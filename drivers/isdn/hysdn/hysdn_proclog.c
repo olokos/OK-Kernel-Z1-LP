@@ -173,43 +173,44 @@ hysdn_log_write(struct file *file, const char __user *buf, size_t count, loff_t 
 /* read log file */
 /******************/
 static ssize_t
-hysdn_log_read(struct file *file, char __user *buf, size_t count, loff_t *off) {
-    struct log_data *inf;
-    int len;
-    struct proc_dir_entry *pde = PDE(file->f_path.dentry->d_inode);
-    struct procdata *pd = NULL;
-    hysdn_card *card;
+hysdn_log_read(struct file *file, char __user *buf, size_t count, loff_t *off)
+{
+	struct log_data *inf;
+	int len;
+	struct proc_dir_entry *pde = PDE(file_inode(file));
+	struct procdata *pd = NULL;
+	hysdn_card *card;
 
-    if (!*((struct log_data **) file->private_data)) {
-        if (file->f_flags & O_NONBLOCK)
-            return (-EAGAIN);
+	if (!*((struct log_data **) file->private_data)) {
+		if (file->f_flags & O_NONBLOCK)
+			return (-EAGAIN);
 
-        /* sorry, but we need to search the card */
-        card = card_root;
-        while (card) {
-            pd = card->proclog;
-            if (pd->log == pde)
-                break;
-            card = card->next;	/* search next entry */
-        }
-        if (card)
-            interruptible_sleep_on(&(pd->rd_queue));
-        else
-            return (-EAGAIN);
+		/* sorry, but we need to search the card */
+		card = card_root;
+		while (card) {
+			pd = card->proclog;
+			if (pd->log == pde)
+				break;
+			card = card->next;	/* search next entry */
+		}
+		if (card)
+			interruptible_sleep_on(&(pd->rd_queue));
+		else
+			return (-EAGAIN);
 
-    }
-    if (!(inf = *((struct log_data **) file->private_data)))
-        return (0);
+	}
+	if (!(inf = *((struct log_data **) file->private_data)))
+		return (0);
 
-    inf->usage_cnt--;	/* new usage count */
-    file->private_data = &inf->next;	/* next structure */
-    if ((len = strlen(inf->log_start)) <= count) {
-        if (copy_to_user(buf, inf->log_start, len))
-            return -EFAULT;
-        *off += len;
-        return (len);
-    }
-    return (0);
+	inf->usage_cnt--;	/* new usage count */
+	file->private_data = &inf->next;	/* next structure */
+	if ((len = strlen(inf->log_start)) <= count) {
+		if (copy_to_user(buf, inf->log_start, len))
+			return -EFAULT;
+		*off += len;
+		return (len);
+	}
+	return (0);
 }				/* hysdn_log_read */
 
 /******************/
@@ -317,32 +318,33 @@ hysdn_log_close(struct inode *ino, struct file *filep) {
 /* select/poll routine to be able using select() */
 /*************************************************/
 static unsigned int
-hysdn_log_poll(struct file *file, poll_table *wait) {
-    unsigned int mask = 0;
-    struct proc_dir_entry *pde = PDE(file->f_path.dentry->d_inode);
-    hysdn_card *card;
-    struct procdata *pd = NULL;
+hysdn_log_poll(struct file *file, poll_table *wait)
+{
+	unsigned int mask = 0;
+	struct proc_dir_entry *pde = PDE(file_inode(file));
+	hysdn_card *card;
+	struct procdata *pd = NULL;
 
-    if ((file->f_mode & (FMODE_READ | FMODE_WRITE)) == FMODE_WRITE)
-        return (mask);	/* no polling for write supported */
+	if ((file->f_mode & (FMODE_READ | FMODE_WRITE)) == FMODE_WRITE)
+		return (mask);	/* no polling for write supported */
 
-    /* we need to search the card */
-    card = card_root;
-    while (card) {
-        pd = card->proclog;
-        if (pd->log == pde)
-            break;
-        card = card->next;	/* search next entry */
-    }
-    if (!card)
-        return (mask);	/* card not found */
+	/* we need to search the card */
+	card = card_root;
+	while (card) {
+		pd = card->proclog;
+		if (pd->log == pde)
+			break;
+		card = card->next;	/* search next entry */
+	}
+	if (!card)
+		return (mask);	/* card not found */
 
-    poll_wait(file, &(pd->rd_queue), wait);
+	poll_wait(file, &(pd->rd_queue), wait);
 
-    if (*((struct log_data **) file->private_data))
-        mask |= POLLIN | POLLRDNORM;
+	if (*((struct log_data **) file->private_data))
+		mask |= POLLIN | POLLRDNORM;
 
-    return mask;
+	return mask;
 }				/* hysdn_log_poll */
 
 /**************************************************/

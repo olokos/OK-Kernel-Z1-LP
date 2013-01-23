@@ -2544,9 +2544,10 @@ static ssize_t sonypi_misc_read(struct file *file, char __user *buf,
     ssize_t ret;
     unsigned char c;
 
-    if ((kfifo_len(&sonypi_compat.fifo) == 0) &&
-            (file->f_flags & O_NONBLOCK))
-        return -EAGAIN;
+	if (ret > 0) {
+		struct inode *inode = file_inode(file);
+		inode->i_atime = current_fs_time(inode->i_sb);
+	}
 
     ret = wait_event_interruptible(sonypi_compat.fifo_proc_list,
                                    kfifo_len(&sonypi_compat.fifo) != 0);

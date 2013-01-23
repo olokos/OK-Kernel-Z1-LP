@@ -109,8 +109,8 @@ static ssize_t atomic_counters_read(struct file *file, char __user *buf,
     struct infinipath_counters counters;
     struct ipath_devdata *dd;
 
-    dd = file->f_path.dentry->d_inode->i_private;
-    dd->ipath_f_read_counters(dd, &counters);
+	dd = file_inode(file)->i_private;
+	dd->ipath_f_read_counters(dd, &counters);
 
     return simple_read_from_buffer(buf, count, ppos, &counters,
                                    sizeof counters);
@@ -122,47 +122,48 @@ static const struct file_operations atomic_counters_ops = {
 };
 
 static ssize_t flash_read(struct file *file, char __user *buf,
-                          size_t count, loff_t *ppos) {
-    struct ipath_devdata *dd;
-    ssize_t ret;
-    loff_t pos;
-    char *tmp;
+			  size_t count, loff_t *ppos)
+{
+	struct ipath_devdata *dd;
+	ssize_t ret;
+	loff_t pos;
+	char *tmp;
 
-    pos = *ppos;
+	pos = *ppos;
 
-    if ( pos < 0) {
-        ret = -EINVAL;
-        goto bail;
-    }
+	if ( pos < 0) {
+		ret = -EINVAL;
+		goto bail;
+	}
 
-    if (pos >= sizeof(struct ipath_flash)) {
-        ret = 0;
-        goto bail;
-    }
+	if (pos >= sizeof(struct ipath_flash)) {
+		ret = 0;
+		goto bail;
+	}
 
-    if (count > sizeof(struct ipath_flash) - pos)
-        count = sizeof(struct ipath_flash) - pos;
+	if (count > sizeof(struct ipath_flash) - pos)
+		count = sizeof(struct ipath_flash) - pos;
 
-    tmp = kmalloc(count, GFP_KERNEL);
-    if (!tmp) {
-        ret = -ENOMEM;
-        goto bail;
-    }
+	tmp = kmalloc(count, GFP_KERNEL);
+	if (!tmp) {
+		ret = -ENOMEM;
+		goto bail;
+	}
 
-    dd = file->f_path.dentry->d_inode->i_private;
-    if (ipath_eeprom_read(dd, pos, tmp, count)) {
-        ipath_dev_err(dd, "failed to read from flash\n");
-        ret = -ENXIO;
-        goto bail_tmp;
-    }
+	dd = file_inode(file)->i_private;
+	if (ipath_eeprom_read(dd, pos, tmp, count)) {
+		ipath_dev_err(dd, "failed to read from flash\n");
+		ret = -ENXIO;
+		goto bail_tmp;
+	}
 
-    if (copy_to_user(buf, tmp, count)) {
-        ret = -EFAULT;
-        goto bail_tmp;
-    }
+	if (copy_to_user(buf, tmp, count)) {
+		ret = -EFAULT;
+		goto bail_tmp;
+	}
 
-    *ppos = pos + count;
-    ret = count;
+	*ppos = pos + count;
+	ret = count;
 
 bail_tmp:
     kfree(tmp);
@@ -172,44 +173,45 @@ bail:
 }
 
 static ssize_t flash_write(struct file *file, const char __user *buf,
-                           size_t count, loff_t *ppos) {
-    struct ipath_devdata *dd;
-    ssize_t ret;
-    loff_t pos;
-    char *tmp;
+			   size_t count, loff_t *ppos)
+{
+	struct ipath_devdata *dd;
+	ssize_t ret;
+	loff_t pos;
+	char *tmp;
 
-    pos = *ppos;
+	pos = *ppos;
 
-    if (pos != 0) {
-        ret = -EINVAL;
-        goto bail;
-    }
+	if (pos != 0) {
+		ret = -EINVAL;
+		goto bail;
+	}
 
-    if (count != sizeof(struct ipath_flash)) {
-        ret = -EINVAL;
-        goto bail;
-    }
+	if (count != sizeof(struct ipath_flash)) {
+		ret = -EINVAL;
+		goto bail;
+	}
 
-    tmp = kmalloc(count, GFP_KERNEL);
-    if (!tmp) {
-        ret = -ENOMEM;
-        goto bail;
-    }
+	tmp = kmalloc(count, GFP_KERNEL);
+	if (!tmp) {
+		ret = -ENOMEM;
+		goto bail;
+	}
 
-    if (copy_from_user(tmp, buf, count)) {
-        ret = -EFAULT;
-        goto bail_tmp;
-    }
+	if (copy_from_user(tmp, buf, count)) {
+		ret = -EFAULT;
+		goto bail_tmp;
+	}
 
-    dd = file->f_path.dentry->d_inode->i_private;
-    if (ipath_eeprom_write(dd, pos, tmp, count)) {
-        ret = -ENXIO;
-        ipath_dev_err(dd, "failed to write to flash\n");
-        goto bail_tmp;
-    }
+	dd = file_inode(file)->i_private;
+	if (ipath_eeprom_write(dd, pos, tmp, count)) {
+		ret = -ENXIO;
+		ipath_dev_err(dd, "failed to write to flash\n");
+		goto bail_tmp;
+	}
 
-    *ppos = pos + count;
-    ret = count;
+	*ppos = pos + count;
+	ret = count;
 
 bail_tmp:
     kfree(tmp);

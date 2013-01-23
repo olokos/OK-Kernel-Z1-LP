@@ -658,120 +658,116 @@ static void xrcd_table_delete(struct ib_uverbs_device *dev,
 }
 
 ssize_t ib_uverbs_open_xrcd(struct ib_uverbs_file *file,
-                            const char __user *buf, int in_len,
-                            int out_len) {
-    struct ib_uverbs_open_xrcd	cmd;
-    struct ib_uverbs_open_xrcd_resp	resp;
-    struct ib_udata			udata;
-    struct ib_uxrcd_object         *obj;
-    struct ib_xrcd                 *xrcd = NULL;
-    struct file                    *f = NULL;
-    struct inode                   *inode = NULL;
-    int				ret = 0;
-    int				new_xrcd = 0;
+			    const char __user *buf, int in_len,
+			    int out_len)
+{
+	struct ib_uverbs_open_xrcd	cmd;
+	struct ib_uverbs_open_xrcd_resp	resp;
+	struct ib_udata			udata;
+	struct ib_uxrcd_object         *obj;
+	struct ib_xrcd                 *xrcd = NULL;
+	struct fd			f = {NULL, 0};
+	struct inode                   *inode = NULL;
+	int				ret = 0;
+	int				new_xrcd = 0;
 
-    if (out_len < sizeof resp)
-        return -ENOSPC;
+	if (out_len < sizeof resp)
+		return -ENOSPC;
 
-    if (copy_from_user(&cmd, buf, sizeof cmd))
-        return -EFAULT;
+	if (copy_from_user(&cmd, buf, sizeof cmd))
+		return -EFAULT;
 
-    INIT_UDATA(&udata, buf + sizeof cmd,
-               (unsigned long) cmd.response + sizeof resp,
-               in_len - sizeof cmd, out_len - sizeof  resp);
+	INIT_UDATA(&udata, buf + sizeof cmd,
+		   (unsigned long) cmd.response + sizeof resp,
+		   in_len - sizeof cmd, out_len - sizeof  resp);
 
-    mutex_lock(&file->device->xrcd_tree_mutex);
+	mutex_lock(&file->device->xrcd_tree_mutex);
 
-    if (cmd.fd != -1) {
-        /* search for file descriptor */
-        f = fget(cmd.fd);
-        if (!f) {
-            ret = -EBADF;
-            goto err_tree_mutex_unlock;
-        }
+	if (cmd.fd != -1) {
+		/* search for file descriptor */
+		f = fdget(cmd.fd);
+		if (!f.file) {
+			ret = -EBADF;
+			goto err_tree_mutex_unlock;
+		}
 
-        inode = f->f_dentry->d_inode;
-        if (!inode) {
-            ret = -EBADF;
-            goto err_tree_mutex_unlock;
-        }
+		inode = file_inode(f.file);
+		xrcd = find_xrcd(file->device, inode);
+		if (!xrcd && !(cmd.oflags & O_CREAT)) {
+			/* no file descriptor. Need CREATE flag */
+			ret = -EAGAIN;
+			goto err_tree_mutex_unlock;
+		}
 
-        xrcd = find_xrcd(file->device, inode);
-        if (!xrcd && !(cmd.oflags & O_CREAT)) {
-            /* no file descriptor. Need CREATE flag */
-            ret = -EAGAIN;
-            goto err_tree_mutex_unlock;
-        }
+		if (xrcd && cmd.oflags & O_EXCL) {
+			ret = -EINVAL;
+			goto err_tree_mutex_unlock;
+		}
+	}
 
-        if (xrcd && cmd.oflags & O_EXCL) {
-            ret = -EINVAL;
-            goto err_tree_mutex_unlock;
-        }
-    }
+	obj = kmalloc(sizeof *obj, GFP_KERNEL);
+	if (!obj) {
+		ret = -ENOMEM;
+		goto err_tree_mutex_unlock;
+	}
 
-    obj = kmalloc(sizeof *obj, GFP_KERNEL);
-    if (!obj) {
-        ret = -ENOMEM;
-        goto err_tree_mutex_unlock;
-    }
+	init_uobj(&obj->uobject, 0, file->ucontext, &xrcd_lock_class);
 
-    init_uobj(&obj->uobject, 0, file->ucontext, &xrcd_lock_key);
+	down_write(&obj->uobject.mutex);
 
-    down_write(&obj->uobject.mutex);
+	if (!xrcd) {
+		xrcd = file->device->ib_dev->alloc_xrcd(file->device->ib_dev,
+							file->ucontext, &udata);
+		if (IS_ERR(xrcd)) {
+			ret = PTR_ERR(xrcd);
+			goto err;
+		}
 
-    if (!xrcd) {
-        xrcd = file->device->ib_dev->alloc_xrcd(file->device->ib_dev,
-                                                file->ucontext, &udata);
-        if (IS_ERR(xrcd)) {
-            ret = PTR_ERR(xrcd);
-            goto err;
-        }
+		xrcd->inode   = inode;
+		xrcd->device  = file->device->ib_dev;
+		atomic_set(&xrcd->usecnt, 0);
+		mutex_init(&xrcd->tgt_qp_mutex);
+		INIT_LIST_HEAD(&xrcd->tgt_qp_list);
+		new_xrcd = 1;
+	}
 
-        xrcd->inode   = inode;
-        xrcd->device  = file->device->ib_dev;
-        atomic_set(&xrcd->usecnt, 0);
-        mutex_init(&xrcd->tgt_qp_mutex);
-        INIT_LIST_HEAD(&xrcd->tgt_qp_list);
-        new_xrcd = 1;
-    }
+	atomic_set(&obj->refcnt, 0);
+	obj->uobject.object = xrcd;
+	ret = idr_add_uobj(&ib_uverbs_xrcd_idr, &obj->uobject);
+	if (ret)
+		goto err_idr;
 
-    atomic_set(&obj->refcnt, 0);
-    obj->uobject.object = xrcd;
-    ret = idr_add_uobj(&ib_uverbs_xrcd_idr, &obj->uobject);
-    if (ret)
-        goto err_idr;
+	memset(&resp, 0, sizeof resp);
+	resp.xrcd_handle = obj->uobject.id;
 
-    memset(&resp, 0, sizeof resp);
-    resp.xrcd_handle = obj->uobject.id;
+	if (inode) {
+		if (new_xrcd) {
+			/* create new inode/xrcd table entry */
+			ret = xrcd_table_insert(file->device, inode, xrcd);
+			if (ret)
+				goto err_insert_xrcd;
+		}
+		atomic_inc(&xrcd->usecnt);
+	}
 
-    if (inode) {
-        if (new_xrcd) {
-            /* create new inode/xrcd table entry */
-            ret = xrcd_table_insert(file->device, inode, xrcd);
-            if (ret)
-                goto err_insert_xrcd;
-        }
-        atomic_inc(&xrcd->usecnt);
-    }
+	if (copy_to_user((void __user *) (unsigned long) cmd.response,
+			 &resp, sizeof resp)) {
+		ret = -EFAULT;
+		goto err_copy;
+	}
 
-    if (copy_to_user((void __user *) (unsigned long) cmd.response,
-                     &resp, sizeof resp)) {
-        ret = -EFAULT;
-        goto err_copy;
-    }
+	if (f.file)
+		fdput(f);
 
-    if (f)
-        fput(f);
+	mutex_lock(&file->mutex);
+	list_add_tail(&obj->uobject.list, &file->ucontext->xrcd_list);
+	mutex_unlock(&file->mutex);
 
-    mutex_lock(&file->mutex);
-    list_add_tail(&obj->uobject.list, &file->ucontext->xrcd_list);
-    mutex_unlock(&file->mutex);
+	obj->uobject.live = 1;
+	up_write(&obj->uobject.mutex);
 
-    obj->uobject.live = 1;
-    up_write(&obj->uobject.mutex);
-
-    mutex_unlock(&file->device->xrcd_tree_mutex);
-    return in_len;
+	mutex_unlock(&file->device->xrcd_tree_mutex);
+	return in_len;
 
 err_copy:
     if (inode) {

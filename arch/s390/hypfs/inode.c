@@ -112,30 +112,31 @@ static void hypfs_evict_inode(struct inode *inode) {
     kfree(inode->i_private);
 }
 
-static int hypfs_open(struct inode *inode, struct file *filp) {
-    char *data = filp->f_path.dentry->d_inode->i_private;
-    struct hypfs_sb_info *fs_info;
+static int hypfs_open(struct inode *inode, struct file *filp)
+{
+	char *data = file_inode(filp)->i_private;
+	struct hypfs_sb_info *fs_info;
 
-    if (filp->f_mode & FMODE_WRITE) {
-        if (!(inode->i_mode & S_IWUGO))
-            return -EACCES;
-    }
-    if (filp->f_mode & FMODE_READ) {
-        if (!(inode->i_mode & S_IRUGO))
-            return -EACCES;
-    }
+	if (filp->f_mode & FMODE_WRITE) {
+		if (!(inode->i_mode & S_IWUGO))
+			return -EACCES;
+	}
+	if (filp->f_mode & FMODE_READ) {
+		if (!(inode->i_mode & S_IRUGO))
+			return -EACCES;
+	}
 
-    fs_info = inode->i_sb->s_fs_info;
-    if(data) {
-        mutex_lock(&fs_info->lock);
-        filp->private_data = kstrdup(data, GFP_KERNEL);
-        if (!filp->private_data) {
-            mutex_unlock(&fs_info->lock);
-            return -ENOMEM;
-        }
-        mutex_unlock(&fs_info->lock);
-    }
-    return nonseekable_open(inode, filp);
+	fs_info = inode->i_sb->s_fs_info;
+	if(data) {
+		mutex_lock(&fs_info->lock);
+		filp->private_data = kstrdup(data, GFP_KERNEL);
+		if (!filp->private_data) {
+			mutex_unlock(&fs_info->lock);
+			return -ENOMEM;
+		}
+		mutex_unlock(&fs_info->lock);
+	}
+	return nonseekable_open(inode, filp);
 }
 
 static ssize_t hypfs_aio_read(struct kiocb *iocb, const struct iovec *iov,

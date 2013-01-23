@@ -484,8 +484,8 @@ static int fanotify_find_path(int dfd, const char __user *filename,
 
 		ret = -ENOTDIR;
 		if ((flags & FAN_MARK_ONLYDIR) &&
-		    !(S_ISDIR(file->f_path.dentry->d_inode->i_mode))) {
-			fput_light(file, fput_needed);
+		    !(S_ISDIR(file_inode(f.file)->i_mode))) {
+			fdput(f);
 			goto out;
 		}
 

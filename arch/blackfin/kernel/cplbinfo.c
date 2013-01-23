@@ -107,32 +107,33 @@ static const struct seq_operations cplbinfo_sops = {
 
 #define CPLBINFO_DCPLB_FLAG 0x80000000
 
-static int cplbinfo_open(struct inode *inode, struct file *file) {
-    struct proc_dir_entry *pde = PDE(file->f_path.dentry->d_inode);
-    char cplb_type;
-    unsigned int cpu;
-    int ret;
-    struct seq_file *m;
-    struct cplbinfo_data *cdata;
+static int cplbinfo_open(struct inode *inode, struct file *file)
+{
+	struct proc_dir_entry *pde = PDE(file_inode(file));
+	char cplb_type;
+	unsigned int cpu;
+	int ret;
+	struct seq_file *m;
+	struct cplbinfo_data *cdata;
 
-    cpu = (unsigned int)pde->data;
-    cplb_type = cpu & CPLBINFO_DCPLB_FLAG ? 'D' : 'I';
-    cpu &= ~CPLBINFO_DCPLB_FLAG;
+	cpu = (unsigned int)pde->data;
+	cplb_type = cpu & CPLBINFO_DCPLB_FLAG ? 'D' : 'I';
+	cpu &= ~CPLBINFO_DCPLB_FLAG;
 
-    if (!cpu_online(cpu))
-        return -ENODEV;
+	if (!cpu_online(cpu))
+		return -ENODEV;
 
-    ret = seq_open_private(file, &cplbinfo_sops, sizeof(*cdata));
-    if (ret)
-        return ret;
-    m = file->private_data;
-    cdata = m->private;
+	ret = seq_open_private(file, &cplbinfo_sops, sizeof(*cdata));
+	if (ret)
+		return ret;
+	m = file->private_data;
+	cdata = m->private;
 
-    cdata->pos = 0;
-    cdata->cplb_type = cplb_type;
-    cplbinfo_seq_init(cdata, cpu);
+	cdata->pos = 0;
+	cdata->cplb_type = cplb_type;
+	cplbinfo_seq_init(cdata, cpu);
 
-    return 0;
+	return 0;
 }
 
 static const struct file_operations cplbinfo_fops = {

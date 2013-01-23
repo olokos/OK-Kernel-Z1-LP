@@ -179,31 +179,32 @@ void psb_gtt_roll(struct drm_device *dev, struct gtt_range *r, int roll) {
  *	While we hold this the pages cannot be swapped out. This is protected
  *	via the gtt mutex which the caller must hold.
  */
-static int psb_gtt_attach_pages(struct gtt_range *gt) {
-    struct inode *inode;
-    struct address_space *mapping;
-    int i;
-    struct page *p;
-    int pages = gt->gem.size / PAGE_SIZE;
+static int psb_gtt_attach_pages(struct gtt_range *gt)
+{
+	struct inode *inode;
+	struct address_space *mapping;
+	int i;
+	struct page *p;
+	int pages = gt->gem.size / PAGE_SIZE;
 
-    WARN_ON(gt->pages);
+	WARN_ON(gt->pages);
 
-    /* This is the shared memory object that backs the GEM resource */
-    inode = gt->gem.filp->f_path.dentry->d_inode;
-    mapping = inode->i_mapping;
+	/* This is the shared memory object that backs the GEM resource */
+	inode = file_inode(gt->gem.filp);
+	mapping = inode->i_mapping;
 
-    gt->pages = kmalloc(pages * sizeof(struct page *), GFP_KERNEL);
-    if (gt->pages == NULL)
-        return -ENOMEM;
-    gt->npage = pages;
+	gt->pages = kmalloc(pages * sizeof(struct page *), GFP_KERNEL);
+	if (gt->pages == NULL)
+		return -ENOMEM;
+	gt->npage = pages;
 
-    for (i = 0; i < pages; i++) {
-        p = shmem_read_mapping_page(mapping, i);
-        if (IS_ERR(p))
-            goto err;
-        gt->pages[i] = p;
-    }
-    return 0;
+	for (i = 0; i < pages; i++) {
+		p = shmem_read_mapping_page(mapping, i);
+		if (IS_ERR(p))
+			goto err;
+		gt->pages[i] = p;
+	}
+	return 0;
 
 err:
     while (i--)

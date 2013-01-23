@@ -1384,14 +1384,15 @@ static void stop_monitor(struct cm4000_dev *dev) {
     DEBUGP(3, dev, "<- stop_monitor\n");
 }
 
-static long cmm_ioctl(struct file *filp, unsigned int cmd, unsigned long arg) {
-    struct cm4000_dev *dev = filp->private_data;
-    unsigned int iobase = dev->p_dev->resource[0]->start;
-    struct inode *inode = filp->f_path.dentry->d_inode;
-    struct pcmcia_device *link;
-    int size;
-    int rc;
-    void __user *argp = (void __user *)arg;
+static long cmm_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+{
+	struct cm4000_dev *dev = filp->private_data;
+	unsigned int iobase = dev->p_dev->resource[0]->start;
+	struct inode *inode = file_inode(filp);
+	struct pcmcia_device *link;
+	int size;
+	int rc;
+	void __user *argp = (void __user *)arg;
 #ifdef CM4000_DEBUG
     char *ioctl_names[CM_IOC_MAXNR + 1] = {
         [_IOC_NR(CM_IOCGSTATUS)] "CM_IOCGSTATUS",

@@ -174,36 +174,32 @@ static struct file *open_firmware_file(PMINI_ADAPTER Adapter, const char *path) 
  * Path to image file
  * Download Address on the chip
  */
-static int BcmFileDownload(PMINI_ADAPTER Adapter, const char *path, unsigned int loc) {
-    int errorno = 0;
-    struct file *flp = NULL;
-    mm_segment_t oldfs;
-    struct timeval tv = {0};
+static int BcmFileDownload(struct bcm_mini_adapter *Adapter, const char *path, unsigned int loc)
+{
+	int errorno = 0;
+	struct file *flp = NULL;
+	struct timeval tv = {0};
 
-    flp = open_firmware_file(Adapter, path);
-    if (!flp) {
-        errorno = -ENOENT;
-        BCM_DEBUG_PRINT(Adapter, DBG_TYPE_INITEXIT, MP_INIT, DBG_LVL_ALL, "Unable to Open %s\n", path);
-        goto exit_download;
-    }
-    BCM_DEBUG_PRINT(Adapter, DBG_TYPE_INITEXIT, MP_INIT, DBG_LVL_ALL, "Opened file is = %s and length =0x%lx to be downloaded at =0x%x", path, (unsigned long)flp->f_dentry->d_inode->i_size, loc);
-    do_gettimeofday(&tv);
+	flp = open_firmware_file(Adapter, path);
+	if (!flp) {
+		BCM_DEBUG_PRINT(Adapter, DBG_TYPE_INITEXIT, MP_INIT, DBG_LVL_ALL, "Unable to Open %s\n", path);
+		return -ENOENT;
+	}
+	BCM_DEBUG_PRINT(Adapter, DBG_TYPE_INITEXIT, MP_INIT, DBG_LVL_ALL, "Opened file is = %s and length =0x%lx to be downloaded at =0x%x", path, (unsigned long)file_inode(flp)->i_size, loc);
+	do_gettimeofday(&tv);
 
-    BCM_DEBUG_PRINT(Adapter, DBG_TYPE_INITEXIT, MP_INIT, DBG_LVL_ALL, "download start %lx", ((tv.tv_sec * 1000) + (tv.tv_usec / 1000)));
-    if (Adapter->bcm_file_download(Adapter->pvInterfaceAdapter, flp, loc)) {
-        BCM_DEBUG_PRINT(Adapter, DBG_TYPE_INITEXIT, MP_INIT, DBG_LVL_ALL, "Failed to download the firmware with error %x!!!", -EIO);
-        errorno = -EIO;
-        goto exit_download;
-    }
-    oldfs = get_fs();
-    set_fs(get_ds());
-    vfs_llseek(flp, 0, 0);
-    set_fs(oldfs);
-    if (Adapter->bcm_file_readback_from_chip(Adapter->pvInterfaceAdapter, flp, loc)) {
-        BCM_DEBUG_PRINT(Adapter, DBG_TYPE_INITEXIT, MP_INIT, DBG_LVL_ALL, "Failed to read back firmware!");
-        errorno = -EIO;
-        goto exit_download;
-    }
+	BCM_DEBUG_PRINT(Adapter, DBG_TYPE_INITEXIT, MP_INIT, DBG_LVL_ALL, "download start %lx", ((tv.tv_sec * 1000) + (tv.tv_usec / 1000)));
+	if (Adapter->bcm_file_download(Adapter->pvInterfaceAdapter, flp, loc)) {
+		BCM_DEBUG_PRINT(Adapter, DBG_TYPE_INITEXIT, MP_INIT, DBG_LVL_ALL, "Failed to download the firmware with error %x!!!", -EIO);
+		errorno = -EIO;
+		goto exit_download;
+	}
+	vfs_llseek(flp, 0, 0);
+	if (Adapter->bcm_file_readback_from_chip(Adapter->pvInterfaceAdapter, flp, loc)) {
+		BCM_DEBUG_PRINT(Adapter, DBG_TYPE_INITEXIT, MP_INIT, DBG_LVL_ALL, "Failed to read back firmware!");
+		errorno = -EIO;
+		goto exit_download;
+	}
 
 exit_download:
     oldfs = get_fs();

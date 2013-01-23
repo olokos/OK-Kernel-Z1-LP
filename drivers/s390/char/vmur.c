@@ -659,71 +659,72 @@ static int get_file_reclen(struct urdev *urd) {
     }
 }
 
-static int ur_open(struct inode *inode, struct file *file) {
-    u16 devno;
-    struct urdev *urd;
-    struct urfile *urf;
-    unsigned short accmode;
-    int rc;
+static int ur_open(struct inode *inode, struct file *file)
+{
+	u16 devno;
+	struct urdev *urd;
+	struct urfile *urf;
+	unsigned short accmode;
+	int rc;
 
-    accmode = file->f_flags & O_ACCMODE;
+	accmode = file->f_flags & O_ACCMODE;
 
-    if (accmode == O_RDWR)
-        return -EACCES;
-    /*
-     * We treat the minor number as the devno of the ur device
-     * to find in the driver tree.
-     */
-    devno = MINOR(file->f_dentry->d_inode->i_rdev);
+	if (accmode == O_RDWR)
+		return -EACCES;
+	/*
+	 * We treat the minor number as the devno of the ur device
+	 * to find in the driver tree.
+	 */
+	devno = MINOR(file_inode(file)->i_rdev);
 
-    urd = urdev_get_from_devno(devno);
-    if (!urd) {
-        rc = -ENXIO;
-        goto out;
-    }
+	urd = urdev_get_from_devno(devno);
+	if (!urd) {
+		rc = -ENXIO;
+		goto out;
+	}
 
-    spin_lock(&urd->open_lock);
-    while (urd->open_flag) {
-        spin_unlock(&urd->open_lock);
-        if (file->f_flags & O_NONBLOCK) {
-            rc = -EBUSY;
-            goto fail_put;
-        }
-        if (wait_event_interruptible(urd->wait, urd->open_flag == 0)) {
-            rc = -ERESTARTSYS;
-            goto fail_put;
-        }
-        spin_lock(&urd->open_lock);
-    }
-    urd->open_flag++;
-    spin_unlock(&urd->open_lock);
+	spin_lock(&urd->open_lock);
+	while (urd->open_flag) {
+		spin_unlock(&urd->open_lock);
+		if (file->f_flags & O_NONBLOCK) {
+			rc = -EBUSY;
+			goto fail_put;
+		}
+		if (wait_event_interruptible(urd->wait, urd->open_flag == 0)) {
+			rc = -ERESTARTSYS;
+			goto fail_put;
+		}
+		spin_lock(&urd->open_lock);
+	}
+	urd->open_flag++;
+	spin_unlock(&urd->open_lock);
 
-    TRACE("ur_open\n");
+	TRACE("ur_open\n");
 
-    if (((accmode == O_RDONLY) && (urd->class != DEV_CLASS_UR_I)) ||
-            ((accmode == O_WRONLY) && (urd->class != DEV_CLASS_UR_O))) {
-        TRACE("ur_open: unsupported dev class (%d)\n", urd->class);
-        rc = -EACCES;
-        goto fail_unlock;
-    }
+	if (((accmode == O_RDONLY) && (urd->class != DEV_CLASS_UR_I)) ||
+	    ((accmode == O_WRONLY) && (urd->class != DEV_CLASS_UR_O))) {
+		TRACE("ur_open: unsupported dev class (%d)\n", urd->class);
+		rc = -EACCES;
+		goto fail_unlock;
+	}
 
-    rc = verify_device(urd);
-    if (rc)
-        goto fail_unlock;
+	rc = verify_device(urd);
+	if (rc)
+		goto fail_unlock;
 
-    urf = urfile_alloc(urd);
-    if (!urf) {
-        rc = -ENOMEM;
-        goto fail_unlock;
-    }
+	urf = urfile_alloc(urd);
+	if (!urf) {
+		rc = -ENOMEM;
+		goto fail_unlock;
+	}
 
-    urf->dev_reclen = urd->reclen;
-    rc = get_file_reclen(urd);
-    if (rc < 0)
-        goto fail_urfile_free;
-    urf->file_reclen = rc;
-    file->private_data = urf;
-    return 0;
+	urf->dev_reclen = urd->reclen;
+	rc = get_file_reclen(urd);
+	if (rc < 0)
+		goto fail_urfile_free;
+	urf->file_reclen = rc;
+	file->private_data = urf;
+	return 0;
 
 fail_urfile_free:
     urfile_free(urf);

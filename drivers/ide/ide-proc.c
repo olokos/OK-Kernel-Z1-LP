@@ -344,100 +344,101 @@ static int ide_settings_proc_open(struct inode *inode, struct file *file) {
 #define MAX_LEN	30
 
 static ssize_t ide_settings_proc_write(struct file *file, const char __user *buffer,
-                                       size_t count, loff_t *pos) {
-    ide_drive_t	*drive = (ide_drive_t *) PDE(file->f_path.dentry->d_inode)->data;
-    char		name[MAX_LEN + 1];
-    int		for_real = 0, mul_factor, div_factor;
-    unsigned long	n;
+				       size_t count, loff_t *pos)
+{
+	ide_drive_t	*drive = (ide_drive_t *) PDE(file_inode(file))->data;
+	char		name[MAX_LEN + 1];
+	int		for_real = 0, mul_factor, div_factor;
+	unsigned long	n;
 
-    const struct ide_proc_devset *setting;
-    char *buf, *s;
+	const struct ide_proc_devset *setting;
+	char *buf, *s;
 
-    if (!capable(CAP_SYS_ADMIN))
-        return -EACCES;
+	if (!capable(CAP_SYS_ADMIN))
+		return -EACCES;
 
-    proc_ide_settings_warn();
+	proc_ide_settings_warn();
 
-    if (count >= PAGE_SIZE)
-        return -EINVAL;
+	if (count >= PAGE_SIZE)
+		return -EINVAL;
 
-    s = buf = (char *)__get_free_page(GFP_USER);
-    if (!buf)
-        return -ENOMEM;
+	s = buf = (char *)__get_free_page(GFP_USER);
+	if (!buf)
+		return -ENOMEM;
 
-    if (copy_from_user(buf, buffer, count)) {
-        free_page((unsigned long)buf);
-        return -EFAULT;
-    }
+	if (copy_from_user(buf, buffer, count)) {
+		free_page((unsigned long)buf);
+		return -EFAULT;
+	}
 
-    buf[count] = '\0';
+	buf[count] = '\0';
 
-    /*
-     * Skip over leading whitespace
-     */
-    while (count && isspace(*s)) {
-        --count;
-        ++s;
-    }
-    /*
-     * Do one full pass to verify all parameters,
-     * then do another to actually write the new settings.
-     */
-    do {
-        char *p = s;
-        n = count;
-        while (n > 0) {
-            unsigned val;
-            char *q = p;
+	/*
+	 * Skip over leading whitespace
+	 */
+	while (count && isspace(*s)) {
+		--count;
+		++s;
+	}
+	/*
+	 * Do one full pass to verify all parameters,
+	 * then do another to actually write the new settings.
+	 */
+	do {
+		char *p = s;
+		n = count;
+		while (n > 0) {
+			unsigned val;
+			char *q = p;
 
-            while (n > 0 && *p != ':') {
-                --n;
-                p++;
-            }
-            if (*p != ':')
-                goto parse_error;
-            if (p - q > MAX_LEN)
-                goto parse_error;
-            memcpy(name, q, p - q);
-            name[p - q] = 0;
+			while (n > 0 && *p != ':') {
+				--n;
+				p++;
+			}
+			if (*p != ':')
+				goto parse_error;
+			if (p - q > MAX_LEN)
+				goto parse_error;
+			memcpy(name, q, p - q);
+			name[p - q] = 0;
 
-            if (n > 0) {
-                --n;
-                p++;
-            } else
-                goto parse_error;
+			if (n > 0) {
+				--n;
+				p++;
+			} else
+				goto parse_error;
 
-            val = simple_strtoul(p, &q, 10);
-            n -= q - p;
-            p = q;
-            if (n > 0 && !isspace(*p))
-                goto parse_error;
-            while (n > 0 && isspace(*p)) {
-                --n;
-                ++p;
-            }
+			val = simple_strtoul(p, &q, 10);
+			n -= q - p;
+			p = q;
+			if (n > 0 && !isspace(*p))
+				goto parse_error;
+			while (n > 0 && isspace(*p)) {
+				--n;
+				++p;
+			}
 
-            mutex_lock(&ide_setting_mtx);
-            /* generic settings first, then driver specific ones */
-            setting = ide_find_setting(ide_generic_settings, name);
-            if (!setting) {
-                if (drive->settings)
-                    setting = ide_find_setting(drive->settings, name);
-                if (!setting) {
-                    mutex_unlock(&ide_setting_mtx);
-                    goto parse_error;
-                }
-            }
-            if (for_real) {
-                mul_factor = setting->mulf ? setting->mulf(drive) : 1;
-                div_factor = setting->divf ? setting->divf(drive) : 1;
-                ide_write_setting(drive, setting, val * div_factor / mul_factor);
-            }
-            mutex_unlock(&ide_setting_mtx);
-        }
-    } while (!for_real++);
-    free_page((unsigned long)buf);
-    return count;
+			mutex_lock(&ide_setting_mtx);
+			/* generic settings first, then driver specific ones */
+			setting = ide_find_setting(ide_generic_settings, name);
+			if (!setting) {
+				if (drive->settings)
+					setting = ide_find_setting(drive->settings, name);
+				if (!setting) {
+					mutex_unlock(&ide_setting_mtx);
+					goto parse_error;
+				}
+			}
+			if (for_real) {
+				mul_factor = setting->mulf ? setting->mulf(drive) : 1;
+				div_factor = setting->divf ? setting->divf(drive) : 1;
+				ide_write_setting(drive, setting, val * div_factor / mul_factor);
+			}
+			mutex_unlock(&ide_setting_mtx);
+		}
+	} while (!for_real++);
+	free_page((unsigned long)buf);
+	return count;
 parse_error:
     free_page((unsigned long)buf);
     printk("%s(): parse error\n", __func__);
@@ -559,20 +560,21 @@ static int ide_replace_subdriver(ide_drive_t *drive, const char *driver) {
 }
 
 static ssize_t ide_driver_proc_write(struct file *file, const char __user *buffer,
-                                     size_t count, loff_t *pos) {
-    ide_drive_t	*drive = (ide_drive_t *) PDE(file->f_path.dentry->d_inode)->data;
-    char name[32];
+				     size_t count, loff_t *pos)
+{
+	ide_drive_t	*drive = (ide_drive_t *) PDE(file_inode(file))->data;
+	char name[32];
 
-    if (!capable(CAP_SYS_ADMIN))
-        return -EACCES;
-    if (count > 31)
-        count = 31;
-    if (copy_from_user(name, buffer, count))
-        return -EFAULT;
-    name[count] = '\0';
-    if (ide_replace_subdriver(drive, name))
-        return -EINVAL;
-    return count;
+	if (!capable(CAP_SYS_ADMIN))
+		return -EACCES;
+	if (count > 31)
+		count = 31;
+	if (copy_from_user(name, buffer, count))
+		return -EFAULT;
+	name[count] = '\0';
+	if (ide_replace_subdriver(drive, name))
+		return -EINVAL;
+	return count;
 }
 
 static const struct file_operations ide_driver_proc_fops = {

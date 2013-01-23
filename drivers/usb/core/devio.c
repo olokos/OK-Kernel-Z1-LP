@@ -154,7 +154,7 @@ static int connected(struct dev_state *ps) {
 static loff_t usbdev_lseek(struct file *file, loff_t offset, int orig) {
     loff_t ret;
 
-    mutex_lock(&file->f_dentry->d_inode->i_mutex);
+	mutex_lock(&file_inode(file)->i_mutex);
 
     switch (orig) {
     case 0:
@@ -170,8 +170,8 @@ static loff_t usbdev_lseek(struct file *file, loff_t offset, int orig) {
         ret = -EINVAL;
     }
 
-    mutex_unlock(&file->f_dentry->d_inode->i_mutex);
-    return ret;
+	mutex_unlock(&file_inode(file)->i_mutex);
+	return ret;
 }
 
 static ssize_t usbdev_read(struct file *file, char __user *buf, size_t nbytes,
@@ -1758,81 +1758,82 @@ static int proc_release_port(struct dev_state *ps, void __user *arg) {
  * changing.  But there's no mechanism to ensure that...
  */
 static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
-                            void __user *p) {
-    struct dev_state *ps = file->private_data;
-    struct inode *inode = file->f_path.dentry->d_inode;
-    struct usb_device *dev = ps->dev;
-    int ret = -ENOTTY;
+				void __user *p)
+{
+	struct dev_state *ps = file->private_data;
+	struct inode *inode = file_inode(file);
+	struct usb_device *dev = ps->dev;
+	int ret = -ENOTTY;
 
-    if (!(file->f_mode & FMODE_WRITE))
-        return -EPERM;
+	if (!(file->f_mode & FMODE_WRITE))
+		return -EPERM;
 
-    usb_lock_device(dev);
-    if (!connected(ps)) {
-        usb_unlock_device(dev);
-        return -ENODEV;
-    }
+	usb_lock_device(dev);
+	if (!connected(ps)) {
+		usb_unlock_device(dev);
+		return -ENODEV;
+	}
 
-    switch (cmd) {
-    case USBDEVFS_CONTROL:
-        snoop(&dev->dev, "%s: CONTROL\n", __func__);
-        ret = proc_control(ps, p);
-        if (ret >= 0)
-            inode->i_mtime = CURRENT_TIME;
-        break;
+	switch (cmd) {
+	case USBDEVFS_CONTROL:
+		snoop(&dev->dev, "%s: CONTROL\n", __func__);
+		ret = proc_control(ps, p);
+		if (ret >= 0)
+			inode->i_mtime = CURRENT_TIME;
+		break;
 
-    case USBDEVFS_BULK:
-        snoop(&dev->dev, "%s: BULK\n", __func__);
-        ret = proc_bulk(ps, p);
-        if (ret >= 0)
-            inode->i_mtime = CURRENT_TIME;
-        break;
+	case USBDEVFS_BULK:
+		snoop(&dev->dev, "%s: BULK\n", __func__);
+		ret = proc_bulk(ps, p);
+		if (ret >= 0)
+			inode->i_mtime = CURRENT_TIME;
+		break;
 
-    case USBDEVFS_RESETEP:
-        snoop(&dev->dev, "%s: RESETEP\n", __func__);
-        ret = proc_resetep(ps, p);
-        if (ret >= 0)
-            inode->i_mtime = CURRENT_TIME;
-        break;
+	case USBDEVFS_RESETEP:
+		snoop(&dev->dev, "%s: RESETEP\n", __func__);
+		ret = proc_resetep(ps, p);
+		if (ret >= 0)
+			inode->i_mtime = CURRENT_TIME;
+		break;
 
-    case USBDEVFS_RESET:
-        snoop(&dev->dev, "%s: RESET\n", __func__);
-        ret = proc_resetdevice(ps);
-        break;
+	case USBDEVFS_RESET:
+		snoop(&dev->dev, "%s: RESET\n", __func__);
+		ret = proc_resetdevice(ps);
+		break;
 
-    case USBDEVFS_CLEAR_HALT:
-        snoop(&dev->dev, "%s: CLEAR_HALT\n", __func__);
-        ret = proc_clearhalt(ps, p);
-        if (ret >= 0)
-            inode->i_mtime = CURRENT_TIME;
-        break;
+	case USBDEVFS_CLEAR_HALT:
+		snoop(&dev->dev, "%s: CLEAR_HALT\n", __func__);
+		ret = proc_clearhalt(ps, p);
+		if (ret >= 0)
+			inode->i_mtime = CURRENT_TIME;
+		break;
 
-    case USBDEVFS_GETDRIVER:
-        snoop(&dev->dev, "%s: GETDRIVER\n", __func__);
-        ret = proc_getdriver(ps, p);
-        break;
+	case USBDEVFS_GETDRIVER:
+		snoop(&dev->dev, "%s: GETDRIVER\n", __func__);
+		ret = proc_getdriver(ps, p);
+		break;
 
-    case USBDEVFS_CONNECTINFO:
-        snoop(&dev->dev, "%s: CONNECTINFO\n", __func__);
-        ret = proc_connectinfo(ps, p);
-        break;
+	case USBDEVFS_CONNECTINFO:
+		snoop(&dev->dev, "%s: CONNECTINFO\n", __func__);
+		ret = proc_connectinfo(ps, p);
+		break;
 
-    case USBDEVFS_SETINTERFACE:
-        snoop(&dev->dev, "%s: SETINTERFACE\n", __func__);
-        ret = proc_setintf(ps, p);
-        break;
+	case USBDEVFS_SETINTERFACE:
+		snoop(&dev->dev, "%s: SETINTERFACE\n", __func__);
+		ret = proc_setintf(ps, p);
+		break;
 
-    case USBDEVFS_SETCONFIGURATION:
-        snoop(&dev->dev, "%s: SETCONFIGURATION\n", __func__);
-        ret = proc_setconfig(ps, p);
-        break;
+	case USBDEVFS_SETCONFIGURATION:
+		snoop(&dev->dev, "%s: SETCONFIGURATION\n", __func__);
+		ret = proc_setconfig(ps, p);
+		break;
 
-    case USBDEVFS_SUBMITURB:
-        snoop(&dev->dev, "%s: SUBMITURB\n", __func__);
-        ret = proc_submiturb(ps, p);
-        if (ret >= 0)
-            inode->i_mtime = CURRENT_TIME;
-        break;
+	case USBDEVFS_SUBMITURB:
+		snoop(&dev->dev, "%s: SUBMITURB\n", __func__);
+		ret = proc_submiturb(ps, p);
+		if (ret >= 0)
+			inode->i_mtime = CURRENT_TIME;
+		break;
 
 #ifdef CONFIG_COMPAT
     case USBDEVFS_CONTROL32:

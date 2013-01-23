@@ -2685,30 +2685,31 @@ static const struct file_operations ray_cs_essid_proc_fops = {
 };
 
 static ssize_t int_proc_write(struct file *file, const char __user *buffer,
-                              size_t count, loff_t *pos) {
-    static char proc_number[10];
-    char *p;
-    int nr, len;
+			      size_t count, loff_t *pos)
+{
+	static char proc_number[10];
+	char *p;
+	int nr, len;
 
-    if (!count)
-        return 0;
+	if (!count)
+		return 0;
 
-    if (count > 9)
-        return -EINVAL;
-    if (copy_from_user(proc_number, buffer, count))
-        return -EFAULT;
-    p = proc_number;
-    nr = 0;
-    len = count;
-    do {
-        unsigned int c = *p - '0';
-        if (c > 9)
-            return -EINVAL;
-        nr = nr * 10 + c;
-        p++;
-    } while (--len);
-    *(int *)PDE(file->f_path.dentry->d_inode)->data = nr;
-    return count;
+	if (count > 9)
+		return -EINVAL;
+	if (copy_from_user(proc_number, buffer, count))
+		return -EFAULT;
+	p = proc_number;
+	nr = 0;
+	len = count;
+	do {
+		unsigned int c = *p - '0';
+		if (c > 9)
+			return -EINVAL;
+		nr = nr * 10 + c;
+		p++;
+	} while (--len);
+	*(int *)PDE(file_inode(file))->data = nr;
+	return count;
 }
 
 static const struct file_operations int_proc_fops = {

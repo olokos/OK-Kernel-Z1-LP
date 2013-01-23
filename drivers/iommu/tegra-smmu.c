@@ -833,142 +833,297 @@ static struct iommu_ops smmu_iommu_ops = {
     .pgsize_bitmap	= SMMU_IOMMU_PGSIZES,
 };
 
-static int tegra_smmu_suspend(struct device *dev) {
-    struct smmu_device *smmu = dev_get_drvdata(dev);
+/* Should be in the order of enum */
+static const char * const smmu_debugfs_mc[] = { "mc", };
+static const char * const smmu_debugfs_cache[] = {  "tlb", "ptc", };
 
-    smmu->translation_enable_0 = smmu_read(smmu, SMMU_TRANSLATION_ENABLE_0);
-    smmu->translation_enable_1 = smmu_read(smmu, SMMU_TRANSLATION_ENABLE_1);
-    smmu->translation_enable_2 = smmu_read(smmu, SMMU_TRANSLATION_ENABLE_2);
-    smmu->asid_security = smmu_read(smmu, SMMU_ASID_SECURITY);
-    return 0;
+static ssize_t smmu_debugfs_stats_write(struct file *file,
+					const char __user *buffer,
+					size_t count, loff_t *pos)
+{
+	struct smmu_debugfs_info *info;
+	struct smmu_device *smmu;
+	int i;
+	enum {
+		_OFF = 0,
+		_ON,
+		_RESET,
+	};
+	const char * const command[] = {
+		[_OFF]		= "off",
+		[_ON]		= "on",
+		[_RESET]	= "reset",
+	};
+	char str[] = "reset";
+	u32 val;
+	size_t offs;
+
+	count = min_t(size_t, count, sizeof(str));
+	if (copy_from_user(str, buffer, count))
+		return -EINVAL;
+
+	for (i = 0; i < ARRAY_SIZE(command); i++)
+		if (strncmp(str, command[i],
+			    strlen(command[i])) == 0)
+			break;
+
+	if (i == ARRAY_SIZE(command))
+		return -EINVAL;
+
+	info = file_inode(file)->i_private;
+	smmu = info->smmu;
+
+	offs = SMMU_CACHE_CONFIG(info->cache);
+	val = smmu_read(smmu, offs);
+	switch (i) {
+	case _OFF:
+		val &= ~SMMU_CACHE_CONFIG_STATS_ENABLE;
+		val &= ~SMMU_CACHE_CONFIG_STATS_TEST;
+		smmu_write(smmu, val, offs);
+		break;
+	case _ON:
+		val |= SMMU_CACHE_CONFIG_STATS_ENABLE;
+		val &= ~SMMU_CACHE_CONFIG_STATS_TEST;
+		smmu_write(smmu, val, offs);
+		break;
+	case _RESET:
+		val |= SMMU_CACHE_CONFIG_STATS_TEST;
+		smmu_write(smmu, val, offs);
+		val &= ~SMMU_CACHE_CONFIG_STATS_TEST;
+		smmu_write(smmu, val, offs);
+		break;
+	default:
+		BUG();
+		break;
+	}
+
+	dev_dbg(smmu->dev, "%s() %08x, %08x @%08x\n", __func__,
+		val, smmu_read(smmu, offs), offs);
+
+	return count;
 }
 
-static int tegra_smmu_resume(struct device *dev) {
-    struct smmu_device *smmu = dev_get_drvdata(dev);
-    unsigned long flags;
+static int smmu_debugfs_stats_show(struct seq_file *s, void *v)
+{
+	struct smmu_debugfs_info *info;
+	struct smmu_device *smmu;
+	struct dentry *dent;
+	int i;
+	const char * const stats[] = { "hit", "miss", };
 
-    spin_lock_irqsave(&smmu->lock, flags);
-    smmu_setup_regs(smmu);
-    spin_unlock_irqrestore(&smmu->lock, flags);
-    return 0;
+	dent = d_find_alias(s->private);
+	info = dent->d_inode->i_private;
+	smmu = info->smmu;
+
+	for (i = 0; i < ARRAY_SIZE(stats); i++) {
+		u32 val;
+		size_t offs;
+
+		offs = SMMU_STATS_CACHE_COUNT(info->mc, info->cache, i);
+		val = smmu_read(smmu, offs);
+		seq_printf(s, "%s:%08x ", stats[i], val);
+
+		dev_dbg(smmu->dev, "%s() %s %08x @%08x\n", __func__,
+			stats[i], val, offs);
+	}
+	seq_printf(s, "\n");
+	dput(dent);
+
+	return 0;
 }
 
-static int tegra_smmu_probe(struct platform_device *pdev) {
-    struct smmu_device *smmu;
-    struct resource *regs, *regs2, *window;
-    struct device *dev = &pdev->dev;
-    int i, err = 0;
-
-    if (smmu_handle)
-        return -EIO;
-
-    BUILD_BUG_ON(PAGE_SHIFT != SMMU_PAGE_SHIFT);
-
-    regs = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-    regs2 = platform_get_resource(pdev, IORESOURCE_MEM, 1);
-    window = platform_get_resource(pdev, IORESOURCE_MEM, 2);
-    if (!regs || !regs2 || !window) {
-        dev_err(dev, "No SMMU resources\n");
-        return -ENODEV;
-    }
-
-    smmu = devm_kzalloc(dev, sizeof(*smmu), GFP_KERNEL);
-    if (!smmu) {
-        dev_err(dev, "failed to allocate smmu_device\n");
-        return -ENOMEM;
-    }
-
-    smmu->dev = dev;
-    smmu->num_as = SMMU_NUM_ASIDS;
-    smmu->iovmm_base = (unsigned long)window->start;
-    smmu->page_count = resource_size(window) >> SMMU_PAGE_SHIFT;
-    smmu->regs = devm_ioremap(dev, regs->start, resource_size(regs));
-    smmu->regs_ahbarb = devm_ioremap(dev, regs2->start,
-                                     resource_size(regs2));
-    if (!smmu->regs || !smmu->regs_ahbarb) {
-        dev_err(dev, "failed to remap SMMU registers\n");
-        err = -ENXIO;
-        goto fail;
-    }
-
-    smmu->translation_enable_0 = ~0;
-    smmu->translation_enable_1 = ~0;
-    smmu->translation_enable_2 = ~0;
-    smmu->asid_security = 0;
-
-    smmu->as = devm_kzalloc(dev,
-                            sizeof(smmu->as[0]) * smmu->num_as, GFP_KERNEL);
-    if (!smmu->as) {
-        dev_err(dev, "failed to allocate smmu_as\n");
-        err = -ENOMEM;
-        goto fail;
-    }
-
-    for (i = 0; i < smmu->num_as; i++) {
-        struct smmu_as *as = &smmu->as[i];
-
-        as->smmu = smmu;
-        as->asid = i;
-        as->pdir_attr = _PDIR_ATTR;
-        as->pde_attr = _PDE_ATTR;
-        as->pte_attr = _PTE_ATTR;
-
-        spin_lock_init(&as->lock);
-        INIT_LIST_HEAD(&as->client);
-    }
-    spin_lock_init(&smmu->lock);
-    smmu_setup_regs(smmu);
-    platform_set_drvdata(pdev, smmu);
-
-    smmu->avp_vector_page = alloc_page(GFP_KERNEL);
-    if (!smmu->avp_vector_page)
-        goto fail;
-
-    smmu_handle = smmu;
-    return 0;
-
-fail:
-    if (smmu->avp_vector_page)
-        __free_page(smmu->avp_vector_page);
-    if (smmu->regs)
-        devm_iounmap(dev, smmu->regs);
-    if (smmu->regs_ahbarb)
-        devm_iounmap(dev, smmu->regs_ahbarb);
-    if (smmu && smmu->as) {
-        for (i = 0; i < smmu->num_as; i++) {
-            if (smmu->as[i].pdir_page) {
-                ClearPageReserved(smmu->as[i].pdir_page);
-                __free_page(smmu->as[i].pdir_page);
-            }
-        }
-        devm_kfree(dev, smmu->as);
-    }
-    devm_kfree(dev, smmu);
-    return err;
+static int smmu_debugfs_stats_open(struct inode *inode, struct file *file)
+{
+	return single_open(file, smmu_debugfs_stats_show, inode);
 }
 
-static int tegra_smmu_remove(struct platform_device *pdev) {
-    struct smmu_device *smmu = platform_get_drvdata(pdev);
-    struct device *dev = smmu->dev;
+static const struct file_operations smmu_debugfs_stats_fops = {
+	.open		= smmu_debugfs_stats_open,
+	.read		= seq_read,
+	.llseek		= seq_lseek,
+	.release	= single_release,
+	.write		= smmu_debugfs_stats_write,
+};
 
-    smmu_write(smmu, SMMU_CONFIG_DISABLE, SMMU_CONFIG);
-    platform_set_drvdata(pdev, NULL);
-    if (smmu->as) {
-        int i;
+static void smmu_debugfs_delete(struct smmu_device *smmu)
+{
+	debugfs_remove_recursive(smmu->debugfs_root);
+	kfree(smmu->debugfs_info);
+}
 
-        for (i = 0; i < smmu->num_as; i++)
-            free_pdir(&smmu->as[i]);
-        devm_kfree(dev, smmu->as);
-    }
-    if (smmu->avp_vector_page)
-        __free_page(smmu->avp_vector_page);
-    if (smmu->regs)
-        devm_iounmap(dev, smmu->regs);
-    if (smmu->regs_ahbarb)
-        devm_iounmap(dev, smmu->regs_ahbarb);
-    devm_kfree(dev, smmu);
-    smmu_handle = NULL;
-    return 0;
+static void smmu_debugfs_create(struct smmu_device *smmu)
+{
+	int i;
+	size_t bytes;
+	struct dentry *root;
+
+	bytes = ARRAY_SIZE(smmu_debugfs_mc) * ARRAY_SIZE(smmu_debugfs_cache) *
+		sizeof(*smmu->debugfs_info);
+	smmu->debugfs_info = kmalloc(bytes, GFP_KERNEL);
+	if (!smmu->debugfs_info)
+		return;
+
+	root = debugfs_create_dir(dev_name(smmu->dev), NULL);
+	if (!root)
+		goto err_out;
+	smmu->debugfs_root = root;
+
+	for (i = 0; i < ARRAY_SIZE(smmu_debugfs_mc); i++) {
+		int j;
+		struct dentry *mc;
+
+		mc = debugfs_create_dir(smmu_debugfs_mc[i], root);
+		if (!mc)
+			goto err_out;
+
+		for (j = 0; j < ARRAY_SIZE(smmu_debugfs_cache); j++) {
+			struct dentry *cache;
+			struct smmu_debugfs_info *info;
+
+			info = smmu->debugfs_info;
+			info += i * ARRAY_SIZE(smmu_debugfs_mc) + j;
+			info->smmu = smmu;
+			info->mc = i;
+			info->cache = j;
+
+			cache = debugfs_create_file(smmu_debugfs_cache[j],
+						    S_IWUGO | S_IRUGO, mc,
+						    (void *)info,
+						    &smmu_debugfs_stats_fops);
+			if (!cache)
+				goto err_out;
+		}
+	}
+
+	return;
+
+err_out:
+	smmu_debugfs_delete(smmu);
+}
+
+static int tegra_smmu_suspend(struct device *dev)
+{
+	struct smmu_device *smmu = dev_get_drvdata(dev);
+
+	smmu->translation_enable_0 = smmu_read(smmu, SMMU_TRANSLATION_ENABLE_0);
+	smmu->translation_enable_1 = smmu_read(smmu, SMMU_TRANSLATION_ENABLE_1);
+	smmu->translation_enable_2 = smmu_read(smmu, SMMU_TRANSLATION_ENABLE_2);
+	smmu->asid_security = smmu_read(smmu, SMMU_ASID_SECURITY);
+	return 0;
+}
+
+static int tegra_smmu_resume(struct device *dev)
+{
+	struct smmu_device *smmu = dev_get_drvdata(dev);
+	unsigned long flags;
+	int err;
+
+	spin_lock_irqsave(&smmu->lock, flags);
+	err = smmu_setup_regs(smmu);
+	spin_unlock_irqrestore(&smmu->lock, flags);
+	return err;
+}
+
+static int tegra_smmu_probe(struct platform_device *pdev)
+{
+	struct smmu_device *smmu;
+	struct device *dev = &pdev->dev;
+	int i, asids, err = 0;
+	dma_addr_t uninitialized_var(base);
+	size_t bytes, uninitialized_var(size);
+
+	if (smmu_handle)
+		return -EIO;
+
+	BUILD_BUG_ON(PAGE_SHIFT != SMMU_PAGE_SHIFT);
+
+	if (of_property_read_u32(dev->of_node, "nvidia,#asids", &asids))
+		return -ENODEV;
+
+	bytes = sizeof(*smmu) + asids * sizeof(*smmu->as);
+	smmu = devm_kzalloc(dev, bytes, GFP_KERNEL);
+	if (!smmu) {
+		dev_err(dev, "failed to allocate smmu_device\n");
+		return -ENOMEM;
+	}
+
+	for (i = 0; i < ARRAY_SIZE(smmu->regs); i++) {
+		struct resource *res;
+
+		res = platform_get_resource(pdev, IORESOURCE_MEM, i);
+		if (!res)
+			return -ENODEV;
+		smmu->regs[i] = devm_request_and_ioremap(&pdev->dev, res);
+		if (!smmu->regs[i])
+			return -EBUSY;
+	}
+
+	err = of_get_dma_window(dev->of_node, NULL, 0, NULL, &base, &size);
+	if (err)
+		return -ENODEV;
+
+	if (size & SMMU_PAGE_MASK)
+		return -EINVAL;
+
+	size >>= SMMU_PAGE_SHIFT;
+	if (!size)
+		return -EINVAL;
+
+	smmu->ahb = of_parse_phandle(dev->of_node, "nvidia,ahb", 0);
+	if (!smmu->ahb)
+		return -ENODEV;
+
+	smmu->dev = dev;
+	smmu->num_as = asids;
+	smmu->iovmm_base = base;
+	smmu->page_count = size;
+
+	smmu->translation_enable_0 = ~0;
+	smmu->translation_enable_1 = ~0;
+	smmu->translation_enable_2 = ~0;
+	smmu->asid_security = 0;
+
+	for (i = 0; i < smmu->num_as; i++) {
+		struct smmu_as *as = &smmu->as[i];
+
+		as->smmu = smmu;
+		as->asid = i;
+		as->pdir_attr = _PDIR_ATTR;
+		as->pde_attr = _PDE_ATTR;
+		as->pte_attr = _PTE_ATTR;
+
+		spin_lock_init(&as->lock);
+		INIT_LIST_HEAD(&as->client);
+	}
+	spin_lock_init(&smmu->lock);
+	err = smmu_setup_regs(smmu);
+	if (err)
+		return err;
+	platform_set_drvdata(pdev, smmu);
+
+	smmu->avp_vector_page = alloc_page(GFP_KERNEL);
+	if (!smmu->avp_vector_page)
+		return -ENOMEM;
+
+	smmu_debugfs_create(smmu);
+	smmu_handle = smmu;
+	bus_set_iommu(&platform_bus_type, &smmu_iommu_ops);
+	return 0;
+}
+
+static int tegra_smmu_remove(struct platform_device *pdev)
+{
+	struct smmu_device *smmu = platform_get_drvdata(pdev);
+	int i;
+
+	smmu_debugfs_delete(smmu);
+
+	smmu_write(smmu, SMMU_CONFIG_DISABLE, SMMU_CONFIG);
+	for (i = 0; i < smmu->num_as; i++)
+		free_pdir(&smmu->as[i]);
+	__free_page(smmu->avp_vector_page);
+	smmu_handle = NULL;
+	return 0;
 }
 
 const struct dev_pm_ops tegra_smmu_pm_ops = {

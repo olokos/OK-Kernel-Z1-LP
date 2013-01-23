@@ -922,10 +922,12 @@ int mdp_histogram_ctrl_all(boolean en) {
     struct mdp_hist_mgmt *temp;
     int i, ret = 0, ret_temp = 0;
 
-    for (i = 0; i < MDP_HIST_MGMT_MAX; i++) {
-        temp = mdp_hist_mgmt_array[i];
-        if (!temp)
-            continue;
+	if (MAJOR(file_inode(f.file)->i_rdev) == FB_MAJOR) {
+		*start = info->fix.smem_start;
+		*len = info->fix.smem_len;
+	} else
+		ret = -1;
+	fdput(f);
 
         ret_temp = _mdp_histogram_ctrl(en, temp);
         if (ret_temp)

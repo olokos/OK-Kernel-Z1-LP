@@ -953,42 +953,42 @@ static int test_ready(struct scsi_tape *STp, int do_wait) {
    0     drive ready
    1     drive not ready (possibly no tape)
 */
-static int check_tape(struct scsi_tape *STp, struct file *filp) {
-    int i, retval, new_session = 0, do_wait;
-    unsigned char cmd[MAX_COMMAND_SIZE], saved_cleaning;
-    unsigned short st_flags = filp->f_flags;
-    struct st_request *SRpnt = NULL;
-    struct st_modedef *STm;
-    struct st_partstat *STps;
-    char *name = tape_name(STp);
-    struct inode *inode = filp->f_path.dentry->d_inode;
-    int mode = TAPE_MODE(inode);
+static int check_tape(struct scsi_tape *STp, struct file *filp)
+{
+	int i, retval, new_session = 0, do_wait;
+	unsigned char cmd[MAX_COMMAND_SIZE], saved_cleaning;
+	unsigned short st_flags = filp->f_flags;
+	struct st_request *SRpnt = NULL;
+	struct st_modedef *STm;
+	struct st_partstat *STps;
+	char *name = tape_name(STp);
+	struct inode *inode = file_inode(filp);
+	int mode = TAPE_MODE(inode);
 
-    STp->ready = ST_READY;
+	STp->ready = ST_READY;
 
-    if (mode != STp->current_mode) {
-        DEBC(printk(ST_DEB_MSG "%s: Mode change from %d to %d.\n",
-                    name, STp->current_mode, mode));
-        new_session = 1;
-        STp->current_mode = mode;
-    }
-    STm = &(STp->modes[STp->current_mode]);
+	if (mode != STp->current_mode) {
+                DEBC(printk(ST_DEB_MSG "%s: Mode change from %d to %d.\n",
+			       name, STp->current_mode, mode));
+		new_session = 1;
+		STp->current_mode = mode;
+	}
+	STm = &(STp->modes[STp->current_mode]);
 
-    saved_cleaning = STp->cleaning_req;
-    STp->cleaning_req = 0;
+	saved_cleaning = STp->cleaning_req;
+	STp->cleaning_req = 0;
 
-    do_wait = ((filp->f_flags & O_NONBLOCK) == 0);
-    retval = test_ready(STp, do_wait);
+	do_wait = ((filp->f_flags & O_NONBLOCK) == 0);
+	retval = test_ready(STp, do_wait);
 
-    if (retval < 0)
-        goto err_out;
+	if (retval < 0)
+	    goto err_out;
 
-    if (retval == CHKRES_NEW_SESSION) {
-        STp->pos_unknown = 0;
-        STp->partition = STp->new_partition = 0;
-        if (STp->can_partitions)
-            STp->nbr_partitions = 1; /* This guess will be updated later
-                                                    if necessary */
+	if (retval == CHKRES_NEW_SESSION) {
+		STp->pos_unknown = 0;
+		STp->partition = STp->new_partition = 0;
+		if (STp->can_partitions)
+			STp->nbr_partitions = 1; /* This guess will be updated later if necessary */
         for (i = 0; i < ST_NBR_PARTITIONS; i++) {
             STps = &(STp->ps[i]);
             STps->rw = ST_IDLE;

@@ -79,9 +79,9 @@ static int hcall_inst_seq_open(struct inode *inode, struct file *file) {
     int rc;
     struct seq_file *seq;
 
-    rc = seq_open(file, &hcall_inst_seq_ops);
-    seq = file->private_data;
-    seq->private = file->f_path.dentry->d_inode->i_private;
+	rc = seq_open(file, &hcall_inst_seq_ops);
+	seq = file->private_data;
+	seq->private = file_inode(file)->i_private;
 
     return rc;
 }

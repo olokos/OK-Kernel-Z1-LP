@@ -2071,89 +2071,91 @@ static int adpt_ioctl(struct inode *inode, struct file *file, uint cmd, ulong ar
 #define FLG_OSD_PCI_VALID 0x0001
 #define FLG_OSD_DMA	  0x0002
 #define FLG_OSD_I2O	  0x0004
-        memset(&HbaInfo, 0, sizeof(HbaInfo));
-        HbaInfo.drvrHBAnum = pHba->unit;
-        HbaInfo.baseAddr = (ulong) pHba->base_addr_phys;
-        HbaInfo.blinkState = adpt_read_blink_led(pHba);
-        HbaInfo.pciBusNum =  pHba->pDev->bus->number;
-        HbaInfo.pciDeviceNum=PCI_SLOT(pHba->pDev->devfn);
-        HbaInfo.Interrupt = pHba->pDev->irq;
-        HbaInfo.hbaFlags = FLG_OSD_PCI_VALID | FLG_OSD_DMA | FLG_OSD_I2O;
-        if(copy_to_user(argp, &HbaInfo, sizeof(HbaInfo))) {
-            printk(KERN_WARNING"%s: Could not copy HbaInfo TO user\n",pHba->name);
-            return -EFAULT;
-        }
-        break;
-    }
-    case DPT_SYSINFO:
-        return adpt_system_info(argp);
-    case DPT_BLINKLED: {
-        u32 value;
-        value = (u32)adpt_read_blink_led(pHba);
-        if (copy_to_user(argp, &value, sizeof(value))) {
-            return -EFAULT;
-        }
-        break;
-    }
-    case I2ORESETCMD:
-        if(pHba->host)
-            spin_lock_irqsave(pHba->host->host_lock, flags);
-        adpt_hba_reset(pHba);
-        if(pHba->host)
-            spin_unlock_irqrestore(pHba->host->host_lock, flags);
-        break;
-    case I2ORESCANCMD:
-        adpt_rescan(pHba);
-        break;
-    default:
-        return -EINVAL;
-    }
+		memset(&HbaInfo, 0, sizeof(HbaInfo));
+		HbaInfo.drvrHBAnum = pHba->unit;
+		HbaInfo.baseAddr = (ulong) pHba->base_addr_phys;
+		HbaInfo.blinkState = adpt_read_blink_led(pHba);
+		HbaInfo.pciBusNum =  pHba->pDev->bus->number;
+		HbaInfo.pciDeviceNum=PCI_SLOT(pHba->pDev->devfn); 
+		HbaInfo.Interrupt = pHba->pDev->irq; 
+		HbaInfo.hbaFlags = FLG_OSD_PCI_VALID | FLG_OSD_DMA | FLG_OSD_I2O;
+		if(copy_to_user(argp, &HbaInfo, sizeof(HbaInfo))){
+			printk(KERN_WARNING"%s: Could not copy HbaInfo TO user\n",pHba->name);
+			return -EFAULT;
+		}
+		break;
+		}
+	case DPT_SYSINFO:
+		return adpt_system_info(argp);
+	case DPT_BLINKLED:{
+		u32 value;
+		value = (u32)adpt_read_blink_led(pHba);
+		if (copy_to_user(argp, &value, sizeof(value))) {
+			return -EFAULT;
+		}
+		break;
+		}
+	case I2ORESETCMD:
+		if(pHba->host)
+			spin_lock_irqsave(pHba->host->host_lock, flags);
+		adpt_hba_reset(pHba);
+		if(pHba->host)
+			spin_unlock_irqrestore(pHba->host->host_lock, flags);
+		break;
+	case I2ORESCANCMD:
+		adpt_rescan(pHba);
+		break;
+	default:
+		return -EINVAL;
+	}
 
-    return error;
+	return error;
 }
 
-static long adpt_unlocked_ioctl(struct file *file, uint cmd, ulong arg) {
-    struct inode *inode;
-    long ret;
+static long adpt_unlocked_ioctl(struct file *file, uint cmd, ulong arg)
+{
+	struct inode *inode;
+	long ret;
+ 
+	inode = file_inode(file);
+ 
+	mutex_lock(&adpt_mutex);
+	ret = adpt_ioctl(inode, file, cmd, arg);
+	mutex_unlock(&adpt_mutex);
 
-    inode = file->f_dentry->d_inode;
-
-    mutex_lock(&adpt_mutex);
-    ret = adpt_ioctl(inode, file, cmd, arg);
-    mutex_unlock(&adpt_mutex);
-
-    return ret;
+	return ret;
 }
 
 #ifdef CONFIG_COMPAT
 static long compat_adpt_ioctl(struct file *file,
-                              unsigned int cmd, unsigned long arg) {
-    struct inode *inode;
-    long ret;
-
-    inode = file->f_dentry->d_inode;
-
-    mutex_lock(&adpt_mutex);
-
-    switch(cmd) {
-    case DPT_SIGNATURE:
-    case I2OUSRCMD:
-    case DPT_CTRLINFO:
-    case DPT_SYSINFO:
-    case DPT_BLINKLED:
-    case I2ORESETCMD:
-    case I2ORESCANCMD:
-    case (DPT_TARGET_BUSY & 0xFFFF):
-    case DPT_TARGET_BUSY:
-        ret = adpt_ioctl(inode, file, cmd, arg);
-        break;
-    default:
-        ret =  -ENOIOCTLCMD;
-    }
-
-    mutex_unlock(&adpt_mutex);
-
-    return ret;
+				unsigned int cmd, unsigned long arg)
+{
+	struct inode *inode;
+	long ret;
+ 
+	inode = file_inode(file);
+ 
+	mutex_lock(&adpt_mutex);
+ 
+	switch(cmd) {
+		case DPT_SIGNATURE:
+		case I2OUSRCMD:
+		case DPT_CTRLINFO:
+		case DPT_SYSINFO:
+		case DPT_BLINKLED:
+		case I2ORESETCMD:
+		case I2ORESCANCMD:
+		case (DPT_TARGET_BUSY & 0xFFFF):
+		case DPT_TARGET_BUSY:
+			ret = adpt_ioctl(inode, file, cmd, arg);
+			break;
+		default:
+			ret =  -ENOIOCTLCMD;
+	}
+ 
+	mutex_unlock(&adpt_mutex);
+ 
+	return ret;
 }
 #endif
 

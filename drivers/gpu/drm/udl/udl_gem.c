@@ -113,33 +113,34 @@ int udl_gem_init_object(struct drm_gem_object *obj) {
     return 0;
 }
 
-static int udl_gem_get_pages(struct udl_gem_object *obj, gfp_t gfpmask) {
-    int page_count, i;
-    struct page *page;
-    struct inode *inode;
-    struct address_space *mapping;
+static int udl_gem_get_pages(struct udl_gem_object *obj, gfp_t gfpmask)
+{
+	int page_count, i;
+	struct page *page;
+	struct inode *inode;
+	struct address_space *mapping;
 
-    if (obj->pages)
-        return 0;
+	if (obj->pages)
+		return 0;
 
-    page_count = obj->base.size / PAGE_SIZE;
-    BUG_ON(obj->pages != NULL);
-    obj->pages = drm_malloc_ab(page_count, sizeof(struct page *));
-    if (obj->pages == NULL)
-        return -ENOMEM;
+	page_count = obj->base.size / PAGE_SIZE;
+	BUG_ON(obj->pages != NULL);
+	obj->pages = drm_malloc_ab(page_count, sizeof(struct page *));
+	if (obj->pages == NULL)
+		return -ENOMEM;
 
-    inode = obj->base.filp->f_path.dentry->d_inode;
-    mapping = inode->i_mapping;
-    gfpmask |= mapping_gfp_mask(mapping);
+	inode = file_inode(obj->base.filp);
+	mapping = inode->i_mapping;
+	gfpmask |= mapping_gfp_mask(mapping);
 
-    for (i = 0; i < page_count; i++) {
-        page = shmem_read_mapping_page_gfp(mapping, i, gfpmask);
-        if (IS_ERR(page))
-            goto err_pages;
-        obj->pages[i] = page;
-    }
+	for (i = 0; i < page_count; i++) {
+		page = shmem_read_mapping_page_gfp(mapping, i, gfpmask);
+		if (IS_ERR(page))
+			goto err_pages;
+		obj->pages[i] = page;
+	}
 
-    return 0;
+	return 0;
 err_pages:
     while (i--)
         page_cache_release(obj->pages[i]);

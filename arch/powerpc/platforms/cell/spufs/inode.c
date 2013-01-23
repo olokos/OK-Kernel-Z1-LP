@@ -330,68 +330,69 @@ out:
 
 static struct spu_context *
 spufs_assert_affinity(unsigned int flags, struct spu_gang *gang,
-                      struct file *filp) {
-    struct spu_context *tmp, *neighbor, *err;
-    int count, node;
-    int aff_supp;
+						struct file *filp)
+{
+	struct spu_context *tmp, *neighbor, *err;
+	int count, node;
+	int aff_supp;
 
-    aff_supp = !list_empty(&(list_entry(cbe_spu_info[0].spus.next,
-                                        struct spu, cbe_list))->aff_list);
+	aff_supp = !list_empty(&(list_entry(cbe_spu_info[0].spus.next,
+					struct spu, cbe_list))->aff_list);
 
-    if (!aff_supp)
-        return ERR_PTR(-EINVAL);
+	if (!aff_supp)
+		return ERR_PTR(-EINVAL);
 
-    if (flags & SPU_CREATE_GANG)
-        return ERR_PTR(-EINVAL);
+	if (flags & SPU_CREATE_GANG)
+		return ERR_PTR(-EINVAL);
 
-    if (flags & SPU_CREATE_AFFINITY_MEM &&
-            gang->aff_ref_ctx &&
-            gang->aff_ref_ctx->flags & SPU_CREATE_AFFINITY_MEM)
-        return ERR_PTR(-EEXIST);
+	if (flags & SPU_CREATE_AFFINITY_MEM &&
+	    gang->aff_ref_ctx &&
+	    gang->aff_ref_ctx->flags & SPU_CREATE_AFFINITY_MEM)
+		return ERR_PTR(-EEXIST);
 
-    if (gang->aff_flags & AFF_MERGED)
-        return ERR_PTR(-EBUSY);
+	if (gang->aff_flags & AFF_MERGED)
+		return ERR_PTR(-EBUSY);
 
-    neighbor = NULL;
-    if (flags & SPU_CREATE_AFFINITY_SPU) {
-        if (!filp || filp->f_op != &spufs_context_fops)
-            return ERR_PTR(-EINVAL);
+	neighbor = NULL;
+	if (flags & SPU_CREATE_AFFINITY_SPU) {
+		if (!filp || filp->f_op != &spufs_context_fops)
+			return ERR_PTR(-EINVAL);
 
-        neighbor = get_spu_context(
-                       SPUFS_I(filp->f_dentry->d_inode)->i_ctx);
+		neighbor = get_spu_context(
+				SPUFS_I(file_inode(filp))->i_ctx);
 
-        if (!list_empty(&neighbor->aff_list) && !(neighbor->aff_head) &&
-                !list_is_last(&neighbor->aff_list, &gang->aff_list_head) &&
-                !list_entry(neighbor->aff_list.next, struct spu_context,
-                            aff_list)->aff_head) {
-            err = ERR_PTR(-EEXIST);
-            goto out_put_neighbor;
-        }
+		if (!list_empty(&neighbor->aff_list) && !(neighbor->aff_head) &&
+		    !list_is_last(&neighbor->aff_list, &gang->aff_list_head) &&
+		    !list_entry(neighbor->aff_list.next, struct spu_context,
+		    aff_list)->aff_head) {
+			err = ERR_PTR(-EEXIST);
+			goto out_put_neighbor;
+		}
 
-        if (gang != neighbor->gang) {
-            err = ERR_PTR(-EINVAL);
-            goto out_put_neighbor;
-        }
+		if (gang != neighbor->gang) {
+			err = ERR_PTR(-EINVAL);
+			goto out_put_neighbor;
+		}
 
-        count = 1;
-        list_for_each_entry(tmp, &gang->aff_list_head, aff_list)
-        count++;
-        if (list_empty(&neighbor->aff_list))
-            count++;
+		count = 1;
+		list_for_each_entry(tmp, &gang->aff_list_head, aff_list)
+			count++;
+		if (list_empty(&neighbor->aff_list))
+			count++;
 
-        for (node = 0; node < MAX_NUMNODES; node++) {
-            if ((cbe_spu_info[node].n_spus - atomic_read(
-                        &cbe_spu_info[node].reserved_spus)) >= count)
-                break;
-        }
+		for (node = 0; node < MAX_NUMNODES; node++) {
+			if ((cbe_spu_info[node].n_spus - atomic_read(
+				&cbe_spu_info[node].reserved_spus)) >= count)
+				break;
+		}
 
-        if (node == MAX_NUMNODES) {
-            err = ERR_PTR(-EEXIST);
-            goto out_put_neighbor;
-        }
-    }
+		if (node == MAX_NUMNODES) {
+			err = ERR_PTR(-EEXIST);
+			goto out_put_neighbor;
+		}
+	}
 
-    return neighbor;
+	return neighbor;
 
 out_put_neighbor:
     put_spu_context(neighbor);

@@ -104,165 +104,163 @@ static inline void pp_enable_irq (struct pp_struct *pp) {
 }
 
 static ssize_t pp_read (struct file * file, char __user * buf, size_t count,
-                        loff_t * ppos) {
-    unsigned int minor = iminor(file->f_path.dentry->d_inode);
-    struct pp_struct *pp = file->private_data;
-    char * kbuffer;
-    ssize_t bytes_read = 0;
-    struct parport *pport;
-    int mode;
+			loff_t * ppos)
+{
+	unsigned int minor = iminor(file_inode(file));
+	struct pp_struct *pp = file->private_data;
+	char * kbuffer;
+	ssize_t bytes_read = 0;
+	struct parport *pport;
+	int mode;
 
-    if (!(pp->flags & PP_CLAIMED)) {
-        /* Don't have the port claimed */
-        pr_debug(CHRDEV "%x: claim the port first\n", minor);
-        return -EINVAL;
-    }
+	if (!(pp->flags & PP_CLAIMED)) {
+		/* Don't have the port claimed */
+		pr_debug(CHRDEV "%x: claim the port first\n", minor);
+		return -EINVAL;
+	}
 
-    /* Trivial case. */
-    if (count == 0)
-        return 0;
+	/* Trivial case. */
+	if (count == 0)
+		return 0;
 
-    kbuffer = kmalloc(min_t(size_t, count, PP_BUFFER_SIZE), GFP_KERNEL);
-    if (!kbuffer) {
-        return -ENOMEM;
-    }
-    pport = pp->pdev->port;
-    mode = pport->ieee1284.mode & ~(IEEE1284_DEVICEID | IEEE1284_ADDR);
+	kbuffer = kmalloc(min_t(size_t, count, PP_BUFFER_SIZE), GFP_KERNEL);
+	if (!kbuffer) {
+		return -ENOMEM;
+	}
+	pport = pp->pdev->port;
+	mode = pport->ieee1284.mode & ~(IEEE1284_DEVICEID | IEEE1284_ADDR);
 
-    parport_set_timeout (pp->pdev,
-                         (file->f_flags & O_NONBLOCK) ?
-                         PARPORT_INACTIVITY_O_NONBLOCK :
-                         pp->default_inactivity);
+	parport_set_timeout (pp->pdev,
+			     (file->f_flags & O_NONBLOCK) ?
+			     PARPORT_INACTIVITY_O_NONBLOCK :
+			     pp->default_inactivity);
 
-    while (bytes_read == 0) {
-        ssize_t need = min_t(unsigned long, count, PP_BUFFER_SIZE);
+	while (bytes_read == 0) {
+		ssize_t need = min_t(unsigned long, count, PP_BUFFER_SIZE);
 
-        if (mode == IEEE1284_MODE_EPP) {
-            /* various specials for EPP mode */
-            int flags = 0;
-            size_t (*fn)(struct parport *, void *, size_t, int);
+		if (mode == IEEE1284_MODE_EPP) {
+			/* various specials for EPP mode */
+			int flags = 0;
+			size_t (*fn)(struct parport *, void *, size_t, int);
 
-            if (pp->flags & PP_W91284PIC) {
-                flags |= PARPORT_W91284PIC;
-            }
-            if (pp->flags & PP_FASTREAD) {
-                flags |= PARPORT_EPP_FAST;
-            }
-            if (pport->ieee1284.mode & IEEE1284_ADDR) {
-                fn = pport->ops->epp_read_addr;
-            } else {
-                fn = pport->ops->epp_read_data;
-            }
-            bytes_read = (*fn)(pport, kbuffer, need, flags);
-        } else {
-            bytes_read = parport_read (pport, kbuffer, need);
-        }
+			if (pp->flags & PP_W91284PIC) {
+				flags |= PARPORT_W91284PIC;
+			}
+			if (pp->flags & PP_FASTREAD) {
+				flags |= PARPORT_EPP_FAST;
+			}
+			if (pport->ieee1284.mode & IEEE1284_ADDR) {
+				fn = pport->ops->epp_read_addr;
+			} else {
+				fn = pport->ops->epp_read_data;
+			}
+			bytes_read = (*fn)(pport, kbuffer, need, flags);
+		} else {
+			bytes_read = parport_read (pport, kbuffer, need);
+		}
 
-        if (bytes_read != 0)
-            break;
+		if (bytes_read != 0)
+			break;
 
-        if (file->f_flags & O_NONBLOCK) {
-            bytes_read = -EAGAIN;
-            break;
-        }
+		if (file->f_flags & O_NONBLOCK) {
+			bytes_read = -EAGAIN;
+			break;
+		}
 
-        if (signal_pending (current)) {
-            bytes_read = -ERESTARTSYS;
-            break;
-        }
+		if (signal_pending (current)) {
+			bytes_read = -ERESTARTSYS;
+			break;
+		}
 
-        cond_resched();
-    }
+		cond_resched();
+	}
 
-    parport_set_timeout (pp->pdev, pp->default_inactivity);
+	parport_set_timeout (pp->pdev, pp->default_inactivity);
 
-    if (bytes_read > 0 && copy_to_user (buf, kbuffer, bytes_read))
-        bytes_read = -EFAULT;
+	if (bytes_read > 0 && copy_to_user (buf, kbuffer, bytes_read))
+		bytes_read = -EFAULT;
 
-    kfree (kbuffer);
-    pp_enable_irq (pp);
-    return bytes_read;
+	kfree (kbuffer);
+	pp_enable_irq (pp);
+	return bytes_read;
 }
 
 static ssize_t pp_write (struct file * file, const char __user * buf,
-                         size_t count, loff_t * ppos) {
-    unsigned int minor = iminor(file->f_path.dentry->d_inode);
-    struct pp_struct *pp = file->private_data;
-    char * kbuffer;
-    ssize_t bytes_written = 0;
-    ssize_t wrote;
-    int mode;
-    struct parport *pport;
+			 size_t count, loff_t * ppos)
+{
+	unsigned int minor = iminor(file_inode(file));
+	struct pp_struct *pp = file->private_data;
+	char * kbuffer;
+	ssize_t bytes_written = 0;
+	ssize_t wrote;
+	int mode;
+	struct parport *pport;
 
-    if (!(pp->flags & PP_CLAIMED)) {
-        /* Don't have the port claimed */
-        pr_debug(CHRDEV "%x: claim the port first\n", minor);
-        return -EINVAL;
-    }
+	if (!(pp->flags & PP_CLAIMED)) {
+		/* Don't have the port claimed */
+		pr_debug(CHRDEV "%x: claim the port first\n", minor);
+		return -EINVAL;
+	}
 
-    kbuffer = kmalloc(min_t(size_t, count, PP_BUFFER_SIZE), GFP_KERNEL);
-    if (!kbuffer) {
-        return -ENOMEM;
-    }
-    pport = pp->pdev->port;
-    mode = pport->ieee1284.mode & ~(IEEE1284_DEVICEID | IEEE1284_ADDR);
+	kbuffer = kmalloc(min_t(size_t, count, PP_BUFFER_SIZE), GFP_KERNEL);
+	if (!kbuffer) {
+		return -ENOMEM;
+	}
+	pport = pp->pdev->port;
+	mode = pport->ieee1284.mode & ~(IEEE1284_DEVICEID | IEEE1284_ADDR);
 
-    parport_set_timeout (pp->pdev,
-                         (file->f_flags & O_NONBLOCK) ?
-                         PARPORT_INACTIVITY_O_NONBLOCK :
-                         pp->default_inactivity);
+	parport_set_timeout (pp->pdev,
+			     (file->f_flags & O_NONBLOCK) ?
+			     PARPORT_INACTIVITY_O_NONBLOCK :
+			     pp->default_inactivity);
 
-    while (bytes_written < count) {
-        ssize_t n = min_t(unsigned long, count - bytes_written, PP_BUFFER_SIZE);
+	while (bytes_written < count) {
+		ssize_t n = min_t(unsigned long, count - bytes_written, PP_BUFFER_SIZE);
 
-        if (copy_from_user (kbuffer, buf + bytes_written, n)) {
-            bytes_written = -EFAULT;
-            break;
-        }
+		if (copy_from_user (kbuffer, buf + bytes_written, n)) {
+			bytes_written = -EFAULT;
+			break;
+		}
 
-        if ((pp->flags & PP_FASTWRITE) && (mode == IEEE1284_MODE_EPP)) {
-            /* do a fast EPP write */
-            if (pport->ieee1284.mode & IEEE1284_ADDR) {
-                wrote = pport->ops->epp_write_addr (pport,
-                                                    kbuffer, n, PARPORT_EPP_FAST);
-            } else {
-                wrote = pport->ops->epp_write_data (pport,
-                                                    kbuffer, n, PARPORT_EPP_FAST);
-            }
-        } else {
-            wrote = parport_write (pp->pdev->port, kbuffer, n);
-        }
+		if ((pp->flags & PP_FASTWRITE) && (mode == IEEE1284_MODE_EPP)) {
+			/* do a fast EPP write */
+			if (pport->ieee1284.mode & IEEE1284_ADDR) {
+				wrote = pport->ops->epp_write_addr (pport,
+					kbuffer, n, PARPORT_EPP_FAST);
+			} else {
+				wrote = pport->ops->epp_write_data (pport,
+					kbuffer, n, PARPORT_EPP_FAST);
+			}
+		} else {
+			wrote = parport_write (pp->pdev->port, kbuffer, n);
+		}
 
-        if (wrote <= 0) {
-            if (!bytes_written) {
-                bytes_written = wrote;
-            }
-            break;
-        }
+		if (wrote <= 0) {
+			if (!bytes_written) {
+				bytes_written = wrote;
+			}
+			break;
+		}
 
-        bytes_written += wrote;
+		bytes_written += wrote;
 
-        if (file->f_flags & O_NONBLOCK) {
-            if (!bytes_written)
-                bytes_written = -EAGAIN;
-            break;
-        }
+		if (file->f_flags & O_NONBLOCK) {
+			if (!bytes_written)
+				bytes_written = -EAGAIN;
+			break;
+		}
 
-        if (signal_pending (current)) {
-            if (!bytes_written) {
-                bytes_written = -EINTR;
-            }
-            break;
-        }
+		if (signal_pending (current))
+			break;
 
-        cond_resched();
-    }
+		cond_resched();
+	}
 
-    parport_set_timeout (pp->pdev, pp->default_inactivity);
+	parport_set_timeout (pp->pdev, pp->default_inactivity);
 
-    kfree (kbuffer);
-    pp_enable_irq (pp);
-    return bytes_written;
+	kfree (kbuffer);
+	pp_enable_irq (pp);
+	return bytes_written;
 }
 
 static void pp_irq (void *private) {
@@ -616,12 +614,308 @@ static enum ieee1284_phase init_phase (int mode) {
     return 0;
 }
 
-static long pp_ioctl(struct file *file, unsigned int cmd, unsigned long arg) {
-    long ret;
-    mutex_lock(&pp_do_mutex);
-    ret = pp_do_ioctl(file, cmd, arg);
-    mutex_unlock(&pp_do_mutex);
-    return ret;
+static int pp_do_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
+{
+	unsigned int minor = iminor(file_inode(file));
+	struct pp_struct *pp = file->private_data;
+	struct parport * port;
+	void __user *argp = (void __user *)arg;
+
+	/* First handle the cases that don't take arguments. */
+	switch (cmd) {
+	case PPCLAIM:
+	    {
+		struct ieee1284_info *info;
+		int ret;
+
+		if (pp->flags & PP_CLAIMED) {
+			pr_debug(CHRDEV "%x: you've already got it!\n", minor);
+			return -EINVAL;
+		}
+
+		/* Deferred device registration. */
+		if (!pp->pdev) {
+			int err = register_device (minor, pp);
+			if (err) {
+				return err;
+			}
+		}
+
+		ret = parport_claim_or_block (pp->pdev);
+		if (ret < 0)
+			return ret;
+
+		pp->flags |= PP_CLAIMED;
+
+		/* For interrupt-reporting to work, we need to be
+		 * informed of each interrupt. */
+		pp_enable_irq (pp);
+
+		/* We may need to fix up the state machine. */
+		info = &pp->pdev->port->ieee1284;
+		pp->saved_state.mode = info->mode;
+		pp->saved_state.phase = info->phase;
+		info->mode = pp->state.mode;
+		info->phase = pp->state.phase;
+		pp->default_inactivity = parport_set_timeout (pp->pdev, 0);
+		parport_set_timeout (pp->pdev, pp->default_inactivity);
+
+		return 0;
+	    }
+	case PPEXCL:
+		if (pp->pdev) {
+			pr_debug(CHRDEV "%x: too late for PPEXCL; "
+				"already registered\n", minor);
+			if (pp->flags & PP_EXCL)
+				/* But it's not really an error. */
+				return 0;
+			/* There's no chance of making the driver happy. */
+			return -EINVAL;
+		}
+
+		/* Just remember to register the device exclusively
+		 * when we finally do the registration. */
+		pp->flags |= PP_EXCL;
+		return 0;
+	case PPSETMODE:
+	    {
+		int mode;
+		if (copy_from_user (&mode, argp, sizeof (mode)))
+			return -EFAULT;
+		/* FIXME: validate mode */
+		pp->state.mode = mode;
+		pp->state.phase = init_phase (mode);
+
+		if (pp->flags & PP_CLAIMED) {
+			pp->pdev->port->ieee1284.mode = mode;
+			pp->pdev->port->ieee1284.phase = pp->state.phase;
+		}
+
+		return 0;
+	    }
+	case PPGETMODE:
+	    {
+		int mode;
+
+		if (pp->flags & PP_CLAIMED) {
+			mode = pp->pdev->port->ieee1284.mode;
+		} else {
+			mode = pp->state.mode;
+		}
+		if (copy_to_user (argp, &mode, sizeof (mode))) {
+			return -EFAULT;
+		}
+		return 0;
+	    }
+	case PPSETPHASE:
+	    {
+		int phase;
+		if (copy_from_user (&phase, argp, sizeof (phase))) {
+			return -EFAULT;
+		}
+		/* FIXME: validate phase */
+		pp->state.phase = phase;
+
+		if (pp->flags & PP_CLAIMED) {
+			pp->pdev->port->ieee1284.phase = phase;
+		}
+
+		return 0;
+	    }
+	case PPGETPHASE:
+	    {
+		int phase;
+
+		if (pp->flags & PP_CLAIMED) {
+			phase = pp->pdev->port->ieee1284.phase;
+		} else {
+			phase = pp->state.phase;
+		}
+		if (copy_to_user (argp, &phase, sizeof (phase))) {
+			return -EFAULT;
+		}
+		return 0;
+	    }
+	case PPGETMODES:
+	    {
+		unsigned int modes;
+
+		port = parport_find_number (minor);
+		if (!port)
+			return -ENODEV;
+
+		modes = port->modes;
+		parport_put_port(port);
+		if (copy_to_user (argp, &modes, sizeof (modes))) {
+			return -EFAULT;
+		}
+		return 0;
+	    }
+	case PPSETFLAGS:
+	    {
+		int uflags;
+
+		if (copy_from_user (&uflags, argp, sizeof (uflags))) {
+			return -EFAULT;
+		}
+		pp->flags &= ~PP_FLAGMASK;
+		pp->flags |= (uflags & PP_FLAGMASK);
+		return 0;
+	    }
+	case PPGETFLAGS:
+	    {
+		int uflags;
+
+		uflags = pp->flags & PP_FLAGMASK;
+		if (copy_to_user (argp, &uflags, sizeof (uflags))) {
+			return -EFAULT;
+		}
+		return 0;
+	    }
+	}	/* end switch() */
+
+	/* Everything else requires the port to be claimed, so check
+	 * that now. */
+	if ((pp->flags & PP_CLAIMED) == 0) {
+		pr_debug(CHRDEV "%x: claim the port first\n", minor);
+		return -EINVAL;
+	}
+
+	port = pp->pdev->port;
+	switch (cmd) {
+		struct ieee1284_info *info;
+		unsigned char reg;
+		unsigned char mask;
+		int mode;
+		int ret;
+		struct timeval par_timeout;
+		long to_jiffies;
+
+	case PPRSTATUS:
+		reg = parport_read_status (port);
+		if (copy_to_user (argp, &reg, sizeof (reg)))
+			return -EFAULT;
+		return 0;
+	case PPRDATA:
+		reg = parport_read_data (port);
+		if (copy_to_user (argp, &reg, sizeof (reg)))
+			return -EFAULT;
+		return 0;
+	case PPRCONTROL:
+		reg = parport_read_control (port);
+		if (copy_to_user (argp, &reg, sizeof (reg)))
+			return -EFAULT;
+		return 0;
+	case PPYIELD:
+		parport_yield_blocking (pp->pdev);
+		return 0;
+
+	case PPRELEASE:
+		/* Save the state machine's state. */
+		info = &pp->pdev->port->ieee1284;
+		pp->state.mode = info->mode;
+		pp->state.phase = info->phase;
+		info->mode = pp->saved_state.mode;
+		info->phase = pp->saved_state.phase;
+		parport_release (pp->pdev);
+		pp->flags &= ~PP_CLAIMED;
+		return 0;
+
+	case PPWCONTROL:
+		if (copy_from_user (&reg, argp, sizeof (reg)))
+			return -EFAULT;
+		parport_write_control (port, reg);
+		return 0;
+
+	case PPWDATA:
+		if (copy_from_user (&reg, argp, sizeof (reg)))
+			return -EFAULT;
+		parport_write_data (port, reg);
+		return 0;
+
+	case PPFCONTROL:
+		if (copy_from_user (&mask, argp,
+				    sizeof (mask)))
+			return -EFAULT;
+		if (copy_from_user (&reg, 1 + (unsigned char __user *) arg,
+				    sizeof (reg)))
+			return -EFAULT;
+		parport_frob_control (port, mask, reg);
+		return 0;
+
+	case PPDATADIR:
+		if (copy_from_user (&mode, argp, sizeof (mode)))
+			return -EFAULT;
+		if (mode)
+			port->ops->data_reverse (port);
+		else
+			port->ops->data_forward (port);
+		return 0;
+
+	case PPNEGOT:
+		if (copy_from_user (&mode, argp, sizeof (mode)))
+			return -EFAULT;
+		switch ((ret = parport_negotiate (port, mode))) {
+		case 0: break;
+		case -1: /* handshake failed, peripheral not IEEE 1284 */
+			ret = -EIO;
+			break;
+		case 1:  /* handshake succeeded, peripheral rejected mode */
+			ret = -ENXIO;
+			break;
+		}
+		pp_enable_irq (pp);
+		return ret;
+
+	case PPWCTLONIRQ:
+		if (copy_from_user (&reg, argp, sizeof (reg)))
+			return -EFAULT;
+
+		/* Remember what to set the control lines to, for next
+		 * time we get an interrupt. */
+		pp->irqctl = reg;
+		pp->irqresponse = 1;
+		return 0;
+
+	case PPCLRIRQ:
+		ret = atomic_read (&pp->irqc);
+		if (copy_to_user (argp, &ret, sizeof (ret)))
+			return -EFAULT;
+		atomic_sub (ret, &pp->irqc);
+		return 0;
+
+	case PPSETTIME:
+		if (copy_from_user (&par_timeout, argp, sizeof(struct timeval))) {
+			return -EFAULT;
+		}
+		/* Convert to jiffies, place in pp->pdev->timeout */
+		if ((par_timeout.tv_sec < 0) || (par_timeout.tv_usec < 0)) {
+			return -EINVAL;
+		}
+		to_jiffies = ROUND_UP(par_timeout.tv_usec, 1000000/HZ);
+		to_jiffies += par_timeout.tv_sec * (long)HZ;
+		if (to_jiffies <= 0) {
+			return -EINVAL;
+		}
+		pp->pdev->timeout = to_jiffies;
+		return 0;
+
+	case PPGETTIME:
+		to_jiffies = pp->pdev->timeout;
+		memset(&par_timeout, 0, sizeof(par_timeout));
+		par_timeout.tv_sec = to_jiffies / HZ;
+		par_timeout.tv_usec = (to_jiffies % (long)HZ) * (1000000/HZ);
+		if (copy_to_user (argp, &par_timeout, sizeof(struct timeval)))
+			return -EFAULT;
+		return 0;
+
+	default:
+		pr_debug(CHRDEV "%x: What? (cmd=0x%x)\n", minor, cmd);
+		return -EINVAL;
+	}
+
+	/* Keep the compiler happy */
+	return 0;
 }
 
 static int pp_open (struct inode * inode, struct file * file) {

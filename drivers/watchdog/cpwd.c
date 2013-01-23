@@ -389,73 +389,74 @@ static int cpwd_release(struct inode *inode, struct file *file) {
     return 0;
 }
 
-static long cpwd_ioctl(struct file *file, unsigned int cmd, unsigned long arg) {
-    static const struct watchdog_info info = {
-        .options		= WDIOF_SETTIMEOUT,
-        .firmware_version	= 1,
-        .identity		= DRIVER_NAME,
-    };
-    void __user *argp = (void __user *)arg;
-    struct inode *inode = file->f_path.dentry->d_inode;
-    int index = iminor(inode) - WD0_MINOR;
-    struct cpwd *p = cpwd_device;
-    int setopt = 0;
+static long cpwd_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
+{
+	static const struct watchdog_info info = {
+		.options		= WDIOF_SETTIMEOUT,
+		.firmware_version	= 1,
+		.identity		= DRIVER_NAME,
+	};
+	void __user *argp = (void __user *)arg;
+	struct inode *inode = file_inode(file);
+	int index = iminor(inode) - WD0_MINOR;
+	struct cpwd *p = cpwd_device;
+	int setopt = 0;
 
-    switch (cmd) {
-    /* Generic Linux IOCTLs */
-    case WDIOC_GETSUPPORT:
-        if (copy_to_user(argp, &info, sizeof(struct watchdog_info)))
-            return -EFAULT;
-        break;
+	switch (cmd) {
+	/* Generic Linux IOCTLs */
+	case WDIOC_GETSUPPORT:
+		if (copy_to_user(argp, &info, sizeof(struct watchdog_info)))
+			return -EFAULT;
+		break;
 
-    case WDIOC_GETSTATUS:
-    case WDIOC_GETBOOTSTATUS:
-        if (put_user(0, (int __user *)argp))
-            return -EFAULT;
-        break;
+	case WDIOC_GETSTATUS:
+	case WDIOC_GETBOOTSTATUS:
+		if (put_user(0, (int __user *)argp))
+			return -EFAULT;
+		break;
 
-    case WDIOC_KEEPALIVE:
-        cpwd_pingtimer(p, index);
-        break;
+	case WDIOC_KEEPALIVE:
+		cpwd_pingtimer(p, index);
+		break;
 
-    case WDIOC_SETOPTIONS:
-        if (copy_from_user(&setopt, argp, sizeof(unsigned int)))
-            return -EFAULT;
+	case WDIOC_SETOPTIONS:
+		if (copy_from_user(&setopt, argp, sizeof(unsigned int)))
+			return -EFAULT;
 
-        if (setopt & WDIOS_DISABLECARD) {
-            if (p->enabled)
-                return -EINVAL;
-            cpwd_stoptimer(p, index);
-        } else if (setopt & WDIOS_ENABLECARD) {
-            cpwd_starttimer(p, index);
-        } else {
-            return -EINVAL;
-        }
-        break;
+		if (setopt & WDIOS_DISABLECARD) {
+			if (p->enabled)
+				return -EINVAL;
+			cpwd_stoptimer(p, index);
+		} else if (setopt & WDIOS_ENABLECARD) {
+			cpwd_starttimer(p, index);
+		} else {
+			return -EINVAL;
+		}
+		break;
 
-    /* Solaris-compatible IOCTLs */
-    case WIOCGSTAT:
-        setopt = cpwd_getstatus(p, index);
-        if (copy_to_user(argp, &setopt, sizeof(unsigned int)))
-            return -EFAULT;
-        break;
+	/* Solaris-compatible IOCTLs */
+	case WIOCGSTAT:
+		setopt = cpwd_getstatus(p, index);
+		if (copy_to_user(argp, &setopt, sizeof(unsigned int)))
+			return -EFAULT;
+		break;
 
-    case WIOCSTART:
-        cpwd_starttimer(p, index);
-        break;
+	case WIOCSTART:
+		cpwd_starttimer(p, index);
+		break;
 
-    case WIOCSTOP:
-        if (p->enabled)
-            return -EINVAL;
+	case WIOCSTOP:
+		if (p->enabled)
+			return -EINVAL;
 
-        cpwd_stoptimer(p, index);
-        break;
+		cpwd_stoptimer(p, index);
+		break;
 
-    default:
-        return -EINVAL;
-    }
+	default:
+		return -EINVAL;
+	}
 
-    return 0;
+	return 0;
 }
 
 static long cpwd_compat_ioctl(struct file *file, unsigned int cmd,
@@ -481,17 +482,18 @@ static long cpwd_compat_ioctl(struct file *file, unsigned int cmd,
 }
 
 static ssize_t cpwd_write(struct file *file, const char __user *buf,
-                          size_t count, loff_t *ppos) {
-    struct inode *inode = file->f_path.dentry->d_inode;
-    struct cpwd *p = cpwd_device;
-    int index = iminor(inode);
+			  size_t count, loff_t *ppos)
+{
+	struct inode *inode = file_inode(file);
+	struct cpwd *p = cpwd_device;
+	int index = iminor(inode);
 
-    if (count) {
-        cpwd_pingtimer(p, index);
-        return 1;
-    }
+	if (count) {
+		cpwd_pingtimer(p, index);
+		return 1;
+	}
 
-    return 0;
+	return 0;
 }
 
 static ssize_t cpwd_read(struct file *file, char __user *buffer,

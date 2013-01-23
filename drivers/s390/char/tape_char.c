@@ -272,32 +272,33 @@ tapechar_write(struct file *filp, const char __user *data, size_t count, loff_t 
  * Character frontend tape device open function.
  */
 static int
-tapechar_open (struct inode *inode, struct file *filp) {
-    struct tape_device *device;
-    int minor, rc;
+tapechar_open (struct inode *inode, struct file *filp)
+{
+	struct tape_device *device;
+	int minor, rc;
 
-    DBF_EVENT(6, "TCHAR:open: %i:%i\n",
-              imajor(filp->f_path.dentry->d_inode),
-              iminor(filp->f_path.dentry->d_inode));
+	DBF_EVENT(6, "TCHAR:open: %i:%i\n",
+		imajor(file_inode(filp)),
+		iminor(file_inode(filp)));
 
-    if (imajor(filp->f_path.dentry->d_inode) != tapechar_major)
-        return -ENODEV;
+	if (imajor(file_inode(filp)) != tapechar_major)
+		return -ENODEV;
 
-    minor = iminor(filp->f_path.dentry->d_inode);
-    device = tape_find_device(minor / TAPE_MINORS_PER_DEV);
-    if (IS_ERR(device)) {
-        DBF_EVENT(3, "TCHAR:open: tape_find_device() failed\n");
-        return PTR_ERR(device);
-    }
+	minor = iminor(file_inode(filp));
+	device = tape_find_device(minor / TAPE_MINORS_PER_DEV);
+	if (IS_ERR(device)) {
+		DBF_EVENT(3, "TCHAR:open: tape_find_device() failed\n");
+		return PTR_ERR(device);
+	}
 
-    rc = tape_open(device);
-    if (rc == 0) {
-        filp->private_data = device;
-        nonseekable_open(inode, filp);
-    } else
-        tape_put_device(device);
+	rc = tape_open(device);
+	if (rc == 0) {
+		filp->private_data = device;
+		nonseekable_open(inode, filp);
+	} else
+		tape_put_device(device);
 
-    return rc;
+	return rc;
 }
 
 /*

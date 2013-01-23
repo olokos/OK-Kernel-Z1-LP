@@ -256,91 +256,94 @@ static u32 __user *create_aout_tables(char __user *p, struct linux_binprm *bprm)
  * These are the functions used to load a.out style executables and shared
  * libraries.  There is no binary dependent code anywhere else.
  */
-static int load_aout_binary(struct linux_binprm *bprm, struct pt_regs *regs) {
-    unsigned long error, fd_offset, rlim;
-    struct exec ex;
-    int retval;
 
-    ex = *((struct exec *) bprm->buf);		/* exec-header */
-    if ((N_MAGIC(ex) != ZMAGIC && N_MAGIC(ex) != OMAGIC &&
-            N_MAGIC(ex) != QMAGIC && N_MAGIC(ex) != NMAGIC) ||
-            N_TRSIZE(ex) || N_DRSIZE(ex) ||
-            i_size_read(bprm->file->f_path.dentry->d_inode) <
-            ex.a_text+ex.a_data+N_SYMSIZE(ex)+N_TXTOFF(ex)) {
-        return -ENOEXEC;
-    }
+static int load_aout_binary(struct linux_binprm *bprm)
+{
+	unsigned long error, fd_offset, rlim;
+	struct pt_regs *regs = current_pt_regs();
+	struct exec ex;
+	int retval;
 
-    fd_offset = N_TXTOFF(ex);
+	ex = *((struct exec *) bprm->buf);		/* exec-header */
+	if ((N_MAGIC(ex) != ZMAGIC && N_MAGIC(ex) != OMAGIC &&
+	     N_MAGIC(ex) != QMAGIC && N_MAGIC(ex) != NMAGIC) ||
+	    N_TRSIZE(ex) || N_DRSIZE(ex) ||
+	    i_size_read(file_inode(bprm->file)) <
+	    ex.a_text+ex.a_data+N_SYMSIZE(ex)+N_TXTOFF(ex)) {
+		return -ENOEXEC;
+	}
 
-    /* Check initial limits. This avoids letting people circumvent
-     * size limits imposed on them by creating programs with large
-     * arrays in the data or bss.
-     */
-    rlim = rlimit(RLIMIT_DATA);
-    if (rlim >= RLIM_INFINITY)
-        rlim = ~0;
-    if (ex.a_data + ex.a_bss > rlim)
-        return -ENOMEM;
+	fd_offset = N_TXTOFF(ex);
 
-    /* Flush all traces of the currently running executable */
-    retval = flush_old_exec(bprm);
-    if (retval)
-        return retval;
+	/* Check initial limits. This avoids letting people circumvent
+	 * size limits imposed on them by creating programs with large
+	 * arrays in the data or bss.
+	 */
+	rlim = rlimit(RLIMIT_DATA);
+	if (rlim >= RLIM_INFINITY)
+		rlim = ~0;
+	if (ex.a_data + ex.a_bss > rlim)
+		return -ENOMEM;
 
-    /* OK, This is the point of no return */
-    set_personality(PER_LINUX);
-    set_personality_ia32(false);
+	/* Flush all traces of the currently running executable */
+	retval = flush_old_exec(bprm);
+	if (retval)
+		return retval;
 
-    setup_new_exec(bprm);
+	/* OK, This is the point of no return */
+	set_personality(PER_LINUX);
+	set_personality_ia32(false);
 
-    regs->cs = __USER32_CS;
-    regs->r8 = regs->r9 = regs->r10 = regs->r11 = regs->r12 =
-                                          regs->r13 = regs->r14 = regs->r15 = 0;
+	setup_new_exec(bprm);
 
-    current->mm->end_code = ex.a_text +
-                            (current->mm->start_code = N_TXTADDR(ex));
-    current->mm->end_data = ex.a_data +
-                            (current->mm->start_data = N_DATADDR(ex));
-    current->mm->brk = ex.a_bss +
-                       (current->mm->start_brk = N_BSSADDR(ex));
-    current->mm->free_area_cache = TASK_UNMAPPED_BASE;
-    current->mm->cached_hole_size = 0;
+	regs->cs = __USER32_CS;
+	regs->r8 = regs->r9 = regs->r10 = regs->r11 = regs->r12 =
+		regs->r13 = regs->r14 = regs->r15 = 0;
 
-    retval = setup_arg_pages(bprm, IA32_STACK_TOP, EXSTACK_DEFAULT);
-    if (retval < 0) {
-        /* Someone check-me: is this error path enough? */
-        send_sig(SIGKILL, current, 0);
-        return retval;
-    }
+	current->mm->end_code = ex.a_text +
+		(current->mm->start_code = N_TXTADDR(ex));
+	current->mm->end_data = ex.a_data +
+		(current->mm->start_data = N_DATADDR(ex));
+	current->mm->brk = ex.a_bss +
+		(current->mm->start_brk = N_BSSADDR(ex));
+	current->mm->free_area_cache = TASK_UNMAPPED_BASE;
+	current->mm->cached_hole_size = 0;
 
-    install_exec_creds(bprm);
+	retval = setup_arg_pages(bprm, IA32_STACK_TOP, EXSTACK_DEFAULT);
+	if (retval < 0) {
+		/* Someone check-me: is this error path enough? */
+		send_sig(SIGKILL, current, 0);
+		return retval;
+	}
 
-    if (N_MAGIC(ex) == OMAGIC) {
-        unsigned long text_addr, map_size;
-        loff_t pos;
+	install_exec_creds(bprm);
 
-        text_addr = N_TXTADDR(ex);
+	if (N_MAGIC(ex) == OMAGIC) {
+		unsigned long text_addr, map_size;
+		loff_t pos;
 
-        pos = 32;
-        map_size = ex.a_text+ex.a_data;
+		text_addr = N_TXTADDR(ex);
 
-        error = vm_brk(text_addr & PAGE_MASK, map_size);
+		pos = 32;
+		map_size = ex.a_text+ex.a_data;
 
-        if (error != (text_addr & PAGE_MASK)) {
-            send_sig(SIGKILL, current, 0);
-            return error;
-        }
+		error = vm_brk(text_addr & PAGE_MASK, map_size);
 
-        error = bprm->file->f_op->read(bprm->file,
-                                       (char __user *)text_addr,
-                                       ex.a_text+ex.a_data, &pos);
-        if ((signed long)error < 0) {
-            send_sig(SIGKILL, current, 0);
-            return error;
-        }
+		if (error != (text_addr & PAGE_MASK)) {
+			send_sig(SIGKILL, current, 0);
+			return error;
+		}
 
-        flush_icache_range(text_addr, text_addr+ex.a_text+ex.a_data);
-    } else {
+		error = bprm->file->f_op->read(bprm->file,
+			 (char __user *)text_addr,
+			  ex.a_text+ex.a_data, &pos);
+		if ((signed long)error < 0) {
+			send_sig(SIGKILL, current, 0);
+			return error;
+		}
+
+		flush_icache_range(text_addr, text_addr+ex.a_text+ex.a_data);
+	} else {
 #ifdef WARN_OLD
         static unsigned long error_time, error_time2;
         if ((ex.a_text & 0xfff || ex.a_data & 0xfff) &&
@@ -417,26 +420,24 @@ beyond_if:
     return 0;
 }
 
-static int load_aout_library(struct file *file) {
-    struct inode *inode;
-    unsigned long bss, start_addr, len, error;
-    int retval;
-    struct exec ex;
-
-    inode = file->f_path.dentry->d_inode;
+static int load_aout_library(struct file *file)
+{
+	unsigned long bss, start_addr, len, error;
+	int retval;
+	struct exec ex;
 
     retval = -ENOEXEC;
     error = kernel_read(file, 0, (char *) &ex, sizeof(ex));
     if (error != sizeof(ex))
         goto out;
 
-    /* We come in here for the regular a.out style of shared libraries */
-    if ((N_MAGIC(ex) != ZMAGIC && N_MAGIC(ex) != QMAGIC) || N_TRSIZE(ex) ||
-            N_DRSIZE(ex) || ((ex.a_entry & 0xfff) && N_MAGIC(ex) == ZMAGIC) ||
-            i_size_read(inode) <
-            ex.a_text+ex.a_data+N_SYMSIZE(ex)+N_TXTOFF(ex)) {
-        goto out;
-    }
+	/* We come in here for the regular a.out style of shared libraries */
+	if ((N_MAGIC(ex) != ZMAGIC && N_MAGIC(ex) != QMAGIC) || N_TRSIZE(ex) ||
+	    N_DRSIZE(ex) || ((ex.a_entry & 0xfff) && N_MAGIC(ex) == ZMAGIC) ||
+	    i_size_read(file_inode(file)) <
+	    ex.a_text+ex.a_data+N_SYMSIZE(ex)+N_TXTOFF(ex)) {
+		goto out;
+	}
 
     if (N_FLAGS(ex))
         goto out;

@@ -891,33 +891,34 @@ static int sonypi_misc_open(struct inode *inode, struct file *file) {
 }
 
 static ssize_t sonypi_misc_read(struct file *file, char __user *buf,
-                                size_t count, loff_t *pos) {
-    ssize_t ret;
-    unsigned char c;
+				size_t count, loff_t *pos)
+{
+	ssize_t ret;
+	unsigned char c;
 
-    if ((kfifo_len(&sonypi_device.fifo) == 0) &&
-            (file->f_flags & O_NONBLOCK))
-        return -EAGAIN;
+	if ((kfifo_len(&sonypi_device.fifo) == 0) &&
+	    (file->f_flags & O_NONBLOCK))
+		return -EAGAIN;
 
-    ret = wait_event_interruptible(sonypi_device.fifo_proc_list,
-                                   kfifo_len(&sonypi_device.fifo) != 0);
-    if (ret)
-        return ret;
+	ret = wait_event_interruptible(sonypi_device.fifo_proc_list,
+				       kfifo_len(&sonypi_device.fifo) != 0);
+	if (ret)
+		return ret;
 
-    while (ret < count &&
-            (kfifo_out_locked(&sonypi_device.fifo, &c, sizeof(c),
-                              &sonypi_device.fifo_lock) == sizeof(c))) {
-        if (put_user(c, buf++))
-            return -EFAULT;
-        ret++;
-    }
+	while (ret < count &&
+	       (kfifo_out_locked(&sonypi_device.fifo, &c, sizeof(c),
+				 &sonypi_device.fifo_lock) == sizeof(c))) {
+		if (put_user(c, buf++))
+			return -EFAULT;
+		ret++;
+	}
 
-    if (ret > 0) {
-        struct inode *inode = file->f_path.dentry->d_inode;
-        inode->i_atime = current_fs_time(inode->i_sb);
-    }
+	if (ret > 0) {
+		struct inode *inode = file_inode(file);
+		inode->i_atime = current_fs_time(inode->i_sb);
+	}
 
-    return ret;
+	return ret;
 }
 
 static unsigned int sonypi_misc_poll(struct file *file, poll_table *wait) {

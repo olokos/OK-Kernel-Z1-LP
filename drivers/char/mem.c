@@ -681,28 +681,34 @@ static loff_t null_lseek(struct file *file, loff_t offset, int orig) {
  * also note that seeking relative to the "end of file" isn't supported:
  * it has no meaning, so it returns -EINVAL.
  */
-static loff_t memory_lseek(struct file *file, loff_t offset, int orig) {
-    loff_t ret;
+static loff_t memory_lseek(struct file *file, loff_t offset, int orig)
+{
+	loff_t ret;
 
-    mutex_lock(&file->f_path.dentry->d_inode->i_mutex);
-    switch (orig) {
-    case SEEK_CUR:
-        offset += file->f_pos;
-    case SEEK_SET:
-        /* to avoid userland mistaking f_pos=-9 as -EBADF=-9 */
-        if ((unsigned long long)offset >= ~0xFFFULL) {
-            ret = -EOVERFLOW;
-            break;
-        }
-        file->f_pos = offset;
-        ret = file->f_pos;
-        force_successful_syscall_return();
-        break;
-    default:
-        ret = -EINVAL;
-    }
-    mutex_unlock(&file->f_path.dentry->d_inode->i_mutex);
-    return ret;
+	mutex_lock(&file_inode(file)->i_mutex);
+	switch (orig) {
+	case SEEK_CUR:
+		offset += file->f_pos;
+	case SEEK_SET:
+		/* to avoid userland mistaking f_pos=-9 as -EBADF=-9 */
+		if ((unsigned long long)offset >= ~0xFFFULL) {
+			ret = -EOVERFLOW;
+			break;
+		}
+		file->f_pos = offset;
+		ret = file->f_pos;
+		force_successful_syscall_return();
+		break;
+	default:
+		ret = -EINVAL;
+	}
+	mutex_unlock(&file_inode(file)->i_mutex);
+	return ret;
+}
+
+static int open_port(struct inode * inode, struct file * filp)
+{
+	return capable(CAP_SYS_RAWIO) ? 0 : -EPERM;
 }
 
 #endif

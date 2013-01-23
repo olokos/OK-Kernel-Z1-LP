@@ -19,58 +19,60 @@
 #include <asm/setup.h>
 
 static loff_t
-proc_bus_zorro_lseek(struct file *file, loff_t off, int whence) {
-    loff_t new = -1;
-    struct inode *inode = file->f_path.dentry->d_inode;
+proc_bus_zorro_lseek(struct file *file, loff_t off, int whence)
+{
+	loff_t new = -1;
+	struct inode *inode = file_inode(file);
 
-    mutex_lock(&inode->i_mutex);
-    switch (whence) {
-    case 0:
-        new = off;
-        break;
-    case 1:
-        new = file->f_pos + off;
-        break;
-    case 2:
-        new = sizeof(struct ConfigDev) + off;
-        break;
-    }
-    if (new < 0 || new > sizeof(struct ConfigDev))
-        new = -EINVAL;
-    else
-        file->f_pos = new;
-    mutex_unlock(&inode->i_mutex);
-    return new;
+	mutex_lock(&inode->i_mutex);
+	switch (whence) {
+	case 0:
+		new = off;
+		break;
+	case 1:
+		new = file->f_pos + off;
+		break;
+	case 2:
+		new = sizeof(struct ConfigDev) + off;
+		break;
+	}
+	if (new < 0 || new > sizeof(struct ConfigDev))
+		new = -EINVAL;
+	else
+		file->f_pos = new;
+	mutex_unlock(&inode->i_mutex);
+	return new;
 }
 
 static ssize_t
-proc_bus_zorro_read(struct file *file, char __user *buf, size_t nbytes, loff_t *ppos) {
-    struct inode *ino = file->f_path.dentry->d_inode;
-    struct proc_dir_entry *dp = PDE(ino);
-    struct zorro_dev *z = dp->data;
-    struct ConfigDev cd;
-    loff_t pos = *ppos;
+proc_bus_zorro_read(struct file *file, char __user *buf, size_t nbytes, loff_t *ppos)
+{
+	struct inode *ino = file_inode(file);
+	struct proc_dir_entry *dp = PDE(ino);
+	struct zorro_dev *z = dp->data;
+	struct ConfigDev cd;
+	loff_t pos = *ppos;
 
-    if (pos >= sizeof(struct ConfigDev))
-        return 0;
-    if (nbytes >= sizeof(struct ConfigDev))
-        nbytes = sizeof(struct ConfigDev);
-    if (pos + nbytes > sizeof(struct ConfigDev))
-        nbytes = sizeof(struct ConfigDev) - pos;
+	if (pos >= sizeof(struct ConfigDev))
+		return 0;
+	if (nbytes >= sizeof(struct ConfigDev))
+		nbytes = sizeof(struct ConfigDev);
+	if (pos + nbytes > sizeof(struct ConfigDev))
+		nbytes = sizeof(struct ConfigDev) - pos;
 
-    /* Construct a ConfigDev */
-    memset(&cd, 0, sizeof(cd));
-    cd.cd_Rom = z->rom;
-    cd.cd_SlotAddr = z->slotaddr;
-    cd.cd_SlotSize = z->slotsize;
-    cd.cd_BoardAddr = (void *)zorro_resource_start(z);
-    cd.cd_BoardSize = zorro_resource_len(z);
+	/* Construct a ConfigDev */
+	memset(&cd, 0, sizeof(cd));
+	cd.cd_Rom = z->rom;
+	cd.cd_SlotAddr = z->slotaddr;
+	cd.cd_SlotSize = z->slotsize;
+	cd.cd_BoardAddr = (void *)zorro_resource_start(z);
+	cd.cd_BoardSize = zorro_resource_len(z);
 
-    if (copy_to_user(buf, (void *)&cd + pos, nbytes))
-        return -EFAULT;
-    *ppos += nbytes;
+	if (copy_to_user(buf, (void *)&cd + pos, nbytes))
+		return -EFAULT;
+	*ppos += nbytes;
 
-    return nbytes;
+	return nbytes;
 }
 
 static const struct file_operations proc_bus_zorro_operations = {

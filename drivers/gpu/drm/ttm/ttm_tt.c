@@ -271,105 +271,91 @@ int ttm_tt_bind(struct ttm_tt *ttm, struct ttm_mem_reg *bo_mem) {
 }
 EXPORT_SYMBOL(ttm_tt_bind);
 
-int ttm_tt_swapin(struct ttm_tt *ttm) {
-    struct address_space *swap_space;
-    struct file *swap_storage;
-    struct page *from_page;
-    struct page *to_page;
-    void *from_virtual;
-    void *to_virtual;
-    int i;
-    int ret = -ENOMEM;
+int ttm_tt_swapin(struct ttm_tt *ttm)
+{
+	struct address_space *swap_space;
+	struct file *swap_storage;
+	struct page *from_page;
+	struct page *to_page;
+	int i;
+	int ret = -ENOMEM;
 
-    swap_storage = ttm->swap_storage;
-    BUG_ON(swap_storage == NULL);
+	swap_storage = ttm->swap_storage;
+	BUG_ON(swap_storage == NULL);
 
-    swap_space = swap_storage->f_path.dentry->d_inode->i_mapping;
+	swap_space = file_inode(swap_storage)->i_mapping;
 
-    for (i = 0; i < ttm->num_pages; ++i) {
-        from_page = shmem_read_mapping_page(swap_space, i);
-        if (IS_ERR(from_page)) {
-            ret = PTR_ERR(from_page);
-            goto out_err;
-        }
-        to_page = ttm->pages[i];
-        if (unlikely(to_page == NULL))
-            goto out_err;
+	for (i = 0; i < ttm->num_pages; ++i) {
+		from_page = shmem_read_mapping_page(swap_space, i);
+		if (IS_ERR(from_page)) {
+			ret = PTR_ERR(from_page);
+			goto out_err;
+		}
+		to_page = ttm->pages[i];
+		if (unlikely(to_page == NULL))
+			goto out_err;
 
-        preempt_disable();
-        from_virtual = kmap_atomic(from_page);
-        to_virtual = kmap_atomic(to_page);
-        memcpy(to_virtual, from_virtual, PAGE_SIZE);
-        kunmap_atomic(to_virtual);
-        kunmap_atomic(from_virtual);
-        preempt_enable();
-        page_cache_release(from_page);
-    }
+		copy_highpage(to_page, from_page);
+		page_cache_release(from_page);
+	}
 
-    if (!(ttm->page_flags & TTM_PAGE_FLAG_PERSISTENT_SWAP))
-        fput(swap_storage);
-    ttm->swap_storage = NULL;
-    ttm->page_flags &= ~TTM_PAGE_FLAG_SWAPPED;
+	if (!(ttm->page_flags & TTM_PAGE_FLAG_PERSISTENT_SWAP))
+		fput(swap_storage);
+	ttm->swap_storage = NULL;
+	ttm->page_flags &= ~TTM_PAGE_FLAG_SWAPPED;
 
-    return 0;
+	return 0;
 out_err:
     return ret;
 }
 
-int ttm_tt_swapout(struct ttm_tt *ttm, struct file *persistent_swap_storage) {
-    struct address_space *swap_space;
-    struct file *swap_storage;
-    struct page *from_page;
-    struct page *to_page;
-    void *from_virtual;
-    void *to_virtual;
-    int i;
-    int ret = -ENOMEM;
+int ttm_tt_swapout(struct ttm_tt *ttm, struct file *persistent_swap_storage)
+{
+	struct address_space *swap_space;
+	struct file *swap_storage;
+	struct page *from_page;
+	struct page *to_page;
+	int i;
+	int ret = -ENOMEM;
 
-    BUG_ON(ttm->state != tt_unbound && ttm->state != tt_unpopulated);
-    BUG_ON(ttm->caching_state != tt_cached);
+	BUG_ON(ttm->state != tt_unbound && ttm->state != tt_unpopulated);
+	BUG_ON(ttm->caching_state != tt_cached);
 
-    if (!persistent_swap_storage) {
-        swap_storage = shmem_file_setup("ttm swap",
-                                        ttm->num_pages << PAGE_SHIFT,
-                                        0);
-        if (unlikely(IS_ERR(swap_storage))) {
-            pr_err("Failed allocating swap storage\n");
-            return PTR_ERR(swap_storage);
-        }
-    } else
-        swap_storage = persistent_swap_storage;
+	if (!persistent_swap_storage) {
+		swap_storage = shmem_file_setup("ttm swap",
+						ttm->num_pages << PAGE_SHIFT,
+						0);
+		if (unlikely(IS_ERR(swap_storage))) {
+			pr_err("Failed allocating swap storage\n");
+			return PTR_ERR(swap_storage);
+		}
+	} else
+		swap_storage = persistent_swap_storage;
 
-    swap_space = swap_storage->f_path.dentry->d_inode->i_mapping;
+	swap_space = file_inode(swap_storage)->i_mapping;
 
-    for (i = 0; i < ttm->num_pages; ++i) {
-        from_page = ttm->pages[i];
-        if (unlikely(from_page == NULL))
-            continue;
-        to_page = shmem_read_mapping_page(swap_space, i);
-        if (unlikely(IS_ERR(to_page))) {
-            ret = PTR_ERR(to_page);
-            goto out_err;
-        }
-        preempt_disable();
-        from_virtual = kmap_atomic(from_page);
-        to_virtual = kmap_atomic(to_page);
-        memcpy(to_virtual, from_virtual, PAGE_SIZE);
-        kunmap_atomic(to_virtual);
-        kunmap_atomic(from_virtual);
-        preempt_enable();
-        set_page_dirty(to_page);
-        mark_page_accessed(to_page);
-        page_cache_release(to_page);
-    }
+	for (i = 0; i < ttm->num_pages; ++i) {
+		from_page = ttm->pages[i];
+		if (unlikely(from_page == NULL))
+			continue;
+		to_page = shmem_read_mapping_page(swap_space, i);
+		if (unlikely(IS_ERR(to_page))) {
+			ret = PTR_ERR(to_page);
+			goto out_err;
+		}
+		copy_highpage(to_page, from_page);
+		set_page_dirty(to_page);
+		mark_page_accessed(to_page);
+		page_cache_release(to_page);
+	}
 
-    ttm->bdev->driver->ttm_tt_unpopulate(ttm);
-    ttm->swap_storage = swap_storage;
-    ttm->page_flags |= TTM_PAGE_FLAG_SWAPPED;
-    if (persistent_swap_storage)
-        ttm->page_flags |= TTM_PAGE_FLAG_PERSISTENT_SWAP;
+	ttm->bdev->driver->ttm_tt_unpopulate(ttm);
+	ttm->swap_storage = swap_storage;
+	ttm->page_flags |= TTM_PAGE_FLAG_SWAPPED;
+	if (persistent_swap_storage)
+		ttm->page_flags |= TTM_PAGE_FLAG_PERSISTENT_SWAP;
 
-    return 0;
+	return 0;
 out_err:
     if (!persistent_swap_storage)
         fput(swap_storage);

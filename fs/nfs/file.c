@@ -283,10 +283,38 @@ nfs_file_fsync(struct file *file, loff_t start, loff_t end, int datasync)
 		ret = xchg(&ctx->error, 0);
 	if (!ret && status < 0)
 		ret = status;
-	if (!ret && !datasync)
-		/* application has asked for meta-data sync */
-		ret = pnfs_layoutcommit_inode(inode, true);
-	mutex_unlock(&inode->i_mutex);
+		goto out;
+	}
+	do_resend |= test_bit(NFS_CONTEXT_RESEND_WRITES, &ctx->flags);
+	if (do_resend)
+		ret = -EAGAIN;
+out:
+	return ret;
+}
+EXPORT_SYMBOL_GPL(nfs_file_fsync_commit);
+
+static int
+nfs_file_fsync(struct file *file, loff_t start, loff_t end, int datasync)
+{
+	int ret;
+	struct inode *inode = file_inode(file);
+
+	do {
+		ret = filemap_write_and_wait_range(inode->i_mapping, start, end);
+		if (ret != 0)
+			break;
+		mutex_lock(&inode->i_mutex);
+		ret = nfs_file_fsync_commit(file, start, end, datasync);
+		mutex_unlock(&inode->i_mutex);
+		/*
+		 * If nfs_file_fsync_commit detected a server reboot, then
+		 * resend all dirty pages that might have been covered by
+		 * the NFS_CONTEXT_RESEND_WRITES flag
+		 */
+		start = 0;
+		end = LLONG_MAX;
+	} while (ret == -EAGAIN);
+
 	return ret;
 }
 

@@ -648,258 +648,256 @@ static int sync_serial_release(struct inode *inode, struct file *file) {
     return 0;
 }
 
+static unsigned int sync_serial_poll(struct file *file, poll_table *wait)
+{
+	int dev = MINOR(file_inode(file)->i_rdev);
+	unsigned int mask = 0;
+	struct sync_port *port;
+	DEBUGPOLL(static unsigned int prev_mask = 0);
 
+	port = &ports[dev];
+	poll_wait(file, &port->out_wait_q, wait);
+	poll_wait(file, &port->in_wait_q, wait);
+	/* Some room to write */
+	if (port->out_count < OUT_BUFFER_SIZE)
+		mask |=  POLLOUT | POLLWRNORM;
+	/* At least an inbufchunk of data */
+	if (sync_data_avail(port) >= port->inbufchunk)
+		mask |= POLLIN | POLLRDNORM;
 
-static unsigned int sync_serial_poll(struct file *file, poll_table *wait) {
-    int dev = MINOR(file->f_dentry->d_inode->i_rdev);
-    unsigned int mask = 0;
-    struct sync_port *port;
-    DEBUGPOLL(static unsigned int prev_mask = 0);
-
-    port = &ports[dev];
-    poll_wait(file, &port->out_wait_q, wait);
-    poll_wait(file, &port->in_wait_q, wait);
-    /* Some room to write */
-    if (port->out_count < OUT_BUFFER_SIZE)
-        mask |=  POLLOUT | POLLWRNORM;
-    /* At least an inbufchunk of data */
-    if (sync_data_avail(port) >= port->inbufchunk)
-        mask |= POLLIN | POLLRDNORM;
-
-    DEBUGPOLL(if (mask != prev_mask)
-              printk(KERN_DEBUG "sync_serial_poll: mask 0x%08X %s %s\n",
-                     mask,
-                     mask & POLLOUT ? "POLLOUT" : "",
-                     mask & POLLIN ? "POLLIN" : "");
-              prev_mask = mask;
-             );
-    return mask;
+	DEBUGPOLL(if (mask != prev_mask)
+		printk(KERN_DEBUG "sync_serial_poll: mask 0x%08X %s %s\n",
+			mask,
+			mask & POLLOUT ? "POLLOUT" : "",
+			mask & POLLIN ? "POLLIN" : "");
+		prev_mask = mask;
+	);
+	return mask;
 }
 
 static int sync_serial_ioctl_unlocked(struct file *file,
-                                      unsigned int cmd, unsigned long arg) {
-    int return_val = 0;
-    unsigned long flags;
+		  unsigned int cmd, unsigned long arg)
+{
+	int return_val = 0;
+	unsigned long flags;
 
-    int dev = MINOR(file->f_dentry->d_inode->i_rdev);
-    struct sync_port *port;
+	int dev = MINOR(file_inode(file)->i_rdev);
+	struct sync_port *port;
 
-    if (dev < 0 || dev >= NUMBER_OF_PORTS || !ports[dev].enabled) {
-        DEBUG(printk(KERN_DEBUG "Invalid minor %d\n", dev));
-        return -1;
-    }
-    port = &ports[dev];
+	if (dev < 0 || dev >= NUMBER_OF_PORTS || !ports[dev].enabled) {
+		DEBUG(printk(KERN_DEBUG "Invalid minor %d\n", dev));
+		return -1;
+	}
+	port = &ports[dev];
 
-    local_irq_save(flags);
-    /* Disable port while changing config */
-    if (dev) {
-        if (port->use_dma) {
-            RESET_DMA(4);
-            WAIT_DMA(4);
-            port->tr_running = 0;
-            port->out_count = 0;
-            port->outp = port->out_buffer;
-            *R_DMA_CH4_CLR_INTR =
-                IO_STATE(R_DMA_CH4_CLR_INTR, clr_eop, do) |
-                IO_STATE(R_DMA_CH4_CLR_INTR, clr_descr, do);
-        }
-        SETS(gen_config_ii_shadow, R_GEN_CONFIG_II, sermode3, async);
-    } else {
-        if (port->use_dma) {
-            RESET_DMA(8);
-            WAIT_DMA(8);
-            port->tr_running = 0;
-            port->out_count = 0;
-            port->outp = port->out_buffer;
-            *R_DMA_CH8_CLR_INTR =
-                IO_STATE(R_DMA_CH8_CLR_INTR, clr_eop, do) |
-                IO_STATE(R_DMA_CH8_CLR_INTR, clr_descr, do);
-        }
-        SETS(gen_config_ii_shadow, R_GEN_CONFIG_II, sermode1, async);
-    }
-    *R_GEN_CONFIG_II = gen_config_ii_shadow;
-    local_irq_restore(flags);
+	local_irq_save(flags);
+	/* Disable port while changing config */
+	if (dev) {
+		if (port->use_dma) {
+			RESET_DMA(4); WAIT_DMA(4);
+			port->tr_running = 0;
+			port->out_count = 0;
+			port->outp = port->out_buffer;
+			*R_DMA_CH4_CLR_INTR =
+				IO_STATE(R_DMA_CH4_CLR_INTR, clr_eop, do) |
+				IO_STATE(R_DMA_CH4_CLR_INTR, clr_descr, do);
+		}
+		SETS(gen_config_ii_shadow, R_GEN_CONFIG_II, sermode3, async);
+	} else {
+		if (port->use_dma) {
+			RESET_DMA(8); WAIT_DMA(8);
+			port->tr_running = 0;
+			port->out_count = 0;
+			port->outp = port->out_buffer;
+			*R_DMA_CH8_CLR_INTR =
+				IO_STATE(R_DMA_CH8_CLR_INTR, clr_eop, do) |
+				IO_STATE(R_DMA_CH8_CLR_INTR, clr_descr, do);
+		}
+		SETS(gen_config_ii_shadow, R_GEN_CONFIG_II, sermode1, async);
+	}
+	*R_GEN_CONFIG_II = gen_config_ii_shadow;
+	local_irq_restore(flags);
 
-    switch (cmd) {
-    case SSP_SPEED:
-        if (GET_SPEED(arg) == CODEC) {
-            if (dev)
-                SETS(sync_serial_prescale_shadow,
-                     R_SYNC_SERIAL_PRESCALE, clk_sel_u3,
-                     codec);
-            else
-                SETS(sync_serial_prescale_shadow,
-                     R_SYNC_SERIAL_PRESCALE, clk_sel_u1,
-                     codec);
+	switch (cmd) {
+	case SSP_SPEED:
+		if (GET_SPEED(arg) == CODEC) {
+			if (dev)
+				SETS(sync_serial_prescale_shadow,
+					R_SYNC_SERIAL_PRESCALE, clk_sel_u3,
+					codec);
+			else
+				SETS(sync_serial_prescale_shadow,
+					R_SYNC_SERIAL_PRESCALE, clk_sel_u1,
+					codec);
 
-            SETF(sync_serial_prescale_shadow,
-                 R_SYNC_SERIAL_PRESCALE, prescaler,
-                 GET_FREQ(arg));
-            SETF(sync_serial_prescale_shadow,
-                 R_SYNC_SERIAL_PRESCALE, frame_rate,
-                 GET_FRAME_RATE(arg));
-            SETF(sync_serial_prescale_shadow,
-                 R_SYNC_SERIAL_PRESCALE, word_rate,
-                 GET_WORD_RATE(arg));
-        } else {
-            SETF(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
-                 tr_baud, GET_SPEED(arg));
-            if (dev)
-                SETS(sync_serial_prescale_shadow,
-                     R_SYNC_SERIAL_PRESCALE, clk_sel_u3,
-                     baudrate);
-            else
-                SETS(sync_serial_prescale_shadow,
-                     R_SYNC_SERIAL_PRESCALE, clk_sel_u1,
-                     baudrate);
-        }
-        break;
-    case SSP_MODE:
-        if (arg > 5)
-            return -EINVAL;
-        if (arg == MASTER_OUTPUT || arg == SLAVE_OUTPUT)
-            *R_IRQ_MASK1_CLR = 1 << port->data_avail_bit;
-        else if (!port->use_dma)
-            *R_IRQ_MASK1_SET = 1 << port->data_avail_bit;
-        SETF(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL, mode, arg);
-        break;
-    case SSP_FRAME_SYNC:
-        if (arg & NORMAL_SYNC)
-            SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
-                 f_synctype, normal);
-        else if (arg & EARLY_SYNC)
-            SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
-                 f_synctype, early);
+			SETF(sync_serial_prescale_shadow,
+				R_SYNC_SERIAL_PRESCALE, prescaler,
+				GET_FREQ(arg));
+			SETF(sync_serial_prescale_shadow,
+				R_SYNC_SERIAL_PRESCALE, frame_rate,
+				GET_FRAME_RATE(arg));
+			SETF(sync_serial_prescale_shadow,
+				R_SYNC_SERIAL_PRESCALE, word_rate,
+				GET_WORD_RATE(arg));
+		} else {
+			SETF(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
+				tr_baud, GET_SPEED(arg));
+			if (dev)
+				SETS(sync_serial_prescale_shadow,
+					R_SYNC_SERIAL_PRESCALE, clk_sel_u3,
+					baudrate);
+			else
+				SETS(sync_serial_prescale_shadow,
+					R_SYNC_SERIAL_PRESCALE, clk_sel_u1,
+					baudrate);
+		}
+		break;
+	case SSP_MODE:
+		if (arg > 5)
+			return -EINVAL;
+		if (arg == MASTER_OUTPUT || arg == SLAVE_OUTPUT)
+			*R_IRQ_MASK1_CLR = 1 << port->data_avail_bit;
+		else if (!port->use_dma)
+			*R_IRQ_MASK1_SET = 1 << port->data_avail_bit;
+		SETF(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL, mode, arg);
+		break;
+	case SSP_FRAME_SYNC:
+		if (arg & NORMAL_SYNC)
+			SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
+				f_synctype, normal);
+		else if (arg & EARLY_SYNC)
+			SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
+				f_synctype, early);
 
-        if (arg & BIT_SYNC)
-            SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
-                 f_syncsize, bit);
-        else if (arg & WORD_SYNC)
-            SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
-                 f_syncsize, word);
-        else if (arg & EXTENDED_SYNC)
-            SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
-                 f_syncsize, extended);
+		if (arg & BIT_SYNC)
+			SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
+				f_syncsize, bit);
+		else if (arg & WORD_SYNC)
+			SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
+				f_syncsize, word);
+		else if (arg & EXTENDED_SYNC)
+			SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
+				f_syncsize, extended);
 
-        if (arg & SYNC_ON)
-            SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
-                 f_sync, on);
-        else if (arg & SYNC_OFF)
-            SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
-                 f_sync, off);
+		if (arg & SYNC_ON)
+			SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
+				f_sync, on);
+		else if (arg & SYNC_OFF)
+			SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
+				f_sync, off);
 
-        if (arg & WORD_SIZE_8)
-            SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
-                 wordsize, size8bit);
-        else if (arg & WORD_SIZE_12)
-            SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
-                 wordsize, size12bit);
-        else if (arg & WORD_SIZE_16)
-            SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
-                 wordsize, size16bit);
-        else if (arg & WORD_SIZE_24)
-            SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
-                 wordsize, size24bit);
-        else if (arg & WORD_SIZE_32)
-            SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
-                 wordsize, size32bit);
+		if (arg & WORD_SIZE_8)
+			SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
+				wordsize, size8bit);
+		else if (arg & WORD_SIZE_12)
+			SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
+				wordsize, size12bit);
+		else if (arg & WORD_SIZE_16)
+			SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
+				wordsize, size16bit);
+		else if (arg & WORD_SIZE_24)
+			SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
+				wordsize, size24bit);
+		else if (arg & WORD_SIZE_32)
+			SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
+				wordsize, size32bit);
 
-        if (arg & BIT_ORDER_MSB)
-            SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
-                 bitorder, msb);
-        else if (arg & BIT_ORDER_LSB)
-            SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
-                 bitorder, lsb);
+		if (arg & BIT_ORDER_MSB)
+			SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
+				bitorder, msb);
+		else if (arg & BIT_ORDER_LSB)
+			SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
+				bitorder, lsb);
 
-        if (arg & FLOW_CONTROL_ENABLE)
-            SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
-                 flow_ctrl, enabled);
-        else if (arg & FLOW_CONTROL_DISABLE)
-            SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
-                 flow_ctrl, disabled);
+		if (arg & FLOW_CONTROL_ENABLE)
+			SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
+				flow_ctrl, enabled);
+		else if (arg & FLOW_CONTROL_DISABLE)
+			SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
+				flow_ctrl, disabled);
 
-        if (arg & CLOCK_NOT_GATED)
-            SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
-                 clk_mode, normal);
-        else if (arg & CLOCK_GATED)
-            SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
-                 clk_mode, gated);
+		if (arg & CLOCK_NOT_GATED)
+			SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
+				clk_mode, normal);
+		else if (arg & CLOCK_GATED)
+			SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
+				clk_mode, gated);
 
-        break;
-    case SSP_IPOLARITY:
-        /* NOTE!! negedge is considered NORMAL */
-        if (arg & CLOCK_NORMAL)
-            SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
-                 clk_polarity, neg);
-        else if (arg & CLOCK_INVERT)
-            SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
-                 clk_polarity, pos);
+		break;
+	case SSP_IPOLARITY:
+		/* NOTE!! negedge is considered NORMAL */
+		if (arg & CLOCK_NORMAL)
+			SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
+				clk_polarity, neg);
+		else if (arg & CLOCK_INVERT)
+			SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
+				clk_polarity, pos);
 
-        if (arg & FRAME_NORMAL)
-            SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
-                 frame_polarity, normal);
-        else if (arg & FRAME_INVERT)
-            SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
-                 frame_polarity, inverted);
+		if (arg & FRAME_NORMAL)
+			SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
+				frame_polarity, normal);
+		else if (arg & FRAME_INVERT)
+			SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
+				frame_polarity, inverted);
 
-        if (arg & STATUS_NORMAL)
-            SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
-                 status_polarity, normal);
-        else if (arg & STATUS_INVERT)
-            SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
-                 status_polarity, inverted);
-        break;
-    case SSP_OPOLARITY:
-        if (arg & CLOCK_NORMAL)
-            SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
-                 clk_driver, normal);
-        else if (arg & CLOCK_INVERT)
-            SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
-                 clk_driver, inverted);
+		if (arg & STATUS_NORMAL)
+			SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
+				status_polarity, normal);
+		else if (arg & STATUS_INVERT)
+			SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
+				status_polarity, inverted);
+		break;
+	case SSP_OPOLARITY:
+		if (arg & CLOCK_NORMAL)
+			SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
+				clk_driver, normal);
+		else if (arg & CLOCK_INVERT)
+			SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
+				clk_driver, inverted);
 
-        if (arg & FRAME_NORMAL)
-            SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
-                 frame_driver, normal);
-        else if (arg & FRAME_INVERT)
-            SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
-                 frame_driver, inverted);
+		if (arg & FRAME_NORMAL)
+			SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
+				frame_driver, normal);
+		else if (arg & FRAME_INVERT)
+			SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
+				frame_driver, inverted);
 
-        if (arg & STATUS_NORMAL)
-            SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
-                 status_driver, normal);
-        else if (arg & STATUS_INVERT)
-            SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
-                 status_driver, inverted);
-        break;
-    case SSP_SPI:
-        SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL, flow_ctrl,
-             disabled);
-        SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL, bitorder,
-             msb);
-        SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL, wordsize,
-             size8bit);
-        SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL, f_sync, on);
-        SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL, f_syncsize,
-             word);
-        SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL, f_synctype,
-             normal);
-        if (arg & SPI_SLAVE) {
-            SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
-                 frame_polarity, inverted);
-            SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
-                 clk_polarity, neg);
-            SETF(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
-                 mode, SLAVE_INPUT);
-        } else {
-            SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
-                 frame_driver, inverted);
-            SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
-                 clk_driver, inverted);
-            SETF(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
-                 mode, MASTER_OUTPUT);
-        }
-        break;
-    case SSP_INBUFCHUNK:
+		if (arg & STATUS_NORMAL)
+			SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
+				status_driver, normal);
+		else if (arg & STATUS_INVERT)
+			SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
+				status_driver, inverted);
+		break;
+	case SSP_SPI:
+		SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL, flow_ctrl,
+			disabled);
+		SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL, bitorder,
+			msb);
+		SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL, wordsize,
+			size8bit);
+		SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL, f_sync, on);
+		SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL, f_syncsize,
+			word);
+		SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL, f_synctype,
+			normal);
+		if (arg & SPI_SLAVE) {
+			SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
+				frame_polarity, inverted);
+			SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
+				clk_polarity, neg);
+			SETF(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
+				mode, SLAVE_INPUT);
+		} else {
+			SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
+				frame_driver, inverted);
+			SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
+				clk_driver, inverted);
+			SETF(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL,
+				mode, MASTER_OUTPUT);
+		}
+		break;
+	case SSP_INBUFCHUNK:
 #if 0
         if (arg > port->in_buffer_size/NUM_IN_DESCR)
             return -EINVAL;
@@ -974,199 +972,201 @@ static long sync_serial_ioctl(struct file *file,
 
 
 static ssize_t sync_serial_write(struct file *file, const char *buf,
-                                 size_t count, loff_t *ppos) {
-    int dev = MINOR(file->f_dentry->d_inode->i_rdev);
-    DECLARE_WAITQUEUE(wait, current);
-    struct sync_port *port;
-    unsigned long flags;
-    unsigned long c, c1;
-    unsigned long free_outp;
-    unsigned long outp;
-    unsigned long out_buffer;
+	size_t count, loff_t *ppos)
+{
+	int dev = MINOR(file_inode(file)->i_rdev);
+	DECLARE_WAITQUEUE(wait, current);
+	struct sync_port *port;
+	unsigned long flags;
+	unsigned long c, c1;
+	unsigned long free_outp;
+	unsigned long outp;
+	unsigned long out_buffer;
 
-    if (dev < 0 || dev >= NUMBER_OF_PORTS || !ports[dev].enabled) {
-        DEBUG(printk(KERN_DEBUG "Invalid minor %d\n", dev));
-        return -ENODEV;
-    }
-    port = &ports[dev];
+	if (dev < 0 || dev >= NUMBER_OF_PORTS || !ports[dev].enabled) {
+		DEBUG(printk(KERN_DEBUG "Invalid minor %d\n", dev));
+		return -ENODEV;
+	}
+	port = &ports[dev];
 
-    DEBUGWRITE(printk(KERN_DEBUG "W d%d c %lu (%d/%d)\n",
-                      port->port_nbr, count, port->out_count, OUT_BUFFER_SIZE));
-    /* Space to end of buffer */
-    /*
-     * out_buffer <c1>012345<-   c    ->OUT_BUFFER_SIZE
-     *            outp^    +out_count
-     *                      ^free_outp
-     * out_buffer 45<-     c      ->0123OUT_BUFFER_SIZE
-     *             +out_count   outp^
-     *              free_outp
-     *
-     */
+	DEBUGWRITE(printk(KERN_DEBUG "W d%d c %lu (%d/%d)\n",
+		port->port_nbr, count, port->out_count, OUT_BUFFER_SIZE));
+	/* Space to end of buffer */
+	/*
+	 * out_buffer <c1>012345<-   c    ->OUT_BUFFER_SIZE
+	 *            outp^    +out_count
+	 *                      ^free_outp
+	 * out_buffer 45<-     c      ->0123OUT_BUFFER_SIZE
+	 *             +out_count   outp^
+	 *              free_outp
+	 *
+	 */
 
-    /* Read variables that may be updated by interrupts */
-    local_irq_save(flags);
-    if (count > OUT_BUFFER_SIZE - port->out_count)
-        count = OUT_BUFFER_SIZE - port->out_count;
+	/* Read variables that may be updated by interrupts */
+	local_irq_save(flags);
+	if (count > OUT_BUFFER_SIZE - port->out_count)
+		count = OUT_BUFFER_SIZE - port->out_count;
 
-    outp = (unsigned long)port->outp;
-    free_outp = outp + port->out_count;
-    local_irq_restore(flags);
-    out_buffer = (unsigned long)port->out_buffer;
+	outp = (unsigned long)port->outp;
+	free_outp = outp + port->out_count;
+	local_irq_restore(flags);
+	out_buffer = (unsigned long)port->out_buffer;
 
-    /* Find out where and how much to write */
-    if (free_outp >= out_buffer + OUT_BUFFER_SIZE)
-        free_outp -= OUT_BUFFER_SIZE;
-    if (free_outp >= outp)
-        c = out_buffer + OUT_BUFFER_SIZE - free_outp;
-    else
-        c = outp - free_outp;
-    if (c > count)
-        c = count;
+	/* Find out where and how much to write */
+	if (free_outp >= out_buffer + OUT_BUFFER_SIZE)
+		free_outp -= OUT_BUFFER_SIZE;
+	if (free_outp >= outp)
+		c = out_buffer + OUT_BUFFER_SIZE - free_outp;
+	else
+		c = outp - free_outp;
+	if (c > count)
+		c = count;
 
-    DEBUGWRITE(printk(KERN_DEBUG "w op %08lX fop %08lX c %lu\n",
-                      outp, free_outp, c));
-    if (copy_from_user((void *)free_outp, buf, c))
-        return -EFAULT;
+	DEBUGWRITE(printk(KERN_DEBUG "w op %08lX fop %08lX c %lu\n",
+		outp, free_outp, c));
+	if (copy_from_user((void *)free_outp, buf, c))
+		return -EFAULT;
 
-    if (c != count) {
-        buf += c;
-        c1 = count - c;
-        DEBUGWRITE(printk(KERN_DEBUG "w2 fi %lu c %lu c1 %lu\n",
-                          free_outp-out_buffer, c, c1));
-        if (copy_from_user((void *)out_buffer, buf, c1))
-            return -EFAULT;
-    }
-    local_irq_save(flags);
-    port->out_count += count;
-    local_irq_restore(flags);
+	if (c != count) {
+		buf += c;
+		c1 = count - c;
+		DEBUGWRITE(printk(KERN_DEBUG "w2 fi %lu c %lu c1 %lu\n",
+			free_outp-out_buffer, c, c1));
+		if (copy_from_user((void *)out_buffer, buf, c1))
+			return -EFAULT;
+	}
+	local_irq_save(flags);
+	port->out_count += count;
+	local_irq_restore(flags);
 
-    /* Make sure transmitter/receiver is running */
-    if (!port->started) {
-        SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL, clk_halt,
-             running);
-        SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL, tr_enable,
-             enable);
-        SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL, rec_enable,
-             enable);
-        port->started = 1;
-    }
+	/* Make sure transmitter/receiver is running */
+	if (!port->started) {
+		SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL, clk_halt,
+			running);
+		SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL, tr_enable,
+			enable);
+		SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL, rec_enable,
+			enable);
+		port->started = 1;
+	}
 
-    *port->ctrl_data = port->ctrl_data_shadow;
+	*port->ctrl_data = port->ctrl_data_shadow;
 
-    if (file->f_flags & O_NONBLOCK)	{
-        local_irq_save(flags);
-        if (!port->tr_running) {
-            if (!port->use_dma) {
-                /* Start sender by writing data */
-                send_word(port);
-                /* and enable transmitter ready IRQ */
-                *R_IRQ_MASK1_SET = 1 <<
-                                   port->transmitter_ready_bit;
-            } else
-                start_dma(port,
-                          (unsigned char *volatile)port->outp, c);
-        }
-        local_irq_restore(flags);
-        DEBUGWRITE(printk(KERN_DEBUG "w d%d c %lu NB\n",
-                          port->port_nbr, count));
-        return count;
-    }
+	if (file->f_flags & O_NONBLOCK)	{
+		local_irq_save(flags);
+		if (!port->tr_running) {
+			if (!port->use_dma) {
+				/* Start sender by writing data */
+				send_word(port);
+				/* and enable transmitter ready IRQ */
+				*R_IRQ_MASK1_SET = 1 <<
+					port->transmitter_ready_bit;
+			} else
+				start_dma(port,
+					(unsigned char *volatile)port->outp, c);
+		}
+		local_irq_restore(flags);
+		DEBUGWRITE(printk(KERN_DEBUG "w d%d c %lu NB\n",
+			port->port_nbr, count));
+		return count;
+	}
 
-    /* Sleep until all sent */
-    add_wait_queue(&port->out_wait_q, &wait);
-    set_current_state(TASK_INTERRUPTIBLE);
-    local_irq_save(flags);
-    if (!port->tr_running) {
-        if (!port->use_dma) {
-            /* Start sender by writing data */
-            send_word(port);
-            /* and enable transmitter ready IRQ */
-            *R_IRQ_MASK1_SET = 1 << port->transmitter_ready_bit;
-        } else
-            start_dma(port, port->outp, c);
-    }
-    local_irq_restore(flags);
-    schedule();
-    set_current_state(TASK_RUNNING);
-    remove_wait_queue(&port->out_wait_q, &wait);
-    if (signal_pending(current))
-        return -EINTR;
+	/* Sleep until all sent */
+	add_wait_queue(&port->out_wait_q, &wait);
+	set_current_state(TASK_INTERRUPTIBLE);
+	local_irq_save(flags);
+	if (!port->tr_running) {
+		if (!port->use_dma) {
+			/* Start sender by writing data */
+			send_word(port);
+			/* and enable transmitter ready IRQ */
+			*R_IRQ_MASK1_SET = 1 << port->transmitter_ready_bit;
+		} else
+			start_dma(port, port->outp, c);
+	}
+	local_irq_restore(flags);
+	schedule();
+	set_current_state(TASK_RUNNING);
+	remove_wait_queue(&port->out_wait_q, &wait);
+	if (signal_pending(current))
+		return -EINTR;
 
-    DEBUGWRITE(printk(KERN_DEBUG "w d%d c %lu\n", port->port_nbr, count));
-    return count;
+	DEBUGWRITE(printk(KERN_DEBUG "w d%d c %lu\n", port->port_nbr, count));
+	return count;
 }
 
 static ssize_t sync_serial_read(struct file *file, char *buf,
-                                size_t count, loff_t *ppos) {
-    int dev = MINOR(file->f_dentry->d_inode->i_rdev);
-    int avail;
-    struct sync_port *port;
-    unsigned char *start;
-    unsigned char *end;
-    unsigned long flags;
+				size_t count, loff_t *ppos)
+{
+	int dev = MINOR(file_inode(file)->i_rdev);
+	int avail;
+	struct sync_port *port;
+	unsigned char *start;
+	unsigned char *end;
+	unsigned long flags;
 
-    if (dev < 0 || dev >= NUMBER_OF_PORTS || !ports[dev].enabled) {
-        DEBUG(printk(KERN_DEBUG "Invalid minor %d\n", dev));
-        return -ENODEV;
-    }
-    port = &ports[dev];
+	if (dev < 0 || dev >= NUMBER_OF_PORTS || !ports[dev].enabled) {
+		DEBUG(printk(KERN_DEBUG "Invalid minor %d\n", dev));
+		return -ENODEV;
+	}
+	port = &ports[dev];
 
-    DEBUGREAD(printk(KERN_DEBUG "R%d c %d ri %lu wi %lu /%lu\n",
-                     dev, count, port->readp - port->flip,
-                     port->writep - port->flip, port->in_buffer_size));
+	DEBUGREAD(printk(KERN_DEBUG "R%d c %d ri %lu wi %lu /%lu\n",
+		dev, count, port->readp - port->flip,
+		port->writep - port->flip, port->in_buffer_size));
 
-    if (!port->started) {
-        SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL, clk_halt,
-             running);
-        SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL, tr_enable,
-             enable);
-        SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL, rec_enable,
-             enable);
-        port->started = 1;
-    }
-    *port->ctrl_data = port->ctrl_data_shadow;
+	if (!port->started) {
+		SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL, clk_halt,
+			running);
+		SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL, tr_enable,
+			enable);
+		SETS(port->ctrl_data_shadow, R_SYNC_SERIAL1_CTRL, rec_enable,
+			enable);
+		port->started = 1;
+	}
+	*port->ctrl_data = port->ctrl_data_shadow;
 
-    /* Calculate number of available bytes */
-    /* Save pointers to avoid that they are modified by interrupt */
-    local_irq_save(flags);
-    start = (unsigned char *)port->readp; /* cast away volatile */
-    end = (unsigned char *)port->writep;  /* cast away volatile */
-    local_irq_restore(flags);
-    while (start == end && !port->full) {
-        /* No data */
-        if (file->f_flags & O_NONBLOCK)
-            return -EAGAIN;
+	/* Calculate number of available bytes */
+	/* Save pointers to avoid that they are modified by interrupt */
+	local_irq_save(flags);
+	start = (unsigned char *)port->readp; /* cast away volatile */
+	end = (unsigned char *)port->writep;  /* cast away volatile */
+	local_irq_restore(flags);
+	while (start == end && !port->full) {
+		/* No data */
+		if (file->f_flags & O_NONBLOCK)
+			return -EAGAIN;
 
-        interruptible_sleep_on(&port->in_wait_q);
-        if (signal_pending(current))
-            return -EINTR;
+		interruptible_sleep_on(&port->in_wait_q);
+		if (signal_pending(current))
+			return -EINTR;
 
-        local_irq_save(flags);
-        start = (unsigned char *)port->readp; /* cast away volatile */
-        end = (unsigned char *)port->writep;  /* cast away volatile */
-        local_irq_restore(flags);
-    }
+		local_irq_save(flags);
+		start = (unsigned char *)port->readp; /* cast away volatile */
+		end = (unsigned char *)port->writep;  /* cast away volatile */
+		local_irq_restore(flags);
+	}
 
-    /* Lazy read, never return wrapped data. */
-    if (port->full)
-        avail = port->in_buffer_size;
-    else if (end > start)
-        avail = end - start;
-    else
-        avail = port->flip + port->in_buffer_size - start;
+	/* Lazy read, never return wrapped data. */
+	if (port->full)
+		avail = port->in_buffer_size;
+	else if (end > start)
+		avail = end - start;
+	else
+		avail = port->flip + port->in_buffer_size - start;
 
-    count = count > avail ? avail : count;
-    if (copy_to_user(buf, start, count))
-        return -EFAULT;
-    /* Disable interrupts while updating readp */
-    local_irq_save(flags);
-    port->readp += count;
-    if (port->readp >= port->flip + port->in_buffer_size) /* Wrap? */
-        port->readp = port->flip;
-    port->full = 0;
-    local_irq_restore(flags);
-    DEBUGREAD(printk(KERN_DEBUG "r %d\n", count));
-    return count;
+	count = count > avail ? avail : count;
+	if (copy_to_user(buf, start, count))
+		return -EFAULT;
+	/* Disable interrupts while updating readp */
+	local_irq_save(flags);
+	port->readp += count;
+	if (port->readp >= port->flip + port->in_buffer_size) /* Wrap? */
+		port->readp = port->flip;
+	port->full = 0;
+	local_irq_restore(flags);
+	DEBUGREAD(printk(KERN_DEBUG "r %d\n", count));
+	return count;
 }
 
 static void send_word(struct sync_port *port) {

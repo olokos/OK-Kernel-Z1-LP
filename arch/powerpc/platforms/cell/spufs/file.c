@@ -1770,15 +1770,16 @@ out:
     return ret;
 }
 
-static int spufs_mfc_fsync(struct file *file, loff_t start, loff_t end, int datasync) {
-    struct inode *inode = file->f_path.dentry->d_inode;
-    int err = filemap_write_and_wait_range(inode->i_mapping, start, end);
-    if (!err) {
-        mutex_lock(&inode->i_mutex);
-        err = spufs_mfc_flush(file, NULL);
-        mutex_unlock(&inode->i_mutex);
-    }
-    return err;
+static int spufs_mfc_fsync(struct file *file, loff_t start, loff_t end, int datasync)
+{
+	struct inode *inode = file_inode(file);
+	int err = filemap_write_and_wait_range(inode->i_mapping, start, end);
+	if (!err) {
+		mutex_lock(&inode->i_mutex);
+		err = spufs_mfc_flush(file, NULL);
+		mutex_unlock(&inode->i_mutex);
+	}
+	return err;
 }
 
 static int spufs_mfc_fasync(int fd, struct file *file, int on) {
@@ -2377,93 +2378,95 @@ static int switch_log_sprint(struct spu_context *ctx, char *tbuf, int n) {
 }
 
 static ssize_t spufs_switch_log_read(struct file *file, char __user *buf,
-                                     size_t len, loff_t *ppos) {
-    struct inode *inode = file->f_path.dentry->d_inode;
-    struct spu_context *ctx = SPUFS_I(inode)->i_ctx;
-    int error = 0, cnt = 0;
+			     size_t len, loff_t *ppos)
+{
+	struct inode *inode = file_inode(file);
+	struct spu_context *ctx = SPUFS_I(inode)->i_ctx;
+	int error = 0, cnt = 0;
 
-    if (!buf)
-        return -EINVAL;
+	if (!buf)
+		return -EINVAL;
 
-    error = spu_acquire(ctx);
-    if (error)
-        return error;
+	error = spu_acquire(ctx);
+	if (error)
+		return error;
 
-    while (cnt < len) {
-        char tbuf[128];
-        int width;
+	while (cnt < len) {
+		char tbuf[128];
+		int width;
 
-        if (spufs_switch_log_used(ctx) == 0) {
-            if (cnt > 0) {
-                /* If there's data ready to go, we can
-                 * just return straight away */
-                break;
+		if (spufs_switch_log_used(ctx) == 0) {
+			if (cnt > 0) {
+				/* If there's data ready to go, we can
+				 * just return straight away */
+				break;
 
-            } else if (file->f_flags & O_NONBLOCK) {
-                error = -EAGAIN;
-                break;
+			} else if (file->f_flags & O_NONBLOCK) {
+				error = -EAGAIN;
+				break;
 
-            } else {
-                /* spufs_wait will drop the mutex and
-                 * re-acquire, but since we're in read(), the
-                 * file cannot be _released (and so
-                 * ctx->switch_log is stable).
-                 */
-                error = spufs_wait(ctx->switch_log->wait,
-                                   spufs_switch_log_used(ctx) > 0);
+			} else {
+				/* spufs_wait will drop the mutex and
+				 * re-acquire, but since we're in read(), the
+				 * file cannot be _released (and so
+				 * ctx->switch_log is stable).
+				 */
+				error = spufs_wait(ctx->switch_log->wait,
+						spufs_switch_log_used(ctx) > 0);
 
-                /* On error, spufs_wait returns without the
-                 * state mutex held */
-                if (error)
-                    return error;
+				/* On error, spufs_wait returns without the
+				 * state mutex held */
+				if (error)
+					return error;
 
-                /* We may have had entries read from underneath
-                 * us while we dropped the mutex in spufs_wait,
-                 * so re-check */
-                if (spufs_switch_log_used(ctx) == 0)
-                    continue;
-            }
-        }
+				/* We may have had entries read from underneath
+				 * us while we dropped the mutex in spufs_wait,
+				 * so re-check */
+				if (spufs_switch_log_used(ctx) == 0)
+					continue;
+			}
+		}
 
-        width = switch_log_sprint(ctx, tbuf, sizeof(tbuf));
-        if (width < len)
-            ctx->switch_log->tail =
-                (ctx->switch_log->tail + 1) %
-                SWITCH_LOG_BUFSIZE;
-        else
-            /* If the record is greater than space available return
-             * partial buffer (so far) */
-            break;
+		width = switch_log_sprint(ctx, tbuf, sizeof(tbuf));
+		if (width < len)
+			ctx->switch_log->tail =
+				(ctx->switch_log->tail + 1) %
+				 SWITCH_LOG_BUFSIZE;
+		else
+			/* If the record is greater than space available return
+			 * partial buffer (so far) */
+			break;
 
-        error = copy_to_user(buf + cnt, tbuf, width);
-        if (error)
-            break;
-        cnt += width;
-    }
+		error = copy_to_user(buf + cnt, tbuf, width);
+		if (error)
+			break;
+		cnt += width;
+	}
 
-    spu_release(ctx);
+	spu_release(ctx);
 
-    return cnt == 0 ? error : cnt;
+	return cnt == 0 ? error : cnt;
 }
 
-static unsigned int spufs_switch_log_poll(struct file *file, poll_table *wait) {
-    struct inode *inode = file->f_path.dentry->d_inode;
-    struct spu_context *ctx = SPUFS_I(inode)->i_ctx;
-    unsigned int mask = 0;
-    int rc;
+static unsigned int spufs_switch_log_poll(struct file *file, poll_table *wait)
+{
+	struct inode *inode = file_inode(file);
+	struct spu_context *ctx = SPUFS_I(inode)->i_ctx;
+	unsigned int mask = 0;
+	int rc;
 
-    poll_wait(file, &ctx->switch_log->wait, wait);
+	poll_wait(file, &ctx->switch_log->wait, wait);
 
-    rc = spu_acquire(ctx);
-    if (rc)
-        return rc;
+	rc = spu_acquire(ctx);
+	if (rc)
+		return rc;
 
-    if (spufs_switch_log_used(ctx) > 0)
-        mask |= POLLIN;
+	if (spufs_switch_log_used(ctx) > 0)
+		mask |= POLLIN;
 
-    spu_release(ctx);
+	spu_release(ctx);
 
-    return mask;
+	return mask;
 }
 
 static const struct file_operations spufs_switch_log_fops = {

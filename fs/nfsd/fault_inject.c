@@ -52,13 +52,83 @@ static int nfsd_inject_set(void *op_ptr, u64 val)
 	else
 		printk(KERN_INFO "NFSD Fault Injection: %s (n = %llu)", op->file, val);
 
-	op->func(val);
-	return 0;
+	nfs4_lock_state();
+	count = nfsd_for_n_state(val, op->forget);
+	nfs4_unlock_state();
+	printk(KERN_INFO "NFSD: %s: found %llu", op->file, count);
+}
+
+static void nfsd_inject_set_client(struct nfsd_fault_inject_op *op,
+				   struct sockaddr_storage *addr,
+				   size_t addr_size)
+{
+	char buf[INET6_ADDRSTRLEN];
+	struct nfs4_client *clp;
+	u64 count;
+
+	nfs4_lock_state();
+	clp = nfsd_find_client(addr, addr_size);
+	if (clp) {
+		count = op->forget(clp, 0);
+		rpc_ntop((struct sockaddr *)&clp->cl_addr, buf, sizeof(buf));
+		printk(KERN_INFO "NFSD [%s]: Client %s had %llu state object(s)\n", op->file, buf, count);
+	}
+	nfs4_unlock_state();
+}
+
+static void nfsd_inject_get(struct nfsd_fault_inject_op *op, u64 *val)
+{
+	nfs4_lock_state();
+	*val = nfsd_for_n_state(0, op->print);
+	nfs4_unlock_state();
+}
+
+static ssize_t fault_inject_read(struct file *file, char __user *buf,
+				 size_t len, loff_t *ppos)
+{
+	static u64 val;
+	char read_buf[25];
+	size_t size, ret;
+	loff_t pos = *ppos;
+
+	if (!pos)
+		nfsd_inject_get(file_inode(file)->i_private, &val);
+	size = scnprintf(read_buf, sizeof(read_buf), "%llu\n", val);
+
+	if (pos < 0)
+		return -EINVAL;
+	if (pos >= size || !len)
+		return 0;
+	if (len > size - pos)
+		len = size - pos;
+	ret = copy_to_user(buf, read_buf + pos, len);
+	if (ret == len)
+		return -EFAULT;
+	len -= ret;
+	*ppos = pos + len;
+	return len;
 }
 
 static int nfsd_inject_get(void *data, u64 *val)
 {
-	return 0;
+	char write_buf[INET6_ADDRSTRLEN];
+	size_t size = min(sizeof(write_buf) - 1, len);
+	struct net *net = current->nsproxy->net_ns;
+	struct sockaddr_storage sa;
+	u64 val;
+
+	if (copy_from_user(write_buf, buf, size))
+		return -EFAULT;
+	write_buf[size] = '\0';
+
+	size = rpc_pton(net, write_buf, size, (struct sockaddr *)&sa, sizeof(sa));
+	if (size > 0)
+		nfsd_inject_set_client(file_inode(file)->i_private, &sa, size);
+	else {
+		val = simple_strtoll(write_buf, NULL, 0);
+		nfsd_inject_set(file_inode(file)->i_private, val);
+	}
+	return len; /* on success, claim we got the whole input */
 }
 
 DEFINE_SIMPLE_ATTRIBUTE(fops_nfsd, nfsd_inject_get, nfsd_inject_set, "%llu\n");

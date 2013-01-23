@@ -136,55 +136,57 @@ void remove_divas_proc(void) {
 }
 
 static ssize_t grp_opt_proc_write(struct file *file, const char __user *buffer,
-                                  size_t count, loff_t *pos) {
-    diva_os_xdi_adapter_t *a = PDE(file->f_path.dentry->d_inode)->data;
-    PISDN_ADAPTER IoAdapter = IoAdapters[a->controller - 1];
+				  size_t count, loff_t *pos)
+{
+	diva_os_xdi_adapter_t *a = PDE(file_inode(file))->data;
+	PISDN_ADAPTER IoAdapter = IoAdapters[a->controller - 1];
 
-    if ((count == 1) || (count == 2)) {
-        char c;
-        if (get_user(c, buffer))
-            return -EFAULT;
-        switch (c) {
-        case '0':
-            IoAdapter->capi_cfg.cfg_1 &=
-                ~DIVA_XDI_CAPI_CFG_1_GROUP_POPTIMIZATION_ON;
-            break;
-        case '1':
-            IoAdapter->capi_cfg.cfg_1 |=
-                DIVA_XDI_CAPI_CFG_1_GROUP_POPTIMIZATION_ON;
-            break;
-        default:
-            return (-EINVAL);
-        }
-        return (count);
-    }
-    return (-EINVAL);
+	if ((count == 1) || (count == 2)) {
+		char c;
+		if (get_user(c, buffer))
+			return -EFAULT;
+		switch (c) {
+		case '0':
+			IoAdapter->capi_cfg.cfg_1 &=
+				~DIVA_XDI_CAPI_CFG_1_GROUP_POPTIMIZATION_ON;
+			break;
+		case '1':
+			IoAdapter->capi_cfg.cfg_1 |=
+				DIVA_XDI_CAPI_CFG_1_GROUP_POPTIMIZATION_ON;
+			break;
+		default:
+			return (-EINVAL);
+		}
+		return (count);
+	}
+	return (-EINVAL);
 }
 
 static ssize_t d_l1_down_proc_write(struct file *file, const char __user *buffer,
-                                    size_t count, loff_t *pos) {
-    diva_os_xdi_adapter_t *a = PDE(file->f_path.dentry->d_inode)->data;
-    PISDN_ADAPTER IoAdapter = IoAdapters[a->controller - 1];
+				    size_t count, loff_t *pos)
+{
+	diva_os_xdi_adapter_t *a = PDE(file_inode(file))->data;
+	PISDN_ADAPTER IoAdapter = IoAdapters[a->controller - 1];
 
-    if ((count == 1) || (count == 2)) {
-        char c;
-        if (get_user(c, buffer))
-            return -EFAULT;
-        switch (c) {
-        case '0':
-            IoAdapter->capi_cfg.cfg_1 &=
-                ~DIVA_XDI_CAPI_CFG_1_DYNAMIC_L1_ON;
-            break;
-        case '1':
-            IoAdapter->capi_cfg.cfg_1 |=
-                DIVA_XDI_CAPI_CFG_1_DYNAMIC_L1_ON;
-            break;
-        default:
-            return (-EINVAL);
-        }
-        return (count);
-    }
-    return (-EINVAL);
+	if ((count == 1) || (count == 2)) {
+		char c;
+		if (get_user(c, buffer))
+			return -EFAULT;
+		switch (c) {
+		case '0':
+			IoAdapter->capi_cfg.cfg_1 &=
+				~DIVA_XDI_CAPI_CFG_1_DYNAMIC_L1_ON;
+			break;
+		case '1':
+			IoAdapter->capi_cfg.cfg_1 |=
+				DIVA_XDI_CAPI_CFG_1_DYNAMIC_L1_ON;
+			break;
+		default:
+			return (-EINVAL);
+		}
+		return (count);
+	}
+	return (-EINVAL);
 }
 
 static int d_l1_down_proc_show(struct seq_file *m, void *v) {
@@ -236,23 +238,24 @@ static const struct file_operations grp_opt_proc_fops = {
 };
 
 static ssize_t info_proc_write(struct file *file, const char __user *buffer,
-                               size_t count, loff_t *pos) {
-    diva_os_xdi_adapter_t *a = PDE(file->f_path.dentry->d_inode)->data;
-    PISDN_ADAPTER IoAdapter = IoAdapters[a->controller - 1];
-    char c[4];
+			       size_t count, loff_t *pos)
+{
+	diva_os_xdi_adapter_t *a = PDE(file_inode(file))->data;
+	PISDN_ADAPTER IoAdapter = IoAdapters[a->controller - 1];
+	char c[4];
 
-    if (count <= 4)
-        return -EINVAL;
+	if (count <= 4)
+		return -EINVAL;
 
-    if (copy_from_user(c, buffer, 4))
-        return -EFAULT;
+	if (copy_from_user(c, buffer, 4))
+		return -EFAULT;
 
-    /* this is for test purposes only */
-    if (!memcmp(c, "trap", 4)) {
-        (*(IoAdapter->os_trap_nfy_Fnc)) (IoAdapter, IoAdapter->ANum);
-        return (count);
-    }
-    return (-EINVAL);
+	/* this is for test purposes only */
+	if (!memcmp(c, "trap", 4)) {
+		(*(IoAdapter->os_trap_nfy_Fnc)) (IoAdapter, IoAdapter->ANum);
+		return (count);
+	}
+	return (-EINVAL);
 }
 
 static int info_proc_show(struct seq_file *m, void *v) {

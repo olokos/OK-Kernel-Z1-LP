@@ -732,110 +732,111 @@ static void twl_load_sgl(TW_Device_Extension *tw_dev, TW_Command_Full *full_comm
 
 /* This function handles ioctl for the character device
    This interface is used by smartmontools open source software */
-static long twl_chrdev_ioctl(struct file *file, unsigned int cmd, unsigned long arg) {
-    long timeout;
-    unsigned long *cpu_addr, data_buffer_length_adjusted = 0, flags = 0;
-    dma_addr_t dma_handle;
-    int request_id = 0;
-    TW_Ioctl_Driver_Command driver_command;
-    struct inode *inode = file->f_dentry->d_inode;
-    TW_Ioctl_Buf_Apache *tw_ioctl;
-    TW_Command_Full *full_command_packet;
-    TW_Device_Extension *tw_dev = twl_device_extension_list[iminor(inode)];
-    int retval = -EFAULT;
-    void __user *argp = (void __user *)arg;
+static long twl_chrdev_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
+{
+	long timeout;
+	unsigned long *cpu_addr, data_buffer_length_adjusted = 0, flags = 0;
+	dma_addr_t dma_handle;
+	int request_id = 0;
+	TW_Ioctl_Driver_Command driver_command;
+	struct inode *inode = file_inode(file);
+	TW_Ioctl_Buf_Apache *tw_ioctl;
+	TW_Command_Full *full_command_packet;
+	TW_Device_Extension *tw_dev = twl_device_extension_list[iminor(inode)];
+	int retval = -EFAULT;
+	void __user *argp = (void __user *)arg;
 
-    mutex_lock(&twl_chrdev_mutex);
+	mutex_lock(&twl_chrdev_mutex);
 
-    /* Only let one of these through at a time */
-    if (mutex_lock_interruptible(&tw_dev->ioctl_lock)) {
-        retval = -EINTR;
-        goto out;
-    }
+	/* Only let one of these through at a time */
+	if (mutex_lock_interruptible(&tw_dev->ioctl_lock)) {
+		retval = -EINTR;
+		goto out;
+	}
 
-    /* First copy down the driver command */
-    if (copy_from_user(&driver_command, argp, sizeof(TW_Ioctl_Driver_Command)))
-        goto out2;
+	/* First copy down the driver command */
+	if (copy_from_user(&driver_command, argp, sizeof(TW_Ioctl_Driver_Command)))
+		goto out2;
 
-    /* Check data buffer size */
-    if (driver_command.buffer_length > TW_MAX_SECTORS * 2048) {
-        retval = -EINVAL;
-        goto out2;
-    }
+	/* Check data buffer size */
+	if (driver_command.buffer_length > TW_MAX_SECTORS * 2048) {
+		retval = -EINVAL;
+		goto out2;
+	}
 
-    /* Hardware can only do multiple of 512 byte transfers */
-    data_buffer_length_adjusted = (driver_command.buffer_length + 511) & ~511;
+	/* Hardware can only do multiple of 512 byte transfers */
+	data_buffer_length_adjusted = (driver_command.buffer_length + 511) & ~511;
 
-    /* Now allocate ioctl buf memory */
-    cpu_addr = dma_alloc_coherent(&tw_dev->tw_pci_dev->dev, data_buffer_length_adjusted+sizeof(TW_Ioctl_Buf_Apache) - 1, &dma_handle, GFP_KERNEL);
-    if (!cpu_addr) {
-        retval = -ENOMEM;
-        goto out2;
-    }
+	/* Now allocate ioctl buf memory */
+	cpu_addr = dma_alloc_coherent(&tw_dev->tw_pci_dev->dev, data_buffer_length_adjusted+sizeof(TW_Ioctl_Buf_Apache) - 1, &dma_handle, GFP_KERNEL);
+	if (!cpu_addr) {
+		retval = -ENOMEM;
+		goto out2;
+	}
 
-    tw_ioctl = (TW_Ioctl_Buf_Apache *)cpu_addr;
+	tw_ioctl = (TW_Ioctl_Buf_Apache *)cpu_addr;
 
-    /* Now copy down the entire ioctl */
-    if (copy_from_user(tw_ioctl, argp, driver_command.buffer_length + sizeof(TW_Ioctl_Buf_Apache) - 1))
-        goto out3;
+	/* Now copy down the entire ioctl */
+	if (copy_from_user(tw_ioctl, argp, driver_command.buffer_length + sizeof(TW_Ioctl_Buf_Apache) - 1))
+		goto out3;
 
-    /* See which ioctl we are doing */
-    switch (cmd) {
-    case TW_IOCTL_FIRMWARE_PASS_THROUGH:
-        spin_lock_irqsave(tw_dev->host->host_lock, flags);
-        twl_get_request_id(tw_dev, &request_id);
+	/* See which ioctl we are doing */
+	switch (cmd) {
+	case TW_IOCTL_FIRMWARE_PASS_THROUGH:
+		spin_lock_irqsave(tw_dev->host->host_lock, flags);
+		twl_get_request_id(tw_dev, &request_id);
 
-        /* Flag internal command */
-        tw_dev->srb[request_id] = NULL;
+		/* Flag internal command */
+		tw_dev->srb[request_id] = NULL;
 
-        /* Flag chrdev ioctl */
-        tw_dev->chrdev_request_id = request_id;
+		/* Flag chrdev ioctl */
+		tw_dev->chrdev_request_id = request_id;
 
-        full_command_packet = (TW_Command_Full *)&tw_ioctl->firmware_command;
+		full_command_packet = (TW_Command_Full *)&tw_ioctl->firmware_command;
 
-        /* Load request id and sglist for both command types */
-        twl_load_sgl(tw_dev, full_command_packet, request_id, dma_handle, data_buffer_length_adjusted);
+		/* Load request id and sglist for both command types */
+		twl_load_sgl(tw_dev, full_command_packet, request_id, dma_handle, data_buffer_length_adjusted);
 
-        memcpy(tw_dev->command_packet_virt[request_id], &(tw_ioctl->firmware_command), sizeof(TW_Command_Full));
+		memcpy(tw_dev->command_packet_virt[request_id], &(tw_ioctl->firmware_command), sizeof(TW_Command_Full));
 
-        /* Now post the command packet to the controller */
-        twl_post_command_packet(tw_dev, request_id);
-        spin_unlock_irqrestore(tw_dev->host->host_lock, flags);
+		/* Now post the command packet to the controller */
+		twl_post_command_packet(tw_dev, request_id);
+		spin_unlock_irqrestore(tw_dev->host->host_lock, flags);
 
-        timeout = TW_IOCTL_CHRDEV_TIMEOUT*HZ;
+		timeout = TW_IOCTL_CHRDEV_TIMEOUT*HZ;
 
-        /* Now wait for command to complete */
-        timeout = wait_event_timeout(tw_dev->ioctl_wqueue, tw_dev->chrdev_request_id == TW_IOCTL_CHRDEV_FREE, timeout);
+		/* Now wait for command to complete */
+		timeout = wait_event_timeout(tw_dev->ioctl_wqueue, tw_dev->chrdev_request_id == TW_IOCTL_CHRDEV_FREE, timeout);
 
-        /* We timed out, and didn't get an interrupt */
-        if (tw_dev->chrdev_request_id != TW_IOCTL_CHRDEV_FREE) {
-            /* Now we need to reset the board */
-            printk(KERN_WARNING "3w-sas: scsi%d: WARNING: (0x%02X:0x%04X): Character ioctl (0x%x) timed out, resetting card.\n",
-                   tw_dev->host->host_no, TW_DRIVER, 0x6,
-                   cmd);
-            retval = -EIO;
-            twl_reset_device_extension(tw_dev, 1);
-            goto out3;
-        }
+		/* We timed out, and didn't get an interrupt */
+		if (tw_dev->chrdev_request_id != TW_IOCTL_CHRDEV_FREE) {
+			/* Now we need to reset the board */
+			printk(KERN_WARNING "3w-sas: scsi%d: WARNING: (0x%02X:0x%04X): Character ioctl (0x%x) timed out, resetting card.\n",
+			       tw_dev->host->host_no, TW_DRIVER, 0x6,
+			       cmd);
+			retval = -EIO;
+			twl_reset_device_extension(tw_dev, 1);
+			goto out3;
+		}
 
-        /* Now copy in the command packet response */
-        memcpy(&(tw_ioctl->firmware_command), tw_dev->command_packet_virt[request_id], sizeof(TW_Command_Full));
+		/* Now copy in the command packet response */
+		memcpy(&(tw_ioctl->firmware_command), tw_dev->command_packet_virt[request_id], sizeof(TW_Command_Full));
+		
+		/* Now complete the io */
+		spin_lock_irqsave(tw_dev->host->host_lock, flags);
+		tw_dev->posted_request_count--;
+		tw_dev->state[request_id] = TW_S_COMPLETED;
+		twl_free_request_id(tw_dev, request_id);
+		spin_unlock_irqrestore(tw_dev->host->host_lock, flags);
+		break;
+	default:
+		retval = -ENOTTY;
+		goto out3;
+	}
 
-        /* Now complete the io */
-        spin_lock_irqsave(tw_dev->host->host_lock, flags);
-        tw_dev->posted_request_count--;
-        tw_dev->state[request_id] = TW_S_COMPLETED;
-        twl_free_request_id(tw_dev, request_id);
-        spin_unlock_irqrestore(tw_dev->host->host_lock, flags);
-        break;
-    default:
-        retval = -ENOTTY;
-        goto out3;
-    }
-
-    /* Now copy the entire response to userspace */
-    if (copy_to_user(argp, tw_ioctl, sizeof(TW_Ioctl_Buf_Apache) + driver_command.buffer_length - 1) == 0)
-        retval = 0;
+	/* Now copy the entire response to userspace */
+	if (copy_to_user(argp, tw_ioctl, sizeof(TW_Ioctl_Buf_Apache) + driver_command.buffer_length - 1) == 0)
+		retval = 0;
 out3:
     /* Now free ioctl buf memory */
     dma_free_coherent(&tw_dev->tw_pci_dev->dev, data_buffer_length_adjusted+sizeof(TW_Ioctl_Buf_Apache) - 1, cpu_addr, dma_handle);

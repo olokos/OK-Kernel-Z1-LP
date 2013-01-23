@@ -308,133 +308,135 @@ static ssize_t buffer_from_user(unsigned int minor, const char __user *buf,
 }
 
 static ssize_t vme_user_read(struct file *file, char __user *buf, size_t count,
-                             loff_t *ppos) {
-    unsigned int minor = MINOR(file->f_dentry->d_inode->i_rdev);
-    ssize_t retval;
-    size_t image_size;
-    size_t okcount;
+			loff_t *ppos)
+{
+	unsigned int minor = MINOR(file_inode(file)->i_rdev);
+	ssize_t retval;
+	size_t image_size;
+	size_t okcount;
 
-    if (minor == CONTROL_MINOR)
-        return 0;
+	if (minor == CONTROL_MINOR)
+		return 0;
 
-    down(&image[minor].sem);
+	mutex_lock(&image[minor].mutex);
 
-    /* XXX Do we *really* want this helper - we can use vme_*_get ? */
-    image_size = vme_get_size(image[minor].resource);
+	/* XXX Do we *really* want this helper - we can use vme_*_get ? */
+	image_size = vme_get_size(image[minor].resource);
 
-    /* Ensure we are starting at a valid location */
-    if ((*ppos < 0) || (*ppos > (image_size - 1))) {
-        up(&image[minor].sem);
-        return 0;
-    }
+	/* Ensure we are starting at a valid location */
+	if ((*ppos < 0) || (*ppos > (image_size - 1))) {
+		mutex_unlock(&image[minor].mutex);
+		return 0;
+	}
 
-    /* Ensure not reading past end of the image */
-    if (*ppos + count > image_size)
-        okcount = image_size - *ppos;
-    else
-        okcount = count;
+	/* Ensure not reading past end of the image */
+	if (*ppos + count > image_size)
+		okcount = image_size - *ppos;
+	else
+		okcount = count;
 
-    switch (type[minor]) {
-    case MASTER_MINOR:
-        retval = resource_to_user(minor, buf, okcount, ppos);
-        break;
-    case SLAVE_MINOR:
-        retval = buffer_to_user(minor, buf, okcount, ppos);
-        break;
-    default:
-        retval = -EINVAL;
-    }
+	switch (type[minor]) {
+	case MASTER_MINOR:
+		retval = resource_to_user(minor, buf, okcount, ppos);
+		break;
+	case SLAVE_MINOR:
+		retval = buffer_to_user(minor, buf, okcount, ppos);
+		break;
+	default:
+		retval = -EINVAL;
+	}
 
-    up(&image[minor].sem);
+	mutex_unlock(&image[minor].mutex);
+	if (retval > 0)
+		*ppos += retval;
 
-    if (retval > 0)
-        *ppos += retval;
-
-    return retval;
+	return retval;
 }
 
 static ssize_t vme_user_write(struct file *file, const char __user *buf,
-                              size_t count, loff_t *ppos) {
-    unsigned int minor = MINOR(file->f_dentry->d_inode->i_rdev);
-    ssize_t retval;
-    size_t image_size;
-    size_t okcount;
+			size_t count, loff_t *ppos)
+{
+	unsigned int minor = MINOR(file_inode(file)->i_rdev);
+	ssize_t retval;
+	size_t image_size;
+	size_t okcount;
 
-    if (minor == CONTROL_MINOR)
-        return 0;
+	if (minor == CONTROL_MINOR)
+		return 0;
 
-    down(&image[minor].sem);
+	mutex_lock(&image[minor].mutex);
 
-    image_size = vme_get_size(image[minor].resource);
+	image_size = vme_get_size(image[minor].resource);
 
-    /* Ensure we are starting at a valid location */
-    if ((*ppos < 0) || (*ppos > (image_size - 1))) {
-        up(&image[minor].sem);
-        return 0;
-    }
+	/* Ensure we are starting at a valid location */
+	if ((*ppos < 0) || (*ppos > (image_size - 1))) {
+		mutex_unlock(&image[minor].mutex);
+		return 0;
+	}
 
-    /* Ensure not reading past end of the image */
-    if (*ppos + count > image_size)
-        okcount = image_size - *ppos;
-    else
-        okcount = count;
+	/* Ensure not reading past end of the image */
+	if (*ppos + count > image_size)
+		okcount = image_size - *ppos;
+	else
+		okcount = count;
 
-    switch (type[minor]) {
-    case MASTER_MINOR:
-        retval = resource_from_user(minor, buf, okcount, ppos);
-        break;
-    case SLAVE_MINOR:
-        retval = buffer_from_user(minor, buf, okcount, ppos);
-        break;
-    default:
-        retval = -EINVAL;
-    }
+	switch (type[minor]) {
+	case MASTER_MINOR:
+		retval = resource_from_user(minor, buf, okcount, ppos);
+		break;
+	case SLAVE_MINOR:
+		retval = buffer_from_user(minor, buf, okcount, ppos);
+		break;
+	default:
+		retval = -EINVAL;
+	}
 
-    up(&image[minor].sem);
+	mutex_unlock(&image[minor].mutex);
 
-    if (retval > 0)
-        *ppos += retval;
+	if (retval > 0)
+		*ppos += retval;
 
-    return retval;
+	return retval;
 }
 
-static loff_t vme_user_llseek(struct file *file, loff_t off, int whence) {
-    loff_t absolute = -1;
-    unsigned int minor = MINOR(file->f_dentry->d_inode->i_rdev);
-    size_t image_size;
+static loff_t vme_user_llseek(struct file *file, loff_t off, int whence)
+{
+	loff_t absolute = -1;
+	unsigned int minor = MINOR(file_inode(file)->i_rdev);
+	size_t image_size;
 
-    if (minor == CONTROL_MINOR)
-        return -EINVAL;
+	if (minor == CONTROL_MINOR)
+		return -EINVAL;
 
-    down(&image[minor].sem);
-    image_size = vme_get_size(image[minor].resource);
+	mutex_lock(&image[minor].mutex);
+	image_size = vme_get_size(image[minor].resource);
 
-    switch (whence) {
-    case SEEK_SET:
-        absolute = off;
-        break;
-    case SEEK_CUR:
-        absolute = file->f_pos + off;
-        break;
-    case SEEK_END:
-        absolute = image_size + off;
-        break;
-    default:
-        up(&image[minor].sem);
-        return -EINVAL;
-        break;
-    }
+	switch (whence) {
+	case SEEK_SET:
+		absolute = off;
+		break;
+	case SEEK_CUR:
+		absolute = file->f_pos + off;
+		break;
+	case SEEK_END:
+		absolute = image_size + off;
+		break;
+	default:
+		mutex_unlock(&image[minor].mutex);
+		return -EINVAL;
+		break;
+	}
 
-    if ((absolute < 0) || (absolute >= image_size)) {
-        up(&image[minor].sem);
-        return -EINVAL;
-    }
+	if ((absolute < 0) || (absolute >= image_size)) {
+		mutex_unlock(&image[minor].mutex);
+		return -EINVAL;
+	}
 
-    file->f_pos = absolute;
+	file->f_pos = absolute;
 
-    up(&image[minor].sem);
+	mutex_unlock(&image[minor].mutex);
 
-    return absolute;
+	return absolute;
 }
 
 /*
@@ -574,9 +576,9 @@ static long
 vme_user_unlocked_ioctl(struct file *file, unsigned int cmd, unsigned long arg) {
     int ret;
 
-    mutex_lock(&vme_user_mutex);
-    ret = vme_user_ioctl(file->f_path.dentry->d_inode, file, cmd, arg);
-    mutex_unlock(&vme_user_mutex);
+	mutex_lock(&vme_user_mutex);
+	ret = vme_user_ioctl(file_inode(file), file, cmd, arg);
+	mutex_unlock(&vme_user_mutex);
 
     return ret;
 }

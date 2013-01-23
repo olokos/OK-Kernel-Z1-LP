@@ -42,39 +42,40 @@ static void data_free_delayed(struct work_struct *work) {
 }
 
 static ssize_t dbfs_read(struct file *file, char __user *buf,
-                         size_t size, loff_t *ppos) {
-    struct hypfs_dbfs_data *data;
-    struct hypfs_dbfs_file *df;
-    ssize_t rc;
+			 size_t size, loff_t *ppos)
+{
+	struct hypfs_dbfs_data *data;
+	struct hypfs_dbfs_file *df;
+	ssize_t rc;
 
-    if (*ppos != 0)
-        return 0;
+	if (*ppos != 0)
+		return 0;
 
-    df = file->f_path.dentry->d_inode->i_private;
-    mutex_lock(&df->lock);
-    if (!df->data) {
-        data = hypfs_dbfs_data_alloc(df);
-        if (!data) {
-            mutex_unlock(&df->lock);
-            return -ENOMEM;
-        }
-        rc = df->data_create(&data->buf, &data->buf_free_ptr,
-                             &data->size);
-        if (rc) {
-            mutex_unlock(&df->lock);
-            kfree(data);
-            return rc;
-        }
-        df->data = data;
-        schedule_delayed_work(&df->data_free_work, HZ);
-    }
-    data = df->data;
-    kref_get(&data->kref);
-    mutex_unlock(&df->lock);
+	df = file_inode(file)->i_private;
+	mutex_lock(&df->lock);
+	if (!df->data) {
+		data = hypfs_dbfs_data_alloc(df);
+		if (!data) {
+			mutex_unlock(&df->lock);
+			return -ENOMEM;
+		}
+		rc = df->data_create(&data->buf, &data->buf_free_ptr,
+				     &data->size);
+		if (rc) {
+			mutex_unlock(&df->lock);
+			kfree(data);
+			return rc;
+		}
+		df->data = data;
+		schedule_delayed_work(&df->data_free_work, HZ);
+	}
+	data = df->data;
+	kref_get(&data->kref);
+	mutex_unlock(&df->lock);
 
-    rc = simple_read_from_buffer(buf, size, ppos, data->buf, data->size);
-    kref_put(&data->kref, hypfs_dbfs_data_free);
-    return rc;
+	rc = simple_read_from_buffer(buf, size, ppos, data->buf, data->size);
+	kref_put(&data->kref, hypfs_dbfs_data_free);
+	return rc;
 }
 
 static const struct file_operations dbfs_ops = {

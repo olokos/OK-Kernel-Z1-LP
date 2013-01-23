@@ -2250,7 +2250,9 @@ static struct file *do_last(struct nameidata *nd, struct path *path,
 	if (nd->last.name[nd->last.len])
 		goto exit;
 
-	mutex_lock(&dir->d_inode->i_mutex);
+		if ((*opened & FILE_CREATED) ||
+		    !S_ISREG(file_inode(file)->i_mode))
+			will_truncate = false;
 
 	dentry = lookup_hash(nd);
 	error = PTR_ERR(dentry);

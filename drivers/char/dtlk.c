@@ -122,35 +122,36 @@ static char dtlk_write_tts(char);
  */
 
 static ssize_t dtlk_read(struct file *file, char __user *buf,
-                         size_t count, loff_t * ppos) {
-    unsigned int minor = iminor(file->f_path.dentry->d_inode);
-    char ch;
-    int i = 0, retries;
+			 size_t count, loff_t * ppos)
+{
+	unsigned int minor = iminor(file_inode(file));
+	char ch;
+	int i = 0, retries;
 
-    TRACE_TEXT("(dtlk_read");
-    /*  printk("DoubleTalk PC - dtlk_read()\n"); */
+	TRACE_TEXT("(dtlk_read");
+	/*  printk("DoubleTalk PC - dtlk_read()\n"); */
 
-    if (minor != DTLK_MINOR || !dtlk_has_indexing)
-        return -EINVAL;
+	if (minor != DTLK_MINOR || !dtlk_has_indexing)
+		return -EINVAL;
 
-    for (retries = 0; retries < loops_per_jiffy; retries++) {
-        while (i < count && dtlk_readable()) {
-            ch = dtlk_read_lpc();
-            /*        printk("dtlk_read() reads 0x%02x\n", ch); */
-            if (put_user(ch, buf++))
-                return -EFAULT;
-            i++;
-        }
-        if (i)
-            return i;
-        if (file->f_flags & O_NONBLOCK)
-            break;
-        msleep_interruptible(100);
-    }
-    if (retries == loops_per_jiffy)
-        printk(KERN_ERR "dtlk_read times out\n");
-    TRACE_RET;
-    return -EAGAIN;
+	for (retries = 0; retries < loops_per_jiffy; retries++) {
+		while (i < count && dtlk_readable()) {
+			ch = dtlk_read_lpc();
+			/*        printk("dtlk_read() reads 0x%02x\n", ch); */
+			if (put_user(ch, buf++))
+				return -EFAULT;
+			i++;
+		}
+		if (i)
+			return i;
+		if (file->f_flags & O_NONBLOCK)
+			break;
+		msleep_interruptible(100);
+	}
+	if (retries == loops_per_jiffy)
+		printk(KERN_ERR "dtlk_read times out\n");
+	TRACE_RET;
+	return -EAGAIN;
 }
 
 static ssize_t dtlk_write(struct file *file, const char __user *buf,
@@ -174,56 +175,55 @@ static ssize_t dtlk_write(struct file *file, const char __user *buf,
     }
 #endif
 
-    if (iminor(file->f_path.dentry->d_inode) != DTLK_MINOR)
-        return -EINVAL;
+	if (iminor(file_inode(file)) != DTLK_MINOR)
+		return -EINVAL;
 
-    while (1) {
-        while (i < count && !get_user(ch, buf) &&
-                (ch == DTLK_CLEAR || dtlk_writeable())) {
-            dtlk_write_tts(ch);
-            buf++;
-            i++;
-            if (i % 5 == 0)
-                /* We yield our time until scheduled
-                   again.  This reduces the transfer
-                   rate to 500 bytes/sec, but that's
-                   still enough to keep up with the
-                   speech synthesizer. */
-                msleep_interruptible(1);
-            else {
-                /* the RDY bit goes zero 2-3 usec
-                   after writing, and goes 1 again
-                   180-190 usec later.  Here, we wait
-                   up to 250 usec for the RDY bit to
-                   go nonzero. */
-                for (retries = 0;
-                        retries < loops_per_jiffy / (4000/HZ);
-                        retries++)
-                    if (inb_p(dtlk_port_tts) &
-                            TTS_WRITABLE)
-                        break;
-            }
-            retries = 0;
-        }
-        if (i == count)
-            return i;
-        if (file->f_flags & O_NONBLOCK)
-            break;
+	while (1) {
+		while (i < count && !get_user(ch, buf) &&
+		       (ch == DTLK_CLEAR || dtlk_writeable())) {
+			dtlk_write_tts(ch);
+			buf++;
+			i++;
+			if (i % 5 == 0)
+				/* We yield our time until scheduled
+				   again.  This reduces the transfer
+				   rate to 500 bytes/sec, but that's
+				   still enough to keep up with the
+				   speech synthesizer. */
+				msleep_interruptible(1);
+			else {
+				/* the RDY bit goes zero 2-3 usec
+				   after writing, and goes 1 again
+				   180-190 usec later.  Here, we wait
+				   up to 250 usec for the RDY bit to
+				   go nonzero. */
+				for (retries = 0;
+				     retries < loops_per_jiffy / (4000/HZ);
+				     retries++)
+					if (inb_p(dtlk_port_tts) &
+					    TTS_WRITABLE)
+						break;
+			}
+			retries = 0;
+		}
+		if (i == count)
+			return i;
+		if (file->f_flags & O_NONBLOCK)
+			break;
 
-        msleep_interruptible(1);
+		msleep_interruptible(1);
 
-        if (++retries > 10 * HZ) {
-            /* wait no more than 10 sec
-            			      from last write */
-            printk("dtlk: write timeout.  "
-                   "inb_p(dtlk_port_tts) = 0x%02x\n",
-                   inb_p(dtlk_port_tts));
-            TRACE_RET;
-            return -EBUSY;
-        }
-    }
-    TRACE_RET;
-    return -EAGAIN;
+		if (++retries > 10 * HZ) { /* wait no more than 10 sec
+					      from last write */
+			printk("dtlk: write timeout.  "
+			       "inb_p(dtlk_port_tts) = 0x%02x\n",
+			       inb_p(dtlk_port_tts));
+			TRACE_RET;
+			return -EBUSY;
+		}
+	}
+	TRACE_RET;
+	return -EAGAIN;
 }
 
 static unsigned int dtlk_poll(struct file *file, poll_table * wait) {

@@ -912,44 +912,45 @@ static unsigned int cosa_poll(struct file *file, poll_table *poll) {
     return 0;
 }
 
-static int cosa_open(struct inode *inode, struct file *file) {
-    struct cosa_data *cosa;
-    struct channel_data *chan;
-    unsigned long flags;
-    int n;
-    int ret = 0;
+static int cosa_open(struct inode *inode, struct file *file)
+{
+	struct cosa_data *cosa;
+	struct channel_data *chan;
+	unsigned long flags;
+	int n;
+	int ret = 0;
 
-    mutex_lock(&cosa_chardev_mutex);
-    if ((n=iminor(file->f_path.dentry->d_inode)>>CARD_MINOR_BITS)
-            >= nr_cards) {
-        ret = -ENODEV;
-        goto out;
-    }
-    cosa = cosa_cards+n;
+	mutex_lock(&cosa_chardev_mutex);
+	if ((n=iminor(file_inode(file))>>CARD_MINOR_BITS)
+		>= nr_cards) {
+		ret = -ENODEV;
+		goto out;
+	}
+	cosa = cosa_cards+n;
 
-    if ((n=iminor(file->f_path.dentry->d_inode)
-            & ((1<<CARD_MINOR_BITS)-1)) >= cosa->nchannels) {
-        ret = -ENODEV;
-        goto out;
-    }
-    chan = cosa->chan + n;
+	if ((n=iminor(file_inode(file))
+		& ((1<<CARD_MINOR_BITS)-1)) >= cosa->nchannels) {
+		ret = -ENODEV;
+		goto out;
+	}
+	chan = cosa->chan + n;
+	
+	file->private_data = chan;
 
-    file->private_data = chan;
+	spin_lock_irqsave(&cosa->lock, flags);
 
-    spin_lock_irqsave(&cosa->lock, flags);
+	if (chan->usage < 0) { /* in netdev mode */
+		spin_unlock_irqrestore(&cosa->lock, flags);
+		ret = -EBUSY;
+		goto out;
+	}
+	cosa->usage++;
+	chan->usage++;
 
-    if (chan->usage < 0) { /* in netdev mode */
-        spin_unlock_irqrestore(&cosa->lock, flags);
-        ret = -EBUSY;
-        goto out;
-    }
-    cosa->usage++;
-    chan->usage++;
-
-    chan->tx_done = chrdev_tx_done;
-    chan->setup_rx = chrdev_setup_rx;
-    chan->rx_done = chrdev_rx_done;
-    spin_unlock_irqrestore(&cosa->lock, flags);
+	chan->tx_done = chrdev_tx_done;
+	chan->setup_rx = chrdev_setup_rx;
+	chan->rx_done = chrdev_rx_done;
+	spin_unlock_irqrestore(&cosa->lock, flags);
 out:
     mutex_unlock(&cosa_chardev_mutex);
     return ret;

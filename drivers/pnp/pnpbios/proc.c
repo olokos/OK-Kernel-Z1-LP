@@ -230,33 +230,34 @@ static int pnpbios_proc_open(struct inode *inode, struct file *file) {
 }
 
 static ssize_t pnpbios_proc_write(struct file *file, const char __user *buf,
-                                  size_t count, loff_t *pos) {
-    void *data = PDE(file->f_path.dentry->d_inode)->data;
-    struct pnp_bios_node *node;
-    int boot = (long)data >> 8;
-    u8 nodenum = (long)data;
-    int ret = count;
+				  size_t count, loff_t *pos)
+{
+	void *data = PDE(file_inode(file))->data;
+	struct pnp_bios_node *node;
+	int boot = (long)data >> 8;
+	u8 nodenum = (long)data;
+	int ret = count;
 
-    node = kzalloc(node_info.max_node_size, GFP_KERNEL);
-    if (!node)
-        return -ENOMEM;
-    if (pnp_bios_get_dev_node(&nodenum, boot, node)) {
-        ret = -EIO;
-        goto out;
-    }
-    if (count != node->size - sizeof(struct pnp_bios_node)) {
-        ret = -EINVAL;
-        goto out;
-    }
-    if (copy_from_user(node->data, buf, count)) {
-        ret = -EFAULT;
-        goto out;
-    }
-    if (pnp_bios_set_dev_node(node->handle, boot, node) != 0) {
-        ret = -EINVAL;
-        goto out;
-    }
-    ret = count;
+	node = kzalloc(node_info.max_node_size, GFP_KERNEL);
+	if (!node)
+		return -ENOMEM;
+	if (pnp_bios_get_dev_node(&nodenum, boot, node)) {
+		ret = -EIO;
+		goto out;
+	}
+	if (count != node->size - sizeof(struct pnp_bios_node)) {
+		ret = -EINVAL;
+		goto out;
+	}
+	if (copy_from_user(node->data, buf, count)) {
+		ret = -EFAULT;
+		goto out;
+	}
+	if (pnp_bios_set_dev_node(node->handle, boot, node) != 0) {
+		ret = -EINVAL;
+		goto out;
+	}
+	ret = count;
 out:
     kfree(node);
     return ret;

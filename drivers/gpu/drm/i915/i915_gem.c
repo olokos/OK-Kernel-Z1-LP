@@ -1339,40 +1339,13 @@ i915_gem_mmap_gtt_ioctl(struct drm_device *dev, void *data,
     return i915_gem_mmap_gtt(file, dev, args->handle, &args->offset);
 }
 
-
-static int
-i915_gem_object_get_pages_gtt(struct drm_i915_gem_object *obj,
-                              gfp_t gfpmask) {
-    int page_count, i;
-    struct address_space *mapping;
-    struct inode *inode;
-    struct page *page;
-
-    /* Get the list of pages out of our struct file.  They'll be pinned
-     * at this point until we release them.
-     */
-    page_count = obj->base.size / PAGE_SIZE;
-    BUG_ON(obj->pages != NULL);
-    obj->pages = drm_malloc_ab(page_count, sizeof(struct page *));
-    if (obj->pages == NULL)
-        return -ENOMEM;
-
-    inode = obj->base.filp->f_path.dentry->d_inode;
-    mapping = inode->i_mapping;
-    gfpmask |= mapping_gfp_mask(mapping);
-
-    for (i = 0; i < page_count; i++) {
-        page = shmem_read_mapping_page_gfp(mapping, i, gfpmask);
-        if (IS_ERR(page))
-            goto err_pages;
-
-        obj->pages[i] = page;
-    }
-
-    if (i915_gem_object_needs_bit17_swizzle(obj))
-        i915_gem_object_do_bit_17_swizzle(obj);
-
-    return 0;
+	/* Our goal here is to return as much of the memory as
+	 * is possible back to the system as we are called from OOM.
+	 * To do this we must instruct the shmfs to drop all of its
+	 * backing pages, *now*.
+	 */
+	inode = file_inode(obj->base.filp);
+	shmem_truncate_range(inode, 0, (loff_t)-1);
 
 err_pages:
     while (i--)
@@ -1466,10 +1439,84 @@ i915_gem_object_move_to_flushing(struct drm_i915_gem_object *obj) {
     i915_gem_object_move_off_active(obj);
 }
 
-static void
-i915_gem_object_move_to_inactive(struct drm_i915_gem_object *obj) {
-    struct drm_device *dev = obj->base.dev;
-    struct drm_i915_private *dev_priv = dev->dev_private;
+static int
+i915_gem_object_get_pages_gtt(struct drm_i915_gem_object *obj)
+{
+	struct drm_i915_private *dev_priv = obj->base.dev->dev_private;
+	int page_count, i;
+	struct address_space *mapping;
+	struct sg_table *st;
+	struct scatterlist *sg;
+	struct page *page;
+	gfp_t gfp;
+
+	/* Assert that the object is not currently in any GPU domain. As it
+	 * wasn't in the GTT, there shouldn't be any way it could have been in
+	 * a GPU cache
+	 */
+	BUG_ON(obj->base.read_domains & I915_GEM_GPU_DOMAINS);
+	BUG_ON(obj->base.write_domain & I915_GEM_GPU_DOMAINS);
+
+	st = kmalloc(sizeof(*st), GFP_KERNEL);
+	if (st == NULL)
+		return -ENOMEM;
+
+	page_count = obj->base.size / PAGE_SIZE;
+	if (sg_alloc_table(st, page_count, GFP_KERNEL)) {
+		sg_free_table(st);
+		kfree(st);
+		return -ENOMEM;
+	}
+
+	/* Get the list of pages out of our struct file.  They'll be pinned
+	 * at this point until we release them.
+	 *
+	 * Fail silently without starting the shrinker
+	 */
+	mapping = file_inode(obj->base.filp)->i_mapping;
+	gfp = mapping_gfp_mask(mapping);
+	gfp |= __GFP_NORETRY | __GFP_NOWARN | __GFP_NO_KSWAPD;
+	gfp &= ~(__GFP_IO | __GFP_WAIT);
+	for_each_sg(st->sgl, sg, page_count, i) {
+		page = shmem_read_mapping_page_gfp(mapping, i, gfp);
+		if (IS_ERR(page)) {
+			i915_gem_purge(dev_priv, page_count);
+			page = shmem_read_mapping_page_gfp(mapping, i, gfp);
+		}
+		if (IS_ERR(page)) {
+			/* We've tried hard to allocate the memory by reaping
+			 * our own buffer, now let the real VM do its job and
+			 * go down in flames if truly OOM.
+			 */
+			gfp &= ~(__GFP_NORETRY | __GFP_NOWARN | __GFP_NO_KSWAPD);
+			gfp |= __GFP_IO | __GFP_WAIT;
+
+			i915_gem_shrink_all(dev_priv);
+			page = shmem_read_mapping_page_gfp(mapping, i, gfp);
+			if (IS_ERR(page))
+				goto err_pages;
+
+			gfp |= __GFP_NORETRY | __GFP_NOWARN | __GFP_NO_KSWAPD;
+			gfp &= ~(__GFP_IO | __GFP_WAIT);
+		}
+
+		sg_set_page(sg, page, PAGE_SIZE, 0);
+	}
+
+	obj->pages = st;
+
+	if (i915_gem_object_needs_bit17_swizzle(obj))
+		i915_gem_object_do_bit_17_swizzle(obj);
+
+	return 0;
+
+err_pages:
+	for_each_sg(st->sgl, sg, i, page_count)
+		page_cache_release(sg_page(sg));
+	sg_free_table(st);
+	kfree(st);
+	return PTR_ERR(page);
+}
 
     if (obj->pin_count != 0)
         list_move_tail(&obj->mm_list, &dev_priv->mm.pinned_list);
@@ -3509,25 +3556,56 @@ struct drm_i915_gem_object *i915_gem_alloc_object(struct drm_device *dev,
 
     i915_gem_info_add_obj(dev_priv, size);
 
-    obj->base.write_domain = I915_GEM_DOMAIN_CPU;
-    obj->base.read_domains = I915_GEM_DOMAIN_CPU;
+struct drm_i915_gem_object *i915_gem_alloc_object(struct drm_device *dev,
+						  size_t size)
+{
+	struct drm_i915_gem_object *obj;
+	struct address_space *mapping;
+	u32 mask;
 
-    if (HAS_LLC(dev)) {
-        /* On some devices, we can have the GPU use the LLC (the CPU
-         * cache) for about a 10% performance improvement
-         * compared to uncached.  Graphics requests other than
-         * display scanout are coherent with the CPU in
-         * accessing this cache.  This means in this mode we
-         * don't need to clflush on the CPU side, and on the
-         * GPU side we only need to flush internal caches to
-         * get data visible to the CPU.
-         *
-         * However, we maintain the display planes as UC, and so
-         * need to rebind when first used as such.
-         */
-        obj->cache_level = I915_CACHE_LLC;
-    } else
-        obj->cache_level = I915_CACHE_NONE;
+	obj = kzalloc(sizeof(*obj), GFP_KERNEL);
+	if (obj == NULL)
+		return NULL;
+
+	if (drm_gem_object_init(dev, &obj->base, size) != 0) {
+		kfree(obj);
+		return NULL;
+	}
+
+	mask = GFP_HIGHUSER | __GFP_RECLAIMABLE;
+	if (IS_CRESTLINE(dev) || IS_BROADWATER(dev)) {
+		/* 965gm cannot relocate objects above 4GiB. */
+		mask &= ~__GFP_HIGHMEM;
+		mask |= __GFP_DMA32;
+	}
+
+	mapping = file_inode(obj->base.filp)->i_mapping;
+	mapping_set_gfp_mask(mapping, mask);
+
+	i915_gem_object_init(obj, &i915_gem_object_ops);
+
+	obj->base.write_domain = I915_GEM_DOMAIN_CPU;
+	obj->base.read_domains = I915_GEM_DOMAIN_CPU;
+
+	if (HAS_LLC(dev)) {
+		/* On some devices, we can have the GPU use the LLC (the CPU
+		 * cache) for about a 10% performance improvement
+		 * compared to uncached.  Graphics requests other than
+		 * display scanout are coherent with the CPU in
+		 * accessing this cache.  This means in this mode we
+		 * don't need to clflush on the CPU side, and on the
+		 * GPU side we only need to flush internal caches to
+		 * get data visible to the CPU.
+		 *
+		 * However, we maintain the display planes as UC, and so
+		 * need to rebind when first used as such.
+		 */
+		obj->cache_level = I915_CACHE_LLC;
+	} else
+		obj->cache_level = I915_CACHE_NONE;
+
+	return obj;
+}
 
     obj->base.driver_private = NULL;
     obj->fence_reg = I915_FENCE_REG_NONE;
@@ -3950,92 +4028,94 @@ void i915_gem_free_all_phys_object(struct drm_device *dev) {
 }
 
 void i915_gem_detach_phys_object(struct drm_device *dev,
-                                 struct drm_i915_gem_object *obj) {
-    struct address_space *mapping = obj->base.filp->f_path.dentry->d_inode->i_mapping;
-    char *vaddr;
-    int i;
-    int page_count;
+				 struct drm_i915_gem_object *obj)
+{
+	struct address_space *mapping = file_inode(obj->base.filp)->i_mapping;
+	char *vaddr;
+	int i;
+	int page_count;
 
-    if (!obj->phys_obj)
-        return;
-    vaddr = obj->phys_obj->handle->vaddr;
+	if (!obj->phys_obj)
+		return;
+	vaddr = obj->phys_obj->handle->vaddr;
 
-    page_count = obj->base.size / PAGE_SIZE;
-    for (i = 0; i < page_count; i++) {
-        struct page *page = shmem_read_mapping_page(mapping, i);
-        if (!IS_ERR(page)) {
-            char *dst = kmap_atomic(page);
-            memcpy(dst, vaddr + i*PAGE_SIZE, PAGE_SIZE);
-            kunmap_atomic(dst);
+	page_count = obj->base.size / PAGE_SIZE;
+	for (i = 0; i < page_count; i++) {
+		struct page *page = shmem_read_mapping_page(mapping, i);
+		if (!IS_ERR(page)) {
+			char *dst = kmap_atomic(page);
+			memcpy(dst, vaddr + i*PAGE_SIZE, PAGE_SIZE);
+			kunmap_atomic(dst);
 
-            drm_clflush_pages(&page, 1);
+			drm_clflush_pages(&page, 1);
 
-            set_page_dirty(page);
-            mark_page_accessed(page);
-            page_cache_release(page);
-        }
-    }
-    intel_gtt_chipset_flush();
+			set_page_dirty(page);
+			mark_page_accessed(page);
+			page_cache_release(page);
+		}
+	}
+	i915_gem_chipset_flush(dev);
 
-    obj->phys_obj->cur_obj = NULL;
-    obj->phys_obj = NULL;
+	obj->phys_obj->cur_obj = NULL;
+	obj->phys_obj = NULL;
 }
 
 int
 i915_gem_attach_phys_object(struct drm_device *dev,
-                            struct drm_i915_gem_object *obj,
-                            int id,
-                            int align) {
-    struct address_space *mapping = obj->base.filp->f_path.dentry->d_inode->i_mapping;
-    drm_i915_private_t *dev_priv = dev->dev_private;
-    int ret = 0;
-    int page_count;
-    int i;
+			    struct drm_i915_gem_object *obj,
+			    int id,
+			    int align)
+{
+	struct address_space *mapping = file_inode(obj->base.filp)->i_mapping;
+	drm_i915_private_t *dev_priv = dev->dev_private;
+	int ret = 0;
+	int page_count;
+	int i;
 
-    if (id > I915_MAX_PHYS_OBJECT)
-        return -EINVAL;
+	if (id > I915_MAX_PHYS_OBJECT)
+		return -EINVAL;
 
-    if (obj->phys_obj) {
-        if (obj->phys_obj->id == id)
-            return 0;
-        i915_gem_detach_phys_object(dev, obj);
-    }
+	if (obj->phys_obj) {
+		if (obj->phys_obj->id == id)
+			return 0;
+		i915_gem_detach_phys_object(dev, obj);
+	}
 
-    /* create a new object */
-    if (!dev_priv->mm.phys_objs[id - 1]) {
-        ret = i915_gem_init_phys_object(dev, id,
-                                        obj->base.size, align);
-        if (ret) {
-            DRM_ERROR("failed to init phys object %d size: %zu\n",
-                      id, obj->base.size);
-            return ret;
-        }
-    }
+	/* create a new object */
+	if (!dev_priv->mm.phys_objs[id - 1]) {
+		ret = i915_gem_init_phys_object(dev, id,
+						obj->base.size, align);
+		if (ret) {
+			DRM_ERROR("failed to init phys object %d size: %zu\n",
+				  id, obj->base.size);
+			return ret;
+		}
+	}
 
-    /* bind to the object */
-    obj->phys_obj = dev_priv->mm.phys_objs[id - 1];
-    obj->phys_obj->cur_obj = obj;
+	/* bind to the object */
+	obj->phys_obj = dev_priv->mm.phys_objs[id - 1];
+	obj->phys_obj->cur_obj = obj;
 
-    page_count = obj->base.size / PAGE_SIZE;
+	page_count = obj->base.size / PAGE_SIZE;
 
-    for (i = 0; i < page_count; i++) {
-        struct page *page;
-        char *dst, *src;
+	for (i = 0; i < page_count; i++) {
+		struct page *page;
+		char *dst, *src;
 
-        page = shmem_read_mapping_page(mapping, i);
-        if (IS_ERR(page))
-            return PTR_ERR(page);
+		page = shmem_read_mapping_page(mapping, i);
+		if (IS_ERR(page))
+			return PTR_ERR(page);
 
-        src = kmap_atomic(page);
-        dst = obj->phys_obj->handle->vaddr + (i * PAGE_SIZE);
-        memcpy(dst, src, PAGE_SIZE);
-        kunmap_atomic(src);
+		src = kmap_atomic(page);
+		dst = obj->phys_obj->handle->vaddr + (i * PAGE_SIZE);
+		memcpy(dst, src, PAGE_SIZE);
+		kunmap_atomic(src);
 
-        mark_page_accessed(page);
-        page_cache_release(page);
-    }
+		mark_page_accessed(page);
+		page_cache_release(page);
+	}
 
-    return 0;
+	return 0;
 }
 
 static int

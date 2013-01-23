@@ -627,241 +627,242 @@ out:
 } /* End twa_check_srl() */
 
 /* This function handles ioctl for the character device */
-static long twa_chrdev_ioctl(struct file *file, unsigned int cmd, unsigned long arg) {
-    struct inode *inode = file->f_path.dentry->d_inode;
-    long timeout;
-    unsigned long *cpu_addr, data_buffer_length_adjusted = 0, flags = 0;
-    dma_addr_t dma_handle;
-    int request_id = 0;
-    unsigned int sequence_id = 0;
-    unsigned char event_index, start_index;
-    TW_Ioctl_Driver_Command driver_command;
-    TW_Ioctl_Buf_Apache *tw_ioctl;
-    TW_Lock *tw_lock;
-    TW_Command_Full *full_command_packet;
-    TW_Compatibility_Info *tw_compat_info;
-    TW_Event *event;
-    struct timeval current_time;
-    u32 current_time_ms;
-    TW_Device_Extension *tw_dev = twa_device_extension_list[iminor(inode)];
-    int retval = TW_IOCTL_ERROR_OS_EFAULT;
-    void __user *argp = (void __user *)arg;
+static long twa_chrdev_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
+{
+	struct inode *inode = file_inode(file);
+	long timeout;
+	unsigned long *cpu_addr, data_buffer_length_adjusted = 0, flags = 0;
+	dma_addr_t dma_handle;
+	int request_id = 0;
+	unsigned int sequence_id = 0;
+	unsigned char event_index, start_index;
+	TW_Ioctl_Driver_Command driver_command;
+	TW_Ioctl_Buf_Apache *tw_ioctl;
+	TW_Lock *tw_lock;
+	TW_Command_Full *full_command_packet;
+	TW_Compatibility_Info *tw_compat_info;
+	TW_Event *event;
+	struct timeval current_time;
+	u32 current_time_ms;
+	TW_Device_Extension *tw_dev = twa_device_extension_list[iminor(inode)];
+	int retval = TW_IOCTL_ERROR_OS_EFAULT;
+	void __user *argp = (void __user *)arg;
 
-    mutex_lock(&twa_chrdev_mutex);
+	mutex_lock(&twa_chrdev_mutex);
 
-    /* Only let one of these through at a time */
-    if (mutex_lock_interruptible(&tw_dev->ioctl_lock)) {
-        retval = TW_IOCTL_ERROR_OS_EINTR;
-        goto out;
-    }
+	/* Only let one of these through at a time */
+	if (mutex_lock_interruptible(&tw_dev->ioctl_lock)) {
+		retval = TW_IOCTL_ERROR_OS_EINTR;
+		goto out;
+	}
 
-    /* First copy down the driver command */
-    if (copy_from_user(&driver_command, argp, sizeof(TW_Ioctl_Driver_Command)))
-        goto out2;
+	/* First copy down the driver command */
+	if (copy_from_user(&driver_command, argp, sizeof(TW_Ioctl_Driver_Command)))
+		goto out2;
 
-    /* Check data buffer size */
-    if (driver_command.buffer_length > TW_MAX_SECTORS * 2048) {
-        retval = TW_IOCTL_ERROR_OS_EINVAL;
-        goto out2;
-    }
+	/* Check data buffer size */
+	if (driver_command.buffer_length > TW_MAX_SECTORS * 2048) {
+		retval = TW_IOCTL_ERROR_OS_EINVAL;
+		goto out2;
+	}
 
-    /* Hardware can only do multiple of 512 byte transfers */
-    data_buffer_length_adjusted = (driver_command.buffer_length + 511) & ~511;
+	/* Hardware can only do multiple of 512 byte transfers */
+	data_buffer_length_adjusted = (driver_command.buffer_length + 511) & ~511;
 
-    /* Now allocate ioctl buf memory */
-    cpu_addr = dma_alloc_coherent(&tw_dev->tw_pci_dev->dev, data_buffer_length_adjusted+sizeof(TW_Ioctl_Buf_Apache) - 1, &dma_handle, GFP_KERNEL);
-    if (!cpu_addr) {
-        retval = TW_IOCTL_ERROR_OS_ENOMEM;
-        goto out2;
-    }
+	/* Now allocate ioctl buf memory */
+	cpu_addr = dma_alloc_coherent(&tw_dev->tw_pci_dev->dev, data_buffer_length_adjusted+sizeof(TW_Ioctl_Buf_Apache) - 1, &dma_handle, GFP_KERNEL);
+	if (!cpu_addr) {
+		retval = TW_IOCTL_ERROR_OS_ENOMEM;
+		goto out2;
+	}
 
-    tw_ioctl = (TW_Ioctl_Buf_Apache *)cpu_addr;
+	tw_ioctl = (TW_Ioctl_Buf_Apache *)cpu_addr;
 
-    /* Now copy down the entire ioctl */
-    if (copy_from_user(tw_ioctl, argp, driver_command.buffer_length + sizeof(TW_Ioctl_Buf_Apache) - 1))
-        goto out3;
+	/* Now copy down the entire ioctl */
+	if (copy_from_user(tw_ioctl, argp, driver_command.buffer_length + sizeof(TW_Ioctl_Buf_Apache) - 1))
+		goto out3;
 
-    /* See which ioctl we are doing */
-    switch (cmd) {
-    case TW_IOCTL_FIRMWARE_PASS_THROUGH:
-        spin_lock_irqsave(tw_dev->host->host_lock, flags);
-        twa_get_request_id(tw_dev, &request_id);
+	/* See which ioctl we are doing */
+	switch (cmd) {
+	case TW_IOCTL_FIRMWARE_PASS_THROUGH:
+		spin_lock_irqsave(tw_dev->host->host_lock, flags);
+		twa_get_request_id(tw_dev, &request_id);
 
-        /* Flag internal command */
-        tw_dev->srb[request_id] = NULL;
+		/* Flag internal command */
+		tw_dev->srb[request_id] = NULL;
 
-        /* Flag chrdev ioctl */
-        tw_dev->chrdev_request_id = request_id;
+		/* Flag chrdev ioctl */
+		tw_dev->chrdev_request_id = request_id;
 
-        full_command_packet = &tw_ioctl->firmware_command;
+		full_command_packet = &tw_ioctl->firmware_command;
 
-        /* Load request id and sglist for both command types */
-        twa_load_sgl(tw_dev, full_command_packet, request_id, dma_handle, data_buffer_length_adjusted);
+		/* Load request id and sglist for both command types */
+		twa_load_sgl(tw_dev, full_command_packet, request_id, dma_handle, data_buffer_length_adjusted);
 
-        memcpy(tw_dev->command_packet_virt[request_id], &(tw_ioctl->firmware_command), sizeof(TW_Command_Full));
+		memcpy(tw_dev->command_packet_virt[request_id], &(tw_ioctl->firmware_command), sizeof(TW_Command_Full));
 
-        /* Now post the command packet to the controller */
-        twa_post_command_packet(tw_dev, request_id, 1);
-        spin_unlock_irqrestore(tw_dev->host->host_lock, flags);
+		/* Now post the command packet to the controller */
+		twa_post_command_packet(tw_dev, request_id, 1);
+		spin_unlock_irqrestore(tw_dev->host->host_lock, flags);
 
-        timeout = TW_IOCTL_CHRDEV_TIMEOUT*HZ;
+		timeout = TW_IOCTL_CHRDEV_TIMEOUT*HZ;
 
-        /* Now wait for command to complete */
-        timeout = wait_event_timeout(tw_dev->ioctl_wqueue, tw_dev->chrdev_request_id == TW_IOCTL_CHRDEV_FREE, timeout);
+		/* Now wait for command to complete */
+		timeout = wait_event_timeout(tw_dev->ioctl_wqueue, tw_dev->chrdev_request_id == TW_IOCTL_CHRDEV_FREE, timeout);
 
-        /* We timed out, and didn't get an interrupt */
-        if (tw_dev->chrdev_request_id != TW_IOCTL_CHRDEV_FREE) {
-            /* Now we need to reset the board */
-            printk(KERN_WARNING "3w-9xxx: scsi%d: WARNING: (0x%02X:0x%04X): Character ioctl (0x%x) timed out, resetting card.\n",
-                   tw_dev->host->host_no, TW_DRIVER, 0x37,
-                   cmd);
-            retval = TW_IOCTL_ERROR_OS_EIO;
-            twa_reset_device_extension(tw_dev);
-            goto out3;
-        }
+		/* We timed out, and didn't get an interrupt */
+		if (tw_dev->chrdev_request_id != TW_IOCTL_CHRDEV_FREE) {
+			/* Now we need to reset the board */
+			printk(KERN_WARNING "3w-9xxx: scsi%d: WARNING: (0x%02X:0x%04X): Character ioctl (0x%x) timed out, resetting card.\n",
+			       tw_dev->host->host_no, TW_DRIVER, 0x37,
+			       cmd);
+			retval = TW_IOCTL_ERROR_OS_EIO;
+			twa_reset_device_extension(tw_dev);
+			goto out3;
+		}
 
-        /* Now copy in the command packet response */
-        memcpy(&(tw_ioctl->firmware_command), tw_dev->command_packet_virt[request_id], sizeof(TW_Command_Full));
+		/* Now copy in the command packet response */
+		memcpy(&(tw_ioctl->firmware_command), tw_dev->command_packet_virt[request_id], sizeof(TW_Command_Full));
+		
+		/* Now complete the io */
+		spin_lock_irqsave(tw_dev->host->host_lock, flags);
+		tw_dev->posted_request_count--;
+		tw_dev->state[request_id] = TW_S_COMPLETED;
+		twa_free_request_id(tw_dev, request_id);
+		spin_unlock_irqrestore(tw_dev->host->host_lock, flags);
+		break;
+	case TW_IOCTL_GET_COMPATIBILITY_INFO:
+		tw_ioctl->driver_command.status = 0;
+		/* Copy compatibility struct into ioctl data buffer */
+		tw_compat_info = (TW_Compatibility_Info *)tw_ioctl->data_buffer;
+		memcpy(tw_compat_info, &tw_dev->tw_compat_info, sizeof(TW_Compatibility_Info));
+		break;
+	case TW_IOCTL_GET_LAST_EVENT:
+		if (tw_dev->event_queue_wrapped) {
+			if (tw_dev->aen_clobber) {
+				tw_ioctl->driver_command.status = TW_IOCTL_ERROR_STATUS_AEN_CLOBBER;
+				tw_dev->aen_clobber = 0;
+			} else
+				tw_ioctl->driver_command.status = 0;
+		} else {
+			if (!tw_dev->error_index) {
+				tw_ioctl->driver_command.status = TW_IOCTL_ERROR_STATUS_NO_MORE_EVENTS;
+				break;
+			}
+			tw_ioctl->driver_command.status = 0;
+		}
+		event_index = (tw_dev->error_index - 1 + TW_Q_LENGTH) % TW_Q_LENGTH;
+		memcpy(tw_ioctl->data_buffer, tw_dev->event_queue[event_index], sizeof(TW_Event));
+		tw_dev->event_queue[event_index]->retrieved = TW_AEN_RETRIEVED;
+		break;
+	case TW_IOCTL_GET_FIRST_EVENT:
+		if (tw_dev->event_queue_wrapped) {
+			if (tw_dev->aen_clobber) {
+				tw_ioctl->driver_command.status = TW_IOCTL_ERROR_STATUS_AEN_CLOBBER;
+				tw_dev->aen_clobber = 0;
+			} else 
+				tw_ioctl->driver_command.status = 0;
+			event_index = tw_dev->error_index;
+		} else {
+			if (!tw_dev->error_index) {
+				tw_ioctl->driver_command.status = TW_IOCTL_ERROR_STATUS_NO_MORE_EVENTS;
+				break;
+			}
+			tw_ioctl->driver_command.status = 0;
+			event_index = 0;
+		}
+		memcpy(tw_ioctl->data_buffer, tw_dev->event_queue[event_index], sizeof(TW_Event));
+		tw_dev->event_queue[event_index]->retrieved = TW_AEN_RETRIEVED;
+		break;
+	case TW_IOCTL_GET_NEXT_EVENT:
+		event = (TW_Event *)tw_ioctl->data_buffer;
+		sequence_id = event->sequence_id;
+		tw_ioctl->driver_command.status = 0;
 
-        /* Now complete the io */
-        spin_lock_irqsave(tw_dev->host->host_lock, flags);
-        tw_dev->posted_request_count--;
-        tw_dev->state[request_id] = TW_S_COMPLETED;
-        twa_free_request_id(tw_dev, request_id);
-        spin_unlock_irqrestore(tw_dev->host->host_lock, flags);
-        break;
-    case TW_IOCTL_GET_COMPATIBILITY_INFO:
-        tw_ioctl->driver_command.status = 0;
-        /* Copy compatibility struct into ioctl data buffer */
-        tw_compat_info = (TW_Compatibility_Info *)tw_ioctl->data_buffer;
-        memcpy(tw_compat_info, &tw_dev->tw_compat_info, sizeof(TW_Compatibility_Info));
-        break;
-    case TW_IOCTL_GET_LAST_EVENT:
-        if (tw_dev->event_queue_wrapped) {
-            if (tw_dev->aen_clobber) {
-                tw_ioctl->driver_command.status = TW_IOCTL_ERROR_STATUS_AEN_CLOBBER;
-                tw_dev->aen_clobber = 0;
-            } else
-                tw_ioctl->driver_command.status = 0;
-        } else {
-            if (!tw_dev->error_index) {
-                tw_ioctl->driver_command.status = TW_IOCTL_ERROR_STATUS_NO_MORE_EVENTS;
-                break;
-            }
-            tw_ioctl->driver_command.status = 0;
-        }
-        event_index = (tw_dev->error_index - 1 + TW_Q_LENGTH) % TW_Q_LENGTH;
-        memcpy(tw_ioctl->data_buffer, tw_dev->event_queue[event_index], sizeof(TW_Event));
-        tw_dev->event_queue[event_index]->retrieved = TW_AEN_RETRIEVED;
-        break;
-    case TW_IOCTL_GET_FIRST_EVENT:
-        if (tw_dev->event_queue_wrapped) {
-            if (tw_dev->aen_clobber) {
-                tw_ioctl->driver_command.status = TW_IOCTL_ERROR_STATUS_AEN_CLOBBER;
-                tw_dev->aen_clobber = 0;
-            } else
-                tw_ioctl->driver_command.status = 0;
-            event_index = tw_dev->error_index;
-        } else {
-            if (!tw_dev->error_index) {
-                tw_ioctl->driver_command.status = TW_IOCTL_ERROR_STATUS_NO_MORE_EVENTS;
-                break;
-            }
-            tw_ioctl->driver_command.status = 0;
-            event_index = 0;
-        }
-        memcpy(tw_ioctl->data_buffer, tw_dev->event_queue[event_index], sizeof(TW_Event));
-        tw_dev->event_queue[event_index]->retrieved = TW_AEN_RETRIEVED;
-        break;
-    case TW_IOCTL_GET_NEXT_EVENT:
-        event = (TW_Event *)tw_ioctl->data_buffer;
-        sequence_id = event->sequence_id;
-        tw_ioctl->driver_command.status = 0;
+		if (tw_dev->event_queue_wrapped) {
+			if (tw_dev->aen_clobber) {
+				tw_ioctl->driver_command.status = TW_IOCTL_ERROR_STATUS_AEN_CLOBBER;
+				tw_dev->aen_clobber = 0;
+			}
+			start_index = tw_dev->error_index;
+		} else {
+			if (!tw_dev->error_index) {
+				tw_ioctl->driver_command.status = TW_IOCTL_ERROR_STATUS_NO_MORE_EVENTS;
+				break;
+			}
+			start_index = 0;
+		}
+		event_index = (start_index + sequence_id - tw_dev->event_queue[start_index]->sequence_id + 1) % TW_Q_LENGTH;
 
-        if (tw_dev->event_queue_wrapped) {
-            if (tw_dev->aen_clobber) {
-                tw_ioctl->driver_command.status = TW_IOCTL_ERROR_STATUS_AEN_CLOBBER;
-                tw_dev->aen_clobber = 0;
-            }
-            start_index = tw_dev->error_index;
-        } else {
-            if (!tw_dev->error_index) {
-                tw_ioctl->driver_command.status = TW_IOCTL_ERROR_STATUS_NO_MORE_EVENTS;
-                break;
-            }
-            start_index = 0;
-        }
-        event_index = (start_index + sequence_id - tw_dev->event_queue[start_index]->sequence_id + 1) % TW_Q_LENGTH;
+		if (!(tw_dev->event_queue[event_index]->sequence_id > sequence_id)) {
+			if (tw_ioctl->driver_command.status == TW_IOCTL_ERROR_STATUS_AEN_CLOBBER)
+				tw_dev->aen_clobber = 1;
+			tw_ioctl->driver_command.status = TW_IOCTL_ERROR_STATUS_NO_MORE_EVENTS;
+			break;
+		}
+		memcpy(tw_ioctl->data_buffer, tw_dev->event_queue[event_index], sizeof(TW_Event));
+		tw_dev->event_queue[event_index]->retrieved = TW_AEN_RETRIEVED;
+		break;
+	case TW_IOCTL_GET_PREVIOUS_EVENT:
+		event = (TW_Event *)tw_ioctl->data_buffer;
+		sequence_id = event->sequence_id;
+		tw_ioctl->driver_command.status = 0;
 
-        if (!(tw_dev->event_queue[event_index]->sequence_id > sequence_id)) {
-            if (tw_ioctl->driver_command.status == TW_IOCTL_ERROR_STATUS_AEN_CLOBBER)
-                tw_dev->aen_clobber = 1;
-            tw_ioctl->driver_command.status = TW_IOCTL_ERROR_STATUS_NO_MORE_EVENTS;
-            break;
-        }
-        memcpy(tw_ioctl->data_buffer, tw_dev->event_queue[event_index], sizeof(TW_Event));
-        tw_dev->event_queue[event_index]->retrieved = TW_AEN_RETRIEVED;
-        break;
-    case TW_IOCTL_GET_PREVIOUS_EVENT:
-        event = (TW_Event *)tw_ioctl->data_buffer;
-        sequence_id = event->sequence_id;
-        tw_ioctl->driver_command.status = 0;
+		if (tw_dev->event_queue_wrapped) {
+			if (tw_dev->aen_clobber) {
+				tw_ioctl->driver_command.status = TW_IOCTL_ERROR_STATUS_AEN_CLOBBER;
+				tw_dev->aen_clobber = 0;
+			}
+			start_index = tw_dev->error_index;
+		} else {
+			if (!tw_dev->error_index) {
+				tw_ioctl->driver_command.status = TW_IOCTL_ERROR_STATUS_NO_MORE_EVENTS;
+				break;
+			}
+			start_index = 0;
+		}
+		event_index = (start_index + sequence_id - tw_dev->event_queue[start_index]->sequence_id - 1) % TW_Q_LENGTH;
 
-        if (tw_dev->event_queue_wrapped) {
-            if (tw_dev->aen_clobber) {
-                tw_ioctl->driver_command.status = TW_IOCTL_ERROR_STATUS_AEN_CLOBBER;
-                tw_dev->aen_clobber = 0;
-            }
-            start_index = tw_dev->error_index;
-        } else {
-            if (!tw_dev->error_index) {
-                tw_ioctl->driver_command.status = TW_IOCTL_ERROR_STATUS_NO_MORE_EVENTS;
-                break;
-            }
-            start_index = 0;
-        }
-        event_index = (start_index + sequence_id - tw_dev->event_queue[start_index]->sequence_id - 1) % TW_Q_LENGTH;
+		if (!(tw_dev->event_queue[event_index]->sequence_id < sequence_id)) {
+			if (tw_ioctl->driver_command.status == TW_IOCTL_ERROR_STATUS_AEN_CLOBBER)
+				tw_dev->aen_clobber = 1;
+			tw_ioctl->driver_command.status = TW_IOCTL_ERROR_STATUS_NO_MORE_EVENTS;
+			break;
+		}
+		memcpy(tw_ioctl->data_buffer, tw_dev->event_queue[event_index], sizeof(TW_Event));
+		tw_dev->event_queue[event_index]->retrieved = TW_AEN_RETRIEVED;
+		break;
+	case TW_IOCTL_GET_LOCK:
+		tw_lock = (TW_Lock *)tw_ioctl->data_buffer;
+		do_gettimeofday(&current_time);
+		current_time_ms = (current_time.tv_sec * 1000) + (current_time.tv_usec / 1000);
 
-        if (!(tw_dev->event_queue[event_index]->sequence_id < sequence_id)) {
-            if (tw_ioctl->driver_command.status == TW_IOCTL_ERROR_STATUS_AEN_CLOBBER)
-                tw_dev->aen_clobber = 1;
-            tw_ioctl->driver_command.status = TW_IOCTL_ERROR_STATUS_NO_MORE_EVENTS;
-            break;
-        }
-        memcpy(tw_ioctl->data_buffer, tw_dev->event_queue[event_index], sizeof(TW_Event));
-        tw_dev->event_queue[event_index]->retrieved = TW_AEN_RETRIEVED;
-        break;
-    case TW_IOCTL_GET_LOCK:
-        tw_lock = (TW_Lock *)tw_ioctl->data_buffer;
-        do_gettimeofday(&current_time);
-        current_time_ms = (current_time.tv_sec * 1000) + (current_time.tv_usec / 1000);
+		if ((tw_lock->force_flag == 1) || (tw_dev->ioctl_sem_lock == 0) || (current_time_ms >= tw_dev->ioctl_msec)) {
+			tw_dev->ioctl_sem_lock = 1;
+			tw_dev->ioctl_msec = current_time_ms + tw_lock->timeout_msec;
+			tw_ioctl->driver_command.status = 0;
+			tw_lock->time_remaining_msec = tw_lock->timeout_msec;
+		} else {
+			tw_ioctl->driver_command.status = TW_IOCTL_ERROR_STATUS_LOCKED;
+			tw_lock->time_remaining_msec = tw_dev->ioctl_msec - current_time_ms;
+		}
+		break;
+	case TW_IOCTL_RELEASE_LOCK:
+		if (tw_dev->ioctl_sem_lock == 1) {
+			tw_dev->ioctl_sem_lock = 0;
+			tw_ioctl->driver_command.status = 0;
+		} else {
+			tw_ioctl->driver_command.status = TW_IOCTL_ERROR_STATUS_NOT_LOCKED;
+		}
+		break;
+	default:
+		retval = TW_IOCTL_ERROR_OS_ENOTTY;
+		goto out3;
+	}
 
-        if ((tw_lock->force_flag == 1) || (tw_dev->ioctl_sem_lock == 0) || (current_time_ms >= tw_dev->ioctl_msec)) {
-            tw_dev->ioctl_sem_lock = 1;
-            tw_dev->ioctl_msec = current_time_ms + tw_lock->timeout_msec;
-            tw_ioctl->driver_command.status = 0;
-            tw_lock->time_remaining_msec = tw_lock->timeout_msec;
-        } else {
-            tw_ioctl->driver_command.status = TW_IOCTL_ERROR_STATUS_LOCKED;
-            tw_lock->time_remaining_msec = tw_dev->ioctl_msec - current_time_ms;
-        }
-        break;
-    case TW_IOCTL_RELEASE_LOCK:
-        if (tw_dev->ioctl_sem_lock == 1) {
-            tw_dev->ioctl_sem_lock = 0;
-            tw_ioctl->driver_command.status = 0;
-        } else {
-            tw_ioctl->driver_command.status = TW_IOCTL_ERROR_STATUS_NOT_LOCKED;
-        }
-        break;
-    default:
-        retval = TW_IOCTL_ERROR_OS_ENOTTY;
-        goto out3;
-    }
-
-    /* Now copy the entire response to userspace */
-    if (copy_to_user(argp, tw_ioctl, sizeof(TW_Ioctl_Buf_Apache) + driver_command.buffer_length - 1) == 0)
-        retval = 0;
+	/* Now copy the entire response to userspace */
+	if (copy_to_user(argp, tw_ioctl, sizeof(TW_Ioctl_Buf_Apache) + driver_command.buffer_length - 1) == 0)
+		retval = 0;
 out3:
     /* Now free ioctl buf memory */
     dma_free_coherent(&tw_dev->tw_pci_dev->dev, data_buffer_length_adjusted+sizeof(TW_Ioctl_Buf_Apache) - 1, cpu_addr, dma_handle);

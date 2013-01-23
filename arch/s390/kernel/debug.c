@@ -590,26 +590,26 @@ debug_input(struct file *file, const char __user *user_buf, size_t length,
  */
 
 static int
-debug_open(struct inode *inode, struct file *file) {
-    int i, rc = 0;
-    file_private_info_t *p_info;
-    debug_info_t *debug_info, *debug_info_snapshot;
+debug_open(struct inode *inode, struct file *file)
+{
+	int i, rc = 0;
+	file_private_info_t *p_info;
+	debug_info_t *debug_info, *debug_info_snapshot;
 
-    mutex_lock(&debug_mutex);
-    debug_info = file->f_path.dentry->d_inode->i_private;
-    /* find debug view */
-    for (i = 0; i < DEBUG_MAX_VIEWS; i++) {
-        if (!debug_info->views[i])
-            continue;
-        else if (debug_info->debugfs_entries[i] ==
-                 file->f_path.dentry) {
-            goto found;	/* found view ! */
-        }
-    }
-    /* no entry found */
-    rc = -EINVAL;
-    goto out;
-
+	mutex_lock(&debug_mutex);
+	debug_info = file_inode(file)->i_private;
+	/* find debug view */
+	for (i = 0; i < DEBUG_MAX_VIEWS; i++) {
+		if (!debug_info->views[i])
+			continue;
+		else if (debug_info->debugfs_entries[i] ==
+			 file->f_path.dentry) {
+			goto found;	/* found view ! */
+		}
+	}
+	/* no entry found */
+	rc = -EINVAL;
+	goto out;
 found:
 
     /* Make snapshot of current debug areas to get it consistent.     */

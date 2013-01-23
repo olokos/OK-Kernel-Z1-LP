@@ -520,9 +520,10 @@ int lirc_dev_fop_close(struct inode *inode, struct file *file) {
 }
 EXPORT_SYMBOL(lirc_dev_fop_close);
 
-unsigned int lirc_dev_fop_poll(struct file *file, poll_table *wait) {
-    struct irctl *ir = irctls[iminor(file->f_dentry->d_inode)];
-    unsigned int ret;
+unsigned int lirc_dev_fop_poll(struct file *file, poll_table *wait)
+{
+	struct irctl *ir = irctls[iminor(file_inode(file))];
+	unsigned int ret;
 
     if (!ir) {
         printk(KERN_ERR "%s: called with invalid irctl\n", __func__);
@@ -551,180 +552,182 @@ unsigned int lirc_dev_fop_poll(struct file *file, poll_table *wait) {
 }
 EXPORT_SYMBOL(lirc_dev_fop_poll);
 
-long lirc_dev_fop_ioctl(struct file *file, unsigned int cmd, unsigned long arg) {
-    __u32 mode;
-    int result = 0;
-    struct irctl *ir = irctls[iminor(file->f_dentry->d_inode)];
+long lirc_dev_fop_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
+{
+	__u32 mode;
+	int result = 0;
+	struct irctl *ir = irctls[iminor(file_inode(file))];
 
-    if (!ir) {
-        printk(KERN_ERR "lirc_dev: %s: no irctl found!\n", __func__);
-        return -ENODEV;
-    }
+	if (!ir) {
+		printk(KERN_ERR "lirc_dev: %s: no irctl found!\n", __func__);
+		return -ENODEV;
+	}
 
-    dev_dbg(ir->d.dev, LOGHEAD "ioctl called (0x%x)\n",
-            ir->d.name, ir->d.minor, cmd);
+	dev_dbg(ir->d.dev, LOGHEAD "ioctl called (0x%x)\n",
+		ir->d.name, ir->d.minor, cmd);
 
-    if (ir->d.minor == NOPLUG || !ir->attached) {
-        dev_dbg(ir->d.dev, LOGHEAD "ioctl result = -ENODEV\n",
-                ir->d.name, ir->d.minor);
-        return -ENODEV;
-    }
+	if (ir->d.minor == NOPLUG || !ir->attached) {
+		dev_dbg(ir->d.dev, LOGHEAD "ioctl result = -ENODEV\n",
+			ir->d.name, ir->d.minor);
+		return -ENODEV;
+	}
 
-    mutex_lock(&ir->irctl_lock);
+	mutex_lock(&ir->irctl_lock);
 
-    switch (cmd) {
-    case LIRC_GET_FEATURES:
-        result = put_user(ir->d.features, (__u32 *)arg);
-        break;
-    case LIRC_GET_REC_MODE:
-        if (!(ir->d.features & LIRC_CAN_REC_MASK)) {
-            result = -ENOSYS;
-            break;
-        }
+	switch (cmd) {
+	case LIRC_GET_FEATURES:
+		result = put_user(ir->d.features, (__u32 *)arg);
+		break;
+	case LIRC_GET_REC_MODE:
+		if (!(ir->d.features & LIRC_CAN_REC_MASK)) {
+			result = -ENOSYS;
+			break;
+		}
 
-        result = put_user(LIRC_REC2MODE
-                          (ir->d.features & LIRC_CAN_REC_MASK),
-                          (__u32 *)arg);
-        break;
-    case LIRC_SET_REC_MODE:
-        if (!(ir->d.features & LIRC_CAN_REC_MASK)) {
-            result = -ENOSYS;
-            break;
-        }
+		result = put_user(LIRC_REC2MODE
+				  (ir->d.features & LIRC_CAN_REC_MASK),
+				  (__u32 *)arg);
+		break;
+	case LIRC_SET_REC_MODE:
+		if (!(ir->d.features & LIRC_CAN_REC_MASK)) {
+			result = -ENOSYS;
+			break;
+		}
 
-        result = get_user(mode, (__u32 *)arg);
-        if (!result && !(LIRC_MODE2REC(mode) & ir->d.features))
-            result = -EINVAL;
-        /*
-         * FIXME: We should actually set the mode somehow but
-         * for now, lirc_serial doesn't support mode changing either
-         */
-        break;
-    case LIRC_GET_LENGTH:
-        result = put_user(ir->d.code_length, (__u32 *)arg);
-        break;
-    case LIRC_GET_MIN_TIMEOUT:
-        if (!(ir->d.features & LIRC_CAN_SET_REC_TIMEOUT) ||
-                ir->d.min_timeout == 0) {
-            result = -ENOSYS;
-            break;
-        }
+		result = get_user(mode, (__u32 *)arg);
+		if (!result && !(LIRC_MODE2REC(mode) & ir->d.features))
+			result = -EINVAL;
+		/*
+		 * FIXME: We should actually set the mode somehow but
+		 * for now, lirc_serial doesn't support mode changing either
+		 */
+		break;
+	case LIRC_GET_LENGTH:
+		result = put_user(ir->d.code_length, (__u32 *)arg);
+		break;
+	case LIRC_GET_MIN_TIMEOUT:
+		if (!(ir->d.features & LIRC_CAN_SET_REC_TIMEOUT) ||
+		    ir->d.min_timeout == 0) {
+			result = -ENOSYS;
+			break;
+		}
 
-        result = put_user(ir->d.min_timeout, (__u32 *)arg);
-        break;
-    case LIRC_GET_MAX_TIMEOUT:
-        if (!(ir->d.features & LIRC_CAN_SET_REC_TIMEOUT) ||
-                ir->d.max_timeout == 0) {
-            result = -ENOSYS;
-            break;
-        }
+		result = put_user(ir->d.min_timeout, (__u32 *)arg);
+		break;
+	case LIRC_GET_MAX_TIMEOUT:
+		if (!(ir->d.features & LIRC_CAN_SET_REC_TIMEOUT) ||
+		    ir->d.max_timeout == 0) {
+			result = -ENOSYS;
+			break;
+		}
 
-        result = put_user(ir->d.max_timeout, (__u32 *)arg);
-        break;
-    default:
-        result = -EINVAL;
-    }
+		result = put_user(ir->d.max_timeout, (__u32 *)arg);
+		break;
+	default:
+		result = -EINVAL;
+	}
 
-    dev_dbg(ir->d.dev, LOGHEAD "ioctl result = %d\n",
-            ir->d.name, ir->d.minor, result);
+	dev_dbg(ir->d.dev, LOGHEAD "ioctl result = %d\n",
+		ir->d.name, ir->d.minor, result);
 
-    mutex_unlock(&ir->irctl_lock);
+	mutex_unlock(&ir->irctl_lock);
 
-    return result;
+	return result;
 }
 EXPORT_SYMBOL(lirc_dev_fop_ioctl);
 
 ssize_t lirc_dev_fop_read(struct file *file,
-                          char __user *buffer,
-                          size_t length,
-                          loff_t *ppos) {
-    struct irctl *ir = irctls[iminor(file->f_dentry->d_inode)];
-    unsigned char *buf;
-    int ret = 0, written = 0;
-    DECLARE_WAITQUEUE(wait, current);
+			  char __user *buffer,
+			  size_t length,
+			  loff_t *ppos)
+{
+	struct irctl *ir = irctls[iminor(file_inode(file))];
+	unsigned char *buf;
+	int ret = 0, written = 0;
+	DECLARE_WAITQUEUE(wait, current);
 
-    if (!ir) {
-        printk(KERN_ERR "%s: called with invalid irctl\n", __func__);
-        return -ENODEV;
-    }
+	if (!ir) {
+		printk(KERN_ERR "%s: called with invalid irctl\n", __func__);
+		return -ENODEV;
+	}
 
-    dev_dbg(ir->d.dev, LOGHEAD "read called\n", ir->d.name, ir->d.minor);
+	dev_dbg(ir->d.dev, LOGHEAD "read called\n", ir->d.name, ir->d.minor);
 
-    buf = kzalloc(ir->chunk_size, GFP_KERNEL);
-    if (!buf)
-        return -ENOMEM;
+	buf = kzalloc(ir->chunk_size, GFP_KERNEL);
+	if (!buf)
+		return -ENOMEM;
 
-    if (mutex_lock_interruptible(&ir->irctl_lock)) {
-        ret = -ERESTARTSYS;
-        goto out_unlocked;
-    }
-    if (!ir->attached) {
-        ret = -ENODEV;
-        goto out_locked;
-    }
+	if (mutex_lock_interruptible(&ir->irctl_lock)) {
+		ret = -ERESTARTSYS;
+		goto out_unlocked;
+	}
+	if (!ir->attached) {
+		ret = -ENODEV;
+		goto out_locked;
+	}
 
-    if (length % ir->chunk_size) {
-        ret = -EINVAL;
-        goto out_locked;
-    }
+	if (length % ir->chunk_size) {
+		ret = -EINVAL;
+		goto out_locked;
+	}
 
-    /*
-     * we add ourselves to the task queue before buffer check
-     * to avoid losing scan code (in case when queue is awaken somewhere
-     * between while condition checking and scheduling)
-     */
-    add_wait_queue(&ir->buf->wait_poll, &wait);
-    set_current_state(TASK_INTERRUPTIBLE);
+	/*
+	 * we add ourselves to the task queue before buffer check
+	 * to avoid losing scan code (in case when queue is awaken somewhere
+	 * between while condition checking and scheduling)
+	 */
+	add_wait_queue(&ir->buf->wait_poll, &wait);
+	set_current_state(TASK_INTERRUPTIBLE);
 
-    /*
-     * while we didn't provide 'length' bytes, device is opened in blocking
-     * mode and 'copy_to_user' is happy, wait for data.
-     */
-    while (written < length && ret == 0) {
-        if (lirc_buffer_empty(ir->buf)) {
-            /* According to the read(2) man page, 'written' can be
-             * returned as less than 'length', instead of blocking
-             * again, returning -EWOULDBLOCK, or returning
-             * -ERESTARTSYS */
-            if (written)
-                break;
-            if (file->f_flags & O_NONBLOCK) {
-                ret = -EWOULDBLOCK;
-                break;
-            }
-            if (signal_pending(current)) {
-                ret = -ERESTARTSYS;
-                break;
-            }
+	/*
+	 * while we didn't provide 'length' bytes, device is opened in blocking
+	 * mode and 'copy_to_user' is happy, wait for data.
+	 */
+	while (written < length && ret == 0) {
+		if (lirc_buffer_empty(ir->buf)) {
+			/* According to the read(2) man page, 'written' can be
+			 * returned as less than 'length', instead of blocking
+			 * again, returning -EWOULDBLOCK, or returning
+			 * -ERESTARTSYS */
+			if (written)
+				break;
+			if (file->f_flags & O_NONBLOCK) {
+				ret = -EWOULDBLOCK;
+				break;
+			}
+			if (signal_pending(current)) {
+				ret = -ERESTARTSYS;
+				break;
+			}
 
-            mutex_unlock(&ir->irctl_lock);
-            schedule();
-            set_current_state(TASK_INTERRUPTIBLE);
+			mutex_unlock(&ir->irctl_lock);
+			schedule();
+			set_current_state(TASK_INTERRUPTIBLE);
 
-            if (mutex_lock_interruptible(&ir->irctl_lock)) {
-                ret = -ERESTARTSYS;
-                remove_wait_queue(&ir->buf->wait_poll, &wait);
-                set_current_state(TASK_RUNNING);
-                goto out_unlocked;
-            }
+			if (mutex_lock_interruptible(&ir->irctl_lock)) {
+				ret = -ERESTARTSYS;
+				remove_wait_queue(&ir->buf->wait_poll, &wait);
+				set_current_state(TASK_RUNNING);
+				goto out_unlocked;
+			}
 
-            if (!ir->attached) {
-                ret = -ENODEV;
-                break;
-            }
-        } else {
-            lirc_buffer_read(ir->buf, buf);
-            ret = copy_to_user((void *)buffer+written, buf,
-                               ir->buf->chunk_size);
-            if (!ret)
-                written += ir->buf->chunk_size;
-            else
-                ret = -EFAULT;
-        }
-    }
+			if (!ir->attached) {
+				ret = -ENODEV;
+				break;
+			}
+		} else {
+			lirc_buffer_read(ir->buf, buf);
+			ret = copy_to_user((void *)buffer+written, buf,
+					   ir->buf->chunk_size);
+			if (!ret)
+				written += ir->buf->chunk_size;
+			else
+				ret = -EFAULT;
+		}
+	}
 
-    remove_wait_queue(&ir->buf->wait_poll, &wait);
-    set_current_state(TASK_RUNNING);
+	remove_wait_queue(&ir->buf->wait_poll, &wait);
+	set_current_state(TASK_RUNNING);
 
 out_locked:
     mutex_unlock(&ir->irctl_lock);
@@ -741,12 +744,12 @@ EXPORT_SYMBOL(lirc_dev_fop_read);
 void *lirc_get_pdata(struct file *file) {
     void *data = NULL;
 
-    if (file && file->f_dentry && file->f_dentry->d_inode &&
-            file->f_dentry->d_inode->i_rdev) {
-        struct irctl *ir;
-        ir = irctls[iminor(file->f_dentry->d_inode)];
-        data = ir->d.data;
-    }
+	if (file && file->f_dentry && file_inode(file) &&
+	    file_inode(file)->i_rdev) {
+		struct irctl *ir;
+		ir = irctls[iminor(file_inode(file))];
+		data = ir->d.data;
+	}
 
     return data;
 }
@@ -754,8 +757,9 @@ EXPORT_SYMBOL(lirc_get_pdata);
 
 
 ssize_t lirc_dev_fop_write(struct file *file, const char __user *buffer,
-                           size_t length, loff_t *ppos) {
-    struct irctl *ir = irctls[iminor(file->f_dentry->d_inode)];
+			   size_t length, loff_t *ppos)
+{
+	struct irctl *ir = irctls[iminor(file_inode(file))];
 
     if (!ir) {
         printk(KERN_ERR "%s: called with invalid irctl\n", __func__);

@@ -153,75 +153,77 @@ static inline int set_gpio_output_pin(unsigned int pin, char command) {
 }
 
 static ssize_t tanbac_tb0219_read(struct file *file, char __user *buf, size_t len,
-                                  loff_t *ppos) {
-    unsigned int minor;
-    char value;
+                                  loff_t *ppos)
+{
+	unsigned int minor;
+	char value;
 
-    minor = iminor(file->f_path.dentry->d_inode);
-    switch (minor) {
-    case 0:
-        value = get_led();
-        break;
-    case 16 ... 23:
-        value = get_gpio_input_pin(minor - 16);
-        break;
-    case 32 ... 39:
-        value = get_gpio_output_pin(minor - 32);
-        break;
-    case 48 ... 55:
-        value = get_dip_switch(minor - 48);
-        break;
-    default:
-        return -EBADF;
-    }
+	minor = iminor(file_inode(file));
+	switch (minor) {
+	case 0:
+		value = get_led();
+		break;
+	case 16 ... 23:
+		value = get_gpio_input_pin(minor - 16);
+		break;
+	case 32 ... 39:
+		value = get_gpio_output_pin(minor - 32);
+		break;
+	case 48 ... 55:
+		value = get_dip_switch(minor - 48);
+		break;
+	default:
+		return -EBADF;
+	}
 
-    if (len <= 0)
-        return -EFAULT;
+	if (len <= 0)
+		return -EFAULT;
 
-    if (put_user(value, buf))
-        return -EFAULT;
+	if (put_user(value, buf))
+		return -EFAULT;
 
-    return 1;
+	return 1;
 }
 
 static ssize_t tanbac_tb0219_write(struct file *file, const char __user *data,
-                                   size_t len, loff_t *ppos) {
-    unsigned int minor;
-    tb0219_type_t type;
-    size_t i;
-    int retval = 0;
-    char c;
+                                   size_t len, loff_t *ppos)
+{
+	unsigned int minor;
+	tb0219_type_t type;
+	size_t i;
+	int retval = 0;
+	char c;
 
-    minor = iminor(file->f_path.dentry->d_inode);
-    switch (minor) {
-    case 0:
-        type = TYPE_LED;
-        break;
-    case 32 ... 39:
-        type = TYPE_GPIO_OUTPUT;
-        break;
-    default:
-        return -EBADF;
-    }
+	minor = iminor(file_inode(file));
+	switch (minor) {
+	case 0:
+		type = TYPE_LED;
+		break;
+	case 32 ... 39:
+		type = TYPE_GPIO_OUTPUT;
+		break;
+	default:
+		return -EBADF;
+	}
 
-    for (i = 0; i < len; i++) {
-        if (get_user(c, data + i))
-            return -EFAULT;
+	for (i = 0; i < len; i++) {
+		if (get_user(c, data + i))
+			return -EFAULT;
 
-        switch (type) {
-        case TYPE_LED:
-            retval = set_led(c);
-            break;
-        case TYPE_GPIO_OUTPUT:
-            retval = set_gpio_output_pin(minor - 32, c);
-            break;
-        }
+		switch (type) {
+		case TYPE_LED:
+			retval = set_led(c);
+			break;
+		case TYPE_GPIO_OUTPUT:
+			retval = set_gpio_output_pin(minor - 32, c);
+			break;
+		}
 
-        if (retval < 0)
-            break;
-    }
+		if (retval < 0)
+			break;
+	}
 
-    return i;
+	return i;
 }
 
 static int tanbac_tb0219_open(struct inode *inode, struct file *file) {

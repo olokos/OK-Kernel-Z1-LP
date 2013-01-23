@@ -865,153 +865,154 @@ static int tw_allocate_memory(TW_Device_Extension *tw_dev, int size, int which) 
 } /* End tw_allocate_memory() */
 
 /* This function handles ioctl for the character device */
-static long tw_chrdev_ioctl(struct file *file, unsigned int cmd, unsigned long arg) {
-    int request_id;
-    dma_addr_t dma_handle;
-    unsigned short tw_aen_code;
-    unsigned long flags;
-    unsigned int data_buffer_length = 0;
-    unsigned long data_buffer_length_adjusted = 0;
-    struct inode *inode = file->f_dentry->d_inode;
-    unsigned long *cpu_addr;
-    long timeout;
-    TW_New_Ioctl *tw_ioctl;
-    TW_Passthru *passthru;
-    TW_Device_Extension *tw_dev = tw_device_extension_list[iminor(inode)];
-    int retval = -EFAULT;
-    void __user *argp = (void __user *)arg;
+static long tw_chrdev_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
+{
+	int request_id;
+	dma_addr_t dma_handle;
+	unsigned short tw_aen_code;
+	unsigned long flags;
+	unsigned int data_buffer_length = 0;
+	unsigned long data_buffer_length_adjusted = 0;
+	struct inode *inode = file_inode(file);
+	unsigned long *cpu_addr;
+	long timeout;
+	TW_New_Ioctl *tw_ioctl;
+	TW_Passthru *passthru;
+	TW_Device_Extension *tw_dev = tw_device_extension_list[iminor(inode)];
+	int retval = -EFAULT;
+	void __user *argp = (void __user *)arg;
 
-    dprintk(KERN_WARNING "3w-xxxx: tw_chrdev_ioctl()\n");
+	dprintk(KERN_WARNING "3w-xxxx: tw_chrdev_ioctl()\n");
 
-    mutex_lock(&tw_mutex);
-    /* Only let one of these through at a time */
-    if (mutex_lock_interruptible(&tw_dev->ioctl_lock)) {
-        mutex_unlock(&tw_mutex);
-        return -EINTR;
-    }
+	mutex_lock(&tw_mutex);
+	/* Only let one of these through at a time */
+	if (mutex_lock_interruptible(&tw_dev->ioctl_lock)) {
+		mutex_unlock(&tw_mutex);
+		return -EINTR;
+	}
 
-    /* First copy down the buffer length */
-    if (copy_from_user(&data_buffer_length, argp, sizeof(unsigned int)))
-        goto out;
+	/* First copy down the buffer length */
+	if (copy_from_user(&data_buffer_length, argp, sizeof(unsigned int)))
+		goto out;
 
-    /* Check size */
-    if (data_buffer_length > TW_MAX_IOCTL_SECTORS * 512) {
-        retval = -EINVAL;
-        goto out;
-    }
+	/* Check size */
+	if (data_buffer_length > TW_MAX_IOCTL_SECTORS * 512) {
+		retval = -EINVAL;
+		goto out;
+	}
 
-    /* Hardware can only do multiple of 512 byte transfers */
-    data_buffer_length_adjusted = (data_buffer_length + 511) & ~511;
+	/* Hardware can only do multiple of 512 byte transfers */
+	data_buffer_length_adjusted = (data_buffer_length + 511) & ~511;
+	
+	/* Now allocate ioctl buf memory */
+	cpu_addr = dma_alloc_coherent(&tw_dev->tw_pci_dev->dev, data_buffer_length_adjusted+sizeof(TW_New_Ioctl) - 1, &dma_handle, GFP_KERNEL);
+	if (cpu_addr == NULL) {
+		retval = -ENOMEM;
+		goto out;
+	}
 
-    /* Now allocate ioctl buf memory */
-    cpu_addr = dma_alloc_coherent(&tw_dev->tw_pci_dev->dev, data_buffer_length_adjusted+sizeof(TW_New_Ioctl) - 1, &dma_handle, GFP_KERNEL);
-    if (cpu_addr == NULL) {
-        retval = -ENOMEM;
-        goto out;
-    }
+	tw_ioctl = (TW_New_Ioctl *)cpu_addr;
 
-    tw_ioctl = (TW_New_Ioctl *)cpu_addr;
+	/* Now copy down the entire ioctl */
+	if (copy_from_user(tw_ioctl, argp, data_buffer_length + sizeof(TW_New_Ioctl) - 1))
+		goto out2;
 
-    /* Now copy down the entire ioctl */
-    if (copy_from_user(tw_ioctl, argp, data_buffer_length + sizeof(TW_New_Ioctl) - 1))
-        goto out2;
+	passthru = (TW_Passthru *)&tw_ioctl->firmware_command;
 
-    passthru = (TW_Passthru *)&tw_ioctl->firmware_command;
+	/* See which ioctl we are doing */
+	switch (cmd) {
+		case TW_OP_NOP:
+			dprintk(KERN_WARNING "3w-xxxx: tw_chrdev_ioctl(): caught TW_OP_NOP.\n");
+			break;
+		case TW_OP_AEN_LISTEN:
+			dprintk(KERN_WARNING "3w-xxxx: tw_chrdev_ioctl(): caught TW_AEN_LISTEN.\n");
+			memset(tw_ioctl->data_buffer, 0, data_buffer_length);
 
-    /* See which ioctl we are doing */
-    switch (cmd) {
-    case TW_OP_NOP:
-        dprintk(KERN_WARNING "3w-xxxx: tw_chrdev_ioctl(): caught TW_OP_NOP.\n");
-        break;
-    case TW_OP_AEN_LISTEN:
-        dprintk(KERN_WARNING "3w-xxxx: tw_chrdev_ioctl(): caught TW_AEN_LISTEN.\n");
-        memset(tw_ioctl->data_buffer, 0, data_buffer_length);
+			spin_lock_irqsave(tw_dev->host->host_lock, flags);
+			if (tw_dev->aen_head == tw_dev->aen_tail) {
+				tw_aen_code = TW_AEN_QUEUE_EMPTY;
+			} else {
+				tw_aen_code = tw_dev->aen_queue[tw_dev->aen_head];
+				if (tw_dev->aen_head == TW_Q_LENGTH - 1) {
+					tw_dev->aen_head = TW_Q_START;
+				} else {
+					tw_dev->aen_head = tw_dev->aen_head + 1;
+				}
+			}
+			spin_unlock_irqrestore(tw_dev->host->host_lock, flags);
+			memcpy(tw_ioctl->data_buffer, &tw_aen_code, sizeof(tw_aen_code));
+			break;
+		case TW_CMD_PACKET_WITH_DATA:
+			dprintk(KERN_WARNING "3w-xxxx: tw_chrdev_ioctl(): caught TW_CMD_PACKET_WITH_DATA.\n");
+			spin_lock_irqsave(tw_dev->host->host_lock, flags);
 
-        spin_lock_irqsave(tw_dev->host->host_lock, flags);
-        if (tw_dev->aen_head == tw_dev->aen_tail) {
-            tw_aen_code = TW_AEN_QUEUE_EMPTY;
-        } else {
-            tw_aen_code = tw_dev->aen_queue[tw_dev->aen_head];
-            if (tw_dev->aen_head == TW_Q_LENGTH - 1) {
-                tw_dev->aen_head = TW_Q_START;
-            } else {
-                tw_dev->aen_head = tw_dev->aen_head + 1;
-            }
-        }
-        spin_unlock_irqrestore(tw_dev->host->host_lock, flags);
-        memcpy(tw_ioctl->data_buffer, &tw_aen_code, sizeof(tw_aen_code));
-        break;
-    case TW_CMD_PACKET_WITH_DATA:
-        dprintk(KERN_WARNING "3w-xxxx: tw_chrdev_ioctl(): caught TW_CMD_PACKET_WITH_DATA.\n");
-        spin_lock_irqsave(tw_dev->host->host_lock, flags);
+			tw_state_request_start(tw_dev, &request_id);
 
-        tw_state_request_start(tw_dev, &request_id);
+			/* Flag internal command */
+			tw_dev->srb[request_id] = NULL;
 
-        /* Flag internal command */
-        tw_dev->srb[request_id] = NULL;
+			/* Flag chrdev ioctl */
+			tw_dev->chrdev_request_id = request_id;
 
-        /* Flag chrdev ioctl */
-        tw_dev->chrdev_request_id = request_id;
+			tw_ioctl->firmware_command.request_id = request_id;
 
-        tw_ioctl->firmware_command.request_id = request_id;
+			/* Load the sg list */
+			switch (TW_SGL_OUT(tw_ioctl->firmware_command.opcode__sgloffset)) {
+			case 2:
+				tw_ioctl->firmware_command.byte8.param.sgl[0].address = dma_handle + sizeof(TW_New_Ioctl) - 1;
+				tw_ioctl->firmware_command.byte8.param.sgl[0].length = data_buffer_length_adjusted;
+				break;
+			case 3:
+				tw_ioctl->firmware_command.byte8.io.sgl[0].address = dma_handle + sizeof(TW_New_Ioctl) - 1;
+				tw_ioctl->firmware_command.byte8.io.sgl[0].length = data_buffer_length_adjusted;
+				break;
+			case 5:
+				passthru->sg_list[0].address = dma_handle + sizeof(TW_New_Ioctl) - 1;
+				passthru->sg_list[0].length = data_buffer_length_adjusted;
+				break;
+			}
 
-        /* Load the sg list */
-        switch (TW_SGL_OUT(tw_ioctl->firmware_command.opcode__sgloffset)) {
-        case 2:
-            tw_ioctl->firmware_command.byte8.param.sgl[0].address = dma_handle + sizeof(TW_New_Ioctl) - 1;
-            tw_ioctl->firmware_command.byte8.param.sgl[0].length = data_buffer_length_adjusted;
-            break;
-        case 3:
-            tw_ioctl->firmware_command.byte8.io.sgl[0].address = dma_handle + sizeof(TW_New_Ioctl) - 1;
-            tw_ioctl->firmware_command.byte8.io.sgl[0].length = data_buffer_length_adjusted;
-            break;
-        case 5:
-            passthru->sg_list[0].address = dma_handle + sizeof(TW_New_Ioctl) - 1;
-            passthru->sg_list[0].length = data_buffer_length_adjusted;
-            break;
-        }
+			memcpy(tw_dev->command_packet_virtual_address[request_id], &(tw_ioctl->firmware_command), sizeof(TW_Command));
 
-        memcpy(tw_dev->command_packet_virtual_address[request_id], &(tw_ioctl->firmware_command), sizeof(TW_Command));
+			/* Now post the command packet to the controller */
+			tw_post_command_packet(tw_dev, request_id);
+			spin_unlock_irqrestore(tw_dev->host->host_lock, flags);
 
-        /* Now post the command packet to the controller */
-        tw_post_command_packet(tw_dev, request_id);
-        spin_unlock_irqrestore(tw_dev->host->host_lock, flags);
+			timeout = TW_IOCTL_CHRDEV_TIMEOUT*HZ;
 
-        timeout = TW_IOCTL_CHRDEV_TIMEOUT*HZ;
+			/* Now wait for the command to complete */
+			timeout = wait_event_timeout(tw_dev->ioctl_wqueue, tw_dev->chrdev_request_id == TW_IOCTL_CHRDEV_FREE, timeout);
 
-        /* Now wait for the command to complete */
-        timeout = wait_event_timeout(tw_dev->ioctl_wqueue, tw_dev->chrdev_request_id == TW_IOCTL_CHRDEV_FREE, timeout);
+			/* We timed out, and didn't get an interrupt */
+			if (tw_dev->chrdev_request_id != TW_IOCTL_CHRDEV_FREE) {
+				/* Now we need to reset the board */
+				printk(KERN_WARNING "3w-xxxx: scsi%d: Character ioctl (0x%x) timed out, resetting card.\n", tw_dev->host->host_no, cmd);
+				retval = -EIO;
+				if (tw_reset_device_extension(tw_dev)) {
+					printk(KERN_WARNING "3w-xxxx: tw_chrdev_ioctl(): Reset failed for card %d.\n", tw_dev->host->host_no);
+				}
+				goto out2;
+			}
 
-        /* We timed out, and didn't get an interrupt */
-        if (tw_dev->chrdev_request_id != TW_IOCTL_CHRDEV_FREE) {
-            /* Now we need to reset the board */
-            printk(KERN_WARNING "3w-xxxx: scsi%d: Character ioctl (0x%x) timed out, resetting card.\n", tw_dev->host->host_no, cmd);
-            retval = -EIO;
-            if (tw_reset_device_extension(tw_dev)) {
-                printk(KERN_WARNING "3w-xxxx: tw_chrdev_ioctl(): Reset failed for card %d.\n", tw_dev->host->host_no);
-            }
-            goto out2;
-        }
+			/* Now copy in the command packet response */
+			memcpy(&(tw_ioctl->firmware_command), tw_dev->command_packet_virtual_address[request_id], sizeof(TW_Command));
 
-        /* Now copy in the command packet response */
-        memcpy(&(tw_ioctl->firmware_command), tw_dev->command_packet_virtual_address[request_id], sizeof(TW_Command));
+			/* Now complete the io */
+			spin_lock_irqsave(tw_dev->host->host_lock, flags);
+			tw_dev->posted_request_count--;
+			tw_dev->state[request_id] = TW_S_COMPLETED;
+			tw_state_request_finish(tw_dev, request_id);
+			spin_unlock_irqrestore(tw_dev->host->host_lock, flags);
+			break;
+		default:
+			retval = -ENOTTY;
+			goto out2;
+	}
 
-        /* Now complete the io */
-        spin_lock_irqsave(tw_dev->host->host_lock, flags);
-        tw_dev->posted_request_count--;
-        tw_dev->state[request_id] = TW_S_COMPLETED;
-        tw_state_request_finish(tw_dev, request_id);
-        spin_unlock_irqrestore(tw_dev->host->host_lock, flags);
-        break;
-    default:
-        retval = -ENOTTY;
-        goto out2;
-    }
-
-    /* Now copy the response to userspace */
-    if (copy_to_user(argp, tw_ioctl, sizeof(TW_New_Ioctl) + data_buffer_length - 1))
-        goto out2;
-    retval = 0;
+	/* Now copy the response to userspace */
+	if (copy_to_user(argp, tw_ioctl, sizeof(TW_New_Ioctl) + data_buffer_length - 1))
+		goto out2;
+	retval = 0;
 out2:
     /* Now free ioctl buf memory */
     dma_free_coherent(&tw_dev->tw_pci_dev->dev, data_buffer_length_adjusted+sizeof(TW_New_Ioctl) - 1, cpu_addr, dma_handle);

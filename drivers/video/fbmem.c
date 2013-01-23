@@ -699,14 +699,15 @@ static const struct file_operations fb_proc_fops = {
  * So look up the fb_info using the inode minor number,
  * and just verify it against the reference we have.
  */
-static struct fb_info *file_fb_info(struct file *file) {
-    struct inode *inode = file->f_path.dentry->d_inode;
-    int fbidx = iminor(inode);
-    struct fb_info *info = registered_fb[fbidx];
+static struct fb_info *file_fb_info(struct file *file)
+{
+	struct inode *inode = file_inode(file);
+	int fbidx = iminor(inode);
+	struct fb_info *info = registered_fb[fbidx];
 
-    if (info != file->private_data)
-        info = NULL;
-    return info;
+	if (info != file->private_data)
+		info = NULL;
+	return info;
 }
 
 static ssize_t

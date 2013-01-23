@@ -125,9 +125,10 @@ static int qstat_show(struct seq_file *m, void *v) {
     return 0;
 }
 
-static int qstat_seq_open(struct inode *inode, struct file *filp) {
-    return single_open(filp, qstat_show,
-                       filp->f_path.dentry->d_inode->i_private);
+static int qstat_seq_open(struct inode *inode, struct file *filp)
+{
+	return single_open(filp, qstat_show,
+			   file_inode(filp)->i_private);
 }
 
 static const struct file_operations debugfs_fops = {
@@ -215,9 +216,10 @@ static ssize_t qperf_seq_write(struct file *file, const char __user *ubuf,
     return count;
 }
 
-static int qperf_seq_open(struct inode *inode, struct file *filp) {
-    return single_open(filp, qperf_show,
-                       filp->f_path.dentry->d_inode->i_private);
+static int qperf_seq_open(struct inode *inode, struct file *filp)
+{
+	return single_open(filp, qperf_show,
+			   file_inode(filp)->i_private);
 }
 
 static struct file_operations debugfs_perf_fops = {

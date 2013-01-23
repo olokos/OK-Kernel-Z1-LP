@@ -596,350 +596,361 @@ static int sync_serial_release(struct inode *inode, struct file *file) {
     return 0;
 }
 
-static unsigned int sync_serial_poll(struct file *file, poll_table *wait) {
-    int dev = iminor(file->f_path.dentry->d_inode);
-    unsigned int mask = 0;
-    sync_port *port;
-    DEBUGPOLL( static unsigned int prev_mask = 0; );
 
-    port = &ports[dev];
+static unsigned int sync_serial_poll(struct file *file, poll_table *wait)
+{
+	int dev = iminor(file_inode(file));
+	unsigned int mask = 0;
+	sync_port *port;
+	DEBUGPOLL( static unsigned int prev_mask = 0; );
 
-    if (!port->started) {
-        reg_sser_rw_cfg cfg = REG_RD(sser, port->regi_sser, rw_cfg);
-        reg_sser_rw_rec_cfg rec_cfg =
-            REG_RD(sser, port->regi_sser, rw_rec_cfg);
-        cfg.en = regk_sser_yes;
-        rec_cfg.rec_en = port->input;
-        REG_WR(sser, port->regi_sser, rw_cfg, cfg);
-        REG_WR(sser, port->regi_sser, rw_rec_cfg, rec_cfg);
-        port->started = 1;
-    }
+	port = &ports[dev];
 
-    poll_wait(file, &port->out_wait_q, wait);
-    poll_wait(file, &port->in_wait_q, wait);
+	if (!port->started) {
+		reg_sser_rw_cfg cfg = REG_RD(sser, port->regi_sser, rw_cfg);
+		reg_sser_rw_rec_cfg rec_cfg =
+			REG_RD(sser, port->regi_sser, rw_rec_cfg);
+		cfg.en = regk_sser_yes;
+		rec_cfg.rec_en = port->input;
+		REG_WR(sser, port->regi_sser, rw_cfg, cfg);
+		REG_WR(sser, port->regi_sser, rw_rec_cfg, rec_cfg);
+		port->started = 1;
+	}
 
-    /* No active transfer, descriptors are available */
-    if (port->output && !port->tr_running)
-        mask |= POLLOUT | POLLWRNORM;
+	poll_wait(file, &port->out_wait_q, wait);
+	poll_wait(file, &port->in_wait_q, wait);
 
-    /* Descriptor and buffer space available. */
-    if (port->output &&
-            port->active_tr_descr != port->catch_tr_descr &&
-            port->out_buf_count < OUT_BUFFER_SIZE)
-        mask |=  POLLOUT | POLLWRNORM;
+	/* No active transfer, descriptors are available */
+	if (port->output && !port->tr_running)
+		mask |= POLLOUT | POLLWRNORM;
 
-    /* At least an inbufchunk of data */
-    if (port->input && sync_data_avail(port) >= port->inbufchunk)
-        mask |= POLLIN | POLLRDNORM;
+	/* Descriptor and buffer space available. */
+	if (port->output &&
+	    port->active_tr_descr != port->catch_tr_descr &&
+	    port->out_buf_count < OUT_BUFFER_SIZE)
+		mask |=  POLLOUT | POLLWRNORM;
 
-    DEBUGPOLL(if (mask != prev_mask)
-              printk("sync_serial_poll: mask 0x%08X %s %s\n", mask,
-                     mask&POLLOUT?"POLLOUT":"", mask&POLLIN?"POLLIN":"");
-              prev_mask = mask;
-             );
-    return mask;
+	/* At least an inbufchunk of data */
+	if (port->input && sync_data_avail(port) >= port->inbufchunk)
+		mask |= POLLIN | POLLRDNORM;
+
+	DEBUGPOLL(if (mask != prev_mask)
+	      printk("sync_serial_poll: mask 0x%08X %s %s\n", mask,
+		     mask&POLLOUT?"POLLOUT":"", mask&POLLIN?"POLLIN":"");
+	      prev_mask = mask;
+	      );
+	return mask;
 }
 
 static int sync_serial_ioctl(struct file *file,
-                             unsigned int cmd, unsigned long arg) {
-    int return_val = 0;
-    int dma_w_size = regk_dma_set_w_size1;
-    int dev = iminor(file->f_path.dentry->d_inode);
-    sync_port *port;
-    reg_sser_rw_tr_cfg tr_cfg;
-    reg_sser_rw_rec_cfg rec_cfg;
-    reg_sser_rw_frm_cfg frm_cfg;
-    reg_sser_rw_cfg gen_cfg;
-    reg_sser_rw_intr_mask intr_mask;
+		  unsigned int cmd, unsigned long arg)
+{
+	int return_val = 0;
+	int dma_w_size = regk_dma_set_w_size1;
+	int dev = iminor(file_inode(file));
+	sync_port *port;
+	reg_sser_rw_tr_cfg tr_cfg;
+	reg_sser_rw_rec_cfg rec_cfg;
+	reg_sser_rw_frm_cfg frm_cfg;
+	reg_sser_rw_cfg gen_cfg;
+	reg_sser_rw_intr_mask intr_mask;
 
-    if (dev < 0 || dev >= NBR_PORTS || !ports[dev].enabled) {
-        DEBUG(printk("Invalid minor %d\n", dev));
-        return -1;
-    }
-    port = &ports[dev];
-    spin_lock_irq(&port->lock);
+	if (dev < 0 || dev >= NBR_PORTS || !ports[dev].enabled)
+	{
+		DEBUG(printk("Invalid minor %d\n", dev));
+		return -1;
+	}
+        port = &ports[dev];
+	spin_lock_irq(&port->lock);
 
-    tr_cfg = REG_RD(sser, port->regi_sser, rw_tr_cfg);
-    rec_cfg = REG_RD(sser, port->regi_sser, rw_rec_cfg);
-    frm_cfg = REG_RD(sser, port->regi_sser, rw_frm_cfg);
-    gen_cfg = REG_RD(sser, port->regi_sser, rw_cfg);
-    intr_mask = REG_RD(sser, port->regi_sser, rw_intr_mask);
+	tr_cfg = REG_RD(sser, port->regi_sser, rw_tr_cfg);
+	rec_cfg = REG_RD(sser, port->regi_sser, rw_rec_cfg);
+	frm_cfg = REG_RD(sser, port->regi_sser, rw_frm_cfg);
+	gen_cfg = REG_RD(sser, port->regi_sser, rw_cfg);
+	intr_mask = REG_RD(sser, port->regi_sser, rw_intr_mask);
 
-    switch(cmd) {
-    case SSP_SPEED:
-        if (GET_SPEED(arg) == CODEC) {
-            unsigned int freq;
+	switch(cmd)
+	{
+	case SSP_SPEED:
+		if (GET_SPEED(arg) == CODEC)
+		{
+			unsigned int freq;
 
-            gen_cfg.base_freq = regk_sser_f32;
+			gen_cfg.base_freq = regk_sser_f32;
 
-            /* Clock divider will internally be
-             * gen_cfg.clk_div + 1.
-             */
+			/* Clock divider will internally be
+			 * gen_cfg.clk_div + 1.
+			 */
 
-            freq = GET_FREQ(arg);
-            switch (freq) {
-            case FREQ_32kHz:
-            case FREQ_64kHz:
-            case FREQ_128kHz:
-            case FREQ_256kHz:
-                gen_cfg.clk_div = 125 *
-                                  (1 << (freq - FREQ_256kHz)) - 1;
-                break;
-            case FREQ_512kHz:
-                gen_cfg.clk_div = 62;
-                break;
-            case FREQ_1MHz:
-            case FREQ_2MHz:
-            case FREQ_4MHz:
-                gen_cfg.clk_div = 8 * (1 << freq) - 1;
-                break;
-            }
-        } else {
-            gen_cfg.base_freq = regk_sser_f29_493;
-            switch (GET_SPEED(arg)) {
-            case SSP150:
-                gen_cfg.clk_div = 29493000 / (150 * 8) - 1;
-                break;
-            case SSP300:
-                gen_cfg.clk_div = 29493000 / (300 * 8) - 1;
-                break;
-            case SSP600:
-                gen_cfg.clk_div = 29493000 / (600 * 8) - 1;
-                break;
-            case SSP1200:
-                gen_cfg.clk_div = 29493000 / (1200 * 8) - 1;
-                break;
-            case SSP2400:
-                gen_cfg.clk_div = 29493000 / (2400 * 8) - 1;
-                break;
-            case SSP4800:
-                gen_cfg.clk_div = 29493000 / (4800 * 8) - 1;
-                break;
-            case SSP9600:
-                gen_cfg.clk_div = 29493000 / (9600 * 8) - 1;
-                break;
-            case SSP19200:
-                gen_cfg.clk_div = 29493000 / (19200 * 8) - 1;
-                break;
-            case SSP28800:
-                gen_cfg.clk_div = 29493000 / (28800 * 8) - 1;
-                break;
-            case SSP57600:
-                gen_cfg.clk_div = 29493000 / (57600 * 8) - 1;
-                break;
-            case SSP115200:
-                gen_cfg.clk_div = 29493000 / (115200 * 8) - 1;
-                break;
-            case SSP230400:
-                gen_cfg.clk_div = 29493000 / (230400 * 8) - 1;
-                break;
-            case SSP460800:
-                gen_cfg.clk_div = 29493000 / (460800 * 8) - 1;
-                break;
-            case SSP921600:
-                gen_cfg.clk_div = 29493000 / (921600 * 8) - 1;
-                break;
-            case SSP3125000:
-                gen_cfg.base_freq = regk_sser_f100;
-                gen_cfg.clk_div = 100000000 / (3125000 * 8) - 1;
-                break;
+			freq = GET_FREQ(arg);
+			switch (freq) {
+			case FREQ_32kHz:
+			case FREQ_64kHz:
+			case FREQ_128kHz:
+			case FREQ_256kHz:
+				gen_cfg.clk_div = 125 *
+					(1 << (freq - FREQ_256kHz)) - 1;
+			break;
+			case FREQ_512kHz:
+				gen_cfg.clk_div = 62;
+			break;
+			case FREQ_1MHz:
+			case FREQ_2MHz:
+			case FREQ_4MHz:
+				gen_cfg.clk_div = 8 * (1 << freq) - 1;
+			break;
+			}
+		} else {
+			gen_cfg.base_freq = regk_sser_f29_493;
+			switch (GET_SPEED(arg)) {
+			case SSP150:
+				gen_cfg.clk_div = 29493000 / (150 * 8) - 1;
+				break;
+			case SSP300:
+				gen_cfg.clk_div = 29493000 / (300 * 8) - 1;
+				break;
+			case SSP600:
+				gen_cfg.clk_div = 29493000 / (600 * 8) - 1;
+				break;
+			case SSP1200:
+				gen_cfg.clk_div = 29493000 / (1200 * 8) - 1;
+				break;
+			case SSP2400:
+				gen_cfg.clk_div = 29493000 / (2400 * 8) - 1;
+				break;
+			case SSP4800:
+				gen_cfg.clk_div = 29493000 / (4800 * 8) - 1;
+				break;
+			case SSP9600:
+				gen_cfg.clk_div = 29493000 / (9600 * 8) - 1;
+				break;
+			case SSP19200:
+				gen_cfg.clk_div = 29493000 / (19200 * 8) - 1;
+				break;
+			case SSP28800:
+				gen_cfg.clk_div = 29493000 / (28800 * 8) - 1;
+				break;
+			case SSP57600:
+				gen_cfg.clk_div = 29493000 / (57600 * 8) - 1;
+				break;
+			case SSP115200:
+				gen_cfg.clk_div = 29493000 / (115200 * 8) - 1;
+				break;
+			case SSP230400:
+				gen_cfg.clk_div = 29493000 / (230400 * 8) - 1;
+				break;
+			case SSP460800:
+				gen_cfg.clk_div = 29493000 / (460800 * 8) - 1;
+				break;
+			case SSP921600:
+				gen_cfg.clk_div = 29493000 / (921600 * 8) - 1;
+				break;
+			case SSP3125000:
+				gen_cfg.base_freq = regk_sser_f100;
+				gen_cfg.clk_div = 100000000 / (3125000 * 8) - 1;
+				break;
 
-            }
-        }
-        frm_cfg.wordrate = GET_WORD_RATE(arg);
+			}
+		}
+		frm_cfg.wordrate = GET_WORD_RATE(arg);
 
-        break;
-    case SSP_MODE:
-        switch(arg) {
-        case MASTER_OUTPUT:
-            port->output = 1;
-            port->input = 0;
-            frm_cfg.out_on = regk_sser_tr;
-            frm_cfg.frame_pin_dir = regk_sser_out;
-            gen_cfg.clk_dir = regk_sser_out;
-            break;
-        case SLAVE_OUTPUT:
-            port->output = 1;
-            port->input = 0;
-            frm_cfg.frame_pin_dir = regk_sser_in;
-            gen_cfg.clk_dir = regk_sser_in;
-            break;
-        case MASTER_INPUT:
-            port->output = 0;
-            port->input = 1;
-            frm_cfg.frame_pin_dir = regk_sser_out;
-            frm_cfg.out_on = regk_sser_intern_tb;
-            gen_cfg.clk_dir = regk_sser_out;
-            break;
-        case SLAVE_INPUT:
-            port->output = 0;
-            port->input = 1;
-            frm_cfg.frame_pin_dir = regk_sser_in;
-            gen_cfg.clk_dir = regk_sser_in;
-            break;
-        case MASTER_BIDIR:
-            port->output = 1;
-            port->input = 1;
-            frm_cfg.frame_pin_dir = regk_sser_out;
-            frm_cfg.out_on = regk_sser_intern_tb;
-            gen_cfg.clk_dir = regk_sser_out;
-            break;
-        case SLAVE_BIDIR:
-            port->output = 1;
-            port->input = 1;
-            frm_cfg.frame_pin_dir = regk_sser_in;
-            gen_cfg.clk_dir = regk_sser_in;
-            break;
-        default:
-            spin_unlock_irq(&port->lock);
-            return -EINVAL;
-        }
-        if (!port->use_dma || (arg == MASTER_OUTPUT || arg == SLAVE_OUTPUT))
-            intr_mask.rdav = regk_sser_yes;
-        break;
-    case SSP_FRAME_SYNC:
-        if (arg & NORMAL_SYNC) {
-            frm_cfg.rec_delay = 1;
-            frm_cfg.tr_delay = 1;
-        } else if (arg & EARLY_SYNC)
-            frm_cfg.rec_delay = frm_cfg.tr_delay = 0;
-        else if (arg & SECOND_WORD_SYNC) {
-            frm_cfg.rec_delay = 7;
-            frm_cfg.tr_delay = 1;
-        }
+		break;
+	case SSP_MODE:
+		switch(arg)
+		{
+			case MASTER_OUTPUT:
+				port->output = 1;
+				port->input = 0;
+				frm_cfg.out_on = regk_sser_tr;
+				frm_cfg.frame_pin_dir = regk_sser_out;
+				gen_cfg.clk_dir = regk_sser_out;
+				break;
+			case SLAVE_OUTPUT:
+				port->output = 1;
+				port->input = 0;
+				frm_cfg.frame_pin_dir = regk_sser_in;
+				gen_cfg.clk_dir = regk_sser_in;
+				break;
+			case MASTER_INPUT:
+				port->output = 0;
+				port->input = 1;
+				frm_cfg.frame_pin_dir = regk_sser_out;
+				frm_cfg.out_on = regk_sser_intern_tb;
+				gen_cfg.clk_dir = regk_sser_out;
+				break;
+			case SLAVE_INPUT:
+				port->output = 0;
+				port->input = 1;
+				frm_cfg.frame_pin_dir = regk_sser_in;
+				gen_cfg.clk_dir = regk_sser_in;
+				break;
+			case MASTER_BIDIR:
+				port->output = 1;
+				port->input = 1;
+				frm_cfg.frame_pin_dir = regk_sser_out;
+				frm_cfg.out_on = regk_sser_intern_tb;
+				gen_cfg.clk_dir = regk_sser_out;
+				break;
+			case SLAVE_BIDIR:
+				port->output = 1;
+				port->input = 1;
+				frm_cfg.frame_pin_dir = regk_sser_in;
+				gen_cfg.clk_dir = regk_sser_in;
+				break;
+			default:
+				spin_unlock_irq(&port->lock);
+				return -EINVAL;
+		}
+		if (!port->use_dma || (arg == MASTER_OUTPUT || arg == SLAVE_OUTPUT))
+			intr_mask.rdav = regk_sser_yes;
+		break;
+	case SSP_FRAME_SYNC:
+		if (arg & NORMAL_SYNC) {
+			frm_cfg.rec_delay = 1;
+			frm_cfg.tr_delay = 1;
+		}
+		else if (arg & EARLY_SYNC)
+			frm_cfg.rec_delay = frm_cfg.tr_delay = 0;
+		else if (arg & SECOND_WORD_SYNC) {
+			frm_cfg.rec_delay = 7;
+			frm_cfg.tr_delay = 1;
+		}
 
-        tr_cfg.bulk_wspace = frm_cfg.tr_delay;
-        frm_cfg.early_wend = regk_sser_yes;
-        if (arg & BIT_SYNC)
-            frm_cfg.type = regk_sser_edge;
-        else if (arg & WORD_SYNC)
-            frm_cfg.type = regk_sser_level;
-        else if (arg & EXTENDED_SYNC)
-            frm_cfg.early_wend = regk_sser_no;
+		tr_cfg.bulk_wspace = frm_cfg.tr_delay;
+		frm_cfg.early_wend = regk_sser_yes;
+		if (arg & BIT_SYNC)
+			frm_cfg.type = regk_sser_edge;
+		else if (arg & WORD_SYNC)
+			frm_cfg.type = regk_sser_level;
+		else if (arg & EXTENDED_SYNC)
+			frm_cfg.early_wend = regk_sser_no;
 
-        if (arg & SYNC_ON)
-            frm_cfg.frame_pin_use = regk_sser_frm;
-        else if (arg & SYNC_OFF)
-            frm_cfg.frame_pin_use = regk_sser_gio0;
+		if (arg & SYNC_ON)
+			frm_cfg.frame_pin_use = regk_sser_frm;
+		else if (arg & SYNC_OFF)
+			frm_cfg.frame_pin_use = regk_sser_gio0;
 
-        dma_w_size = regk_dma_set_w_size2;
-        if (arg & WORD_SIZE_8) {
-            rec_cfg.sample_size = tr_cfg.sample_size = 7;
-            dma_w_size = regk_dma_set_w_size1;
-        } else if (arg & WORD_SIZE_12)
-            rec_cfg.sample_size = tr_cfg.sample_size = 11;
-        else if (arg & WORD_SIZE_16)
-            rec_cfg.sample_size = tr_cfg.sample_size = 15;
-        else if (arg & WORD_SIZE_24)
-            rec_cfg.sample_size = tr_cfg.sample_size = 23;
-        else if (arg & WORD_SIZE_32)
-            rec_cfg.sample_size = tr_cfg.sample_size = 31;
+		dma_w_size = regk_dma_set_w_size2;
+		if (arg & WORD_SIZE_8) {
+			rec_cfg.sample_size = tr_cfg.sample_size = 7;
+			dma_w_size = regk_dma_set_w_size1;
+		} else if (arg & WORD_SIZE_12)
+			rec_cfg.sample_size = tr_cfg.sample_size = 11;
+		else if (arg & WORD_SIZE_16)
+			rec_cfg.sample_size = tr_cfg.sample_size = 15;
+		else if (arg & WORD_SIZE_24)
+			rec_cfg.sample_size = tr_cfg.sample_size = 23;
+		else if (arg & WORD_SIZE_32)
+			rec_cfg.sample_size = tr_cfg.sample_size = 31;
 
-        if (arg & BIT_ORDER_MSB)
-            rec_cfg.sh_dir = tr_cfg.sh_dir = regk_sser_msbfirst;
-        else if (arg & BIT_ORDER_LSB)
-            rec_cfg.sh_dir = tr_cfg.sh_dir = regk_sser_lsbfirst;
+		if (arg & BIT_ORDER_MSB)
+			rec_cfg.sh_dir = tr_cfg.sh_dir = regk_sser_msbfirst;
+		else if (arg & BIT_ORDER_LSB)
+			rec_cfg.sh_dir = tr_cfg.sh_dir = regk_sser_lsbfirst;
 
-        if (arg & FLOW_CONTROL_ENABLE) {
-            frm_cfg.status_pin_use = regk_sser_frm;
-            rec_cfg.fifo_thr = regk_sser_thr16;
-        } else if (arg & FLOW_CONTROL_DISABLE) {
-            frm_cfg.status_pin_use = regk_sser_gio0;
-            rec_cfg.fifo_thr = regk_sser_inf;
-        }
+		if (arg & FLOW_CONTROL_ENABLE) {
+			frm_cfg.status_pin_use = regk_sser_frm;
+			rec_cfg.fifo_thr = regk_sser_thr16;
+		} else if (arg & FLOW_CONTROL_DISABLE) {
+			frm_cfg.status_pin_use = regk_sser_gio0;
+			rec_cfg.fifo_thr = regk_sser_inf;
+		}
 
-        if (arg & CLOCK_NOT_GATED)
-            gen_cfg.gate_clk = regk_sser_no;
-        else if (arg & CLOCK_GATED)
-            gen_cfg.gate_clk = regk_sser_yes;
+		if (arg & CLOCK_NOT_GATED)
+			gen_cfg.gate_clk = regk_sser_no;
+		else if (arg & CLOCK_GATED)
+			gen_cfg.gate_clk = regk_sser_yes;
 
-        break;
-    case SSP_IPOLARITY:
-        /* NOTE!! negedge is considered NORMAL */
-        if (arg & CLOCK_NORMAL)
-            rec_cfg.clk_pol = regk_sser_neg;
-        else if (arg & CLOCK_INVERT)
-            rec_cfg.clk_pol = regk_sser_pos;
+		break;
+	case SSP_IPOLARITY:
+		/* NOTE!! negedge is considered NORMAL */
+		if (arg & CLOCK_NORMAL)
+			rec_cfg.clk_pol = regk_sser_neg;
+		else if (arg & CLOCK_INVERT)
+			rec_cfg.clk_pol = regk_sser_pos;
 
-        if (arg & FRAME_NORMAL)
-            frm_cfg.level = regk_sser_pos_hi;
-        else if (arg & FRAME_INVERT)
-            frm_cfg.level = regk_sser_neg_lo;
+		if (arg & FRAME_NORMAL)
+			frm_cfg.level = regk_sser_pos_hi;
+		else if (arg & FRAME_INVERT)
+			frm_cfg.level = regk_sser_neg_lo;
 
-        if (arg & STATUS_NORMAL)
-            gen_cfg.hold_pol = regk_sser_pos;
-        else if (arg & STATUS_INVERT)
-            gen_cfg.hold_pol = regk_sser_neg;
-        break;
-    case SSP_OPOLARITY:
-        if (arg & CLOCK_NORMAL)
-            gen_cfg.out_clk_pol = regk_sser_pos;
-        else if (arg & CLOCK_INVERT)
-            gen_cfg.out_clk_pol = regk_sser_neg;
+		if (arg & STATUS_NORMAL)
+			gen_cfg.hold_pol = regk_sser_pos;
+		else if (arg & STATUS_INVERT)
+			gen_cfg.hold_pol = regk_sser_neg;
+		break;
+	case SSP_OPOLARITY:
+		if (arg & CLOCK_NORMAL)
+			gen_cfg.out_clk_pol = regk_sser_pos;
+		else if (arg & CLOCK_INVERT)
+			gen_cfg.out_clk_pol = regk_sser_neg;
 
-        if (arg & FRAME_NORMAL)
-            frm_cfg.level = regk_sser_pos_hi;
-        else if (arg & FRAME_INVERT)
-            frm_cfg.level = regk_sser_neg_lo;
+		if (arg & FRAME_NORMAL)
+			frm_cfg.level = regk_sser_pos_hi;
+		else if (arg & FRAME_INVERT)
+			frm_cfg.level = regk_sser_neg_lo;
 
-        if (arg & STATUS_NORMAL)
-            gen_cfg.hold_pol = regk_sser_pos;
-        else if (arg & STATUS_INVERT)
-            gen_cfg.hold_pol = regk_sser_neg;
-        break;
-    case SSP_SPI:
-        rec_cfg.fifo_thr = regk_sser_inf;
-        rec_cfg.sh_dir = tr_cfg.sh_dir = regk_sser_msbfirst;
-        rec_cfg.sample_size = tr_cfg.sample_size = 7;
-        frm_cfg.frame_pin_use = regk_sser_frm;
-        frm_cfg.type = regk_sser_level;
-        frm_cfg.tr_delay = 1;
-        frm_cfg.level = regk_sser_neg_lo;
-        if (arg & SPI_SLAVE) {
-            rec_cfg.clk_pol = regk_sser_neg;
-            gen_cfg.clk_dir = regk_sser_in;
-            port->input = 1;
-            port->output = 0;
-        } else {
-            gen_cfg.out_clk_pol = regk_sser_pos;
-            port->input = 0;
-            port->output = 1;
-            gen_cfg.clk_dir = regk_sser_out;
-        }
-        break;
-    case SSP_INBUFCHUNK:
-        break;
-    default:
-        return_val = -1;
-    }
-
-
-    if (port->started) {
-        rec_cfg.rec_en = port->input;
-        gen_cfg.en = (port->output | port->input);
-    }
-
-    REG_WR(sser, port->regi_sser, rw_tr_cfg, tr_cfg);
-    REG_WR(sser, port->regi_sser, rw_rec_cfg, rec_cfg);
-    REG_WR(sser, port->regi_sser, rw_frm_cfg, frm_cfg);
-    REG_WR(sser, port->regi_sser, rw_intr_mask, intr_mask);
-    REG_WR(sser, port->regi_sser, rw_cfg, gen_cfg);
+		if (arg & STATUS_NORMAL)
+			gen_cfg.hold_pol = regk_sser_pos;
+		else if (arg & STATUS_INVERT)
+			gen_cfg.hold_pol = regk_sser_neg;
+		break;
+	case SSP_SPI:
+		rec_cfg.fifo_thr = regk_sser_inf;
+		rec_cfg.sh_dir = tr_cfg.sh_dir = regk_sser_msbfirst;
+		rec_cfg.sample_size = tr_cfg.sample_size = 7;
+		frm_cfg.frame_pin_use = regk_sser_frm;
+		frm_cfg.type = regk_sser_level;
+		frm_cfg.tr_delay = 1;
+		frm_cfg.level = regk_sser_neg_lo;
+		if (arg & SPI_SLAVE)
+		{
+			rec_cfg.clk_pol = regk_sser_neg;
+			gen_cfg.clk_dir = regk_sser_in;
+			port->input = 1;
+			port->output = 0;
+		}
+		else
+		{
+			gen_cfg.out_clk_pol = regk_sser_pos;
+			port->input = 0;
+			port->output = 1;
+			gen_cfg.clk_dir = regk_sser_out;
+		}
+		break;
+	case SSP_INBUFCHUNK:
+		break;
+	default:
+		return_val = -1;
+	}
 
 
-    if (cmd == SSP_FRAME_SYNC && (arg & (WORD_SIZE_8 | WORD_SIZE_12 |
-                                         WORD_SIZE_16 | WORD_SIZE_24 | WORD_SIZE_32))) {
-        int en = gen_cfg.en;
-        gen_cfg.en = 0;
-        REG_WR(sser, port->regi_sser, rw_cfg, gen_cfg);
-        /* ##### Should DMA be stoped before we change dma size? */
-        DMA_WR_CMD(port->regi_dmain, dma_w_size);
-        DMA_WR_CMD(port->regi_dmaout, dma_w_size);
-        gen_cfg.en = en;
-        REG_WR(sser, port->regi_sser, rw_cfg, gen_cfg);
-    }
+	if (port->started) {
+		rec_cfg.rec_en = port->input;
+		gen_cfg.en = (port->output | port->input);
+	}
 
-    spin_unlock_irq(&port->lock);
-    return return_val;
+	REG_WR(sser, port->regi_sser, rw_tr_cfg, tr_cfg);
+	REG_WR(sser, port->regi_sser, rw_rec_cfg, rec_cfg);
+	REG_WR(sser, port->regi_sser, rw_frm_cfg, frm_cfg);
+	REG_WR(sser, port->regi_sser, rw_intr_mask, intr_mask);
+	REG_WR(sser, port->regi_sser, rw_cfg, gen_cfg);
+
+
+	if (cmd == SSP_FRAME_SYNC && (arg & (WORD_SIZE_8 | WORD_SIZE_12 |
+			WORD_SIZE_16 | WORD_SIZE_24 | WORD_SIZE_32))) {
+		int en = gen_cfg.en;
+		gen_cfg.en = 0;
+		REG_WR(sser, port->regi_sser, rw_cfg, gen_cfg);
+		/* ##### Should DMA be stoped before we change dma size? */
+		DMA_WR_CMD(port->regi_dmain, dma_w_size);
+		DMA_WR_CMD(port->regi_dmaout, dma_w_size);
+		gen_cfg.en = en;
+		REG_WR(sser, port->regi_sser, rw_cfg, gen_cfg);
+	}
+
+	spin_unlock_irq(&port->lock);
+	return return_val;
 }
 
 static long sync_serial_ioctl(struct file *file,
@@ -955,198 +966,203 @@ static long sync_serial_ioctl(struct file *file,
 
 /* NOTE: sync_serial_write does not support concurrency */
 static ssize_t sync_serial_write(struct file *file, const char *buf,
-                                 size_t count, loff_t *ppos) {
-    int dev = iminor(file->f_path.dentry->d_inode);
-    DECLARE_WAITQUEUE(wait, current);
-    struct sync_port *port;
-    int trunc_count;
-    unsigned long flags;
-    int bytes_free;
-    int out_buf_count;
+				 size_t count, loff_t *ppos)
+{
+	int dev = iminor(file_inode(file));
+	DECLARE_WAITQUEUE(wait, current);
+	struct sync_port *port;
+	int trunc_count;
+	unsigned long flags;
+	int bytes_free;
+	int out_buf_count;
 
-    unsigned char *rd_ptr;       /* First allocated byte in the buffer */
-    unsigned char *wr_ptr;       /* First free byte in the buffer */
-    unsigned char *buf_stop_ptr; /* Last byte + 1 */
+	unsigned char *rd_ptr;       /* First allocated byte in the buffer */
+	unsigned char *wr_ptr;       /* First free byte in the buffer */
+	unsigned char *buf_stop_ptr; /* Last byte + 1 */
 
-    if (dev < 0 || dev >= NBR_PORTS || !ports[dev].enabled) {
-        DEBUG(printk("Invalid minor %d\n", dev));
-        return -ENODEV;
-    }
-    port = &ports[dev];
+	if (dev < 0 || dev >= NBR_PORTS || !ports[dev].enabled) {
+		DEBUG(printk("Invalid minor %d\n", dev));
+		return -ENODEV;
+	}
+	port = &ports[dev];
 
-    /* |<-         OUT_BUFFER_SIZE                          ->|
-     *           |<- out_buf_count ->|
-     *                               |<- trunc_count ->| ...->|
-     *  ______________________________________________________
-     * |  free   |   data            | free                   |
-     * |_________|___________________|________________________|
-     *           ^ rd_ptr            ^ wr_ptr
-     */
-    DEBUGWRITE(printk(KERN_DEBUG "W d%d c %lu a: %p c: %p\n",
-                      port->port_nbr, count, port->active_tr_descr,
-                      port->catch_tr_descr));
+	/* |<-         OUT_BUFFER_SIZE                          ->|
+	 *           |<- out_buf_count ->|
+	 *                               |<- trunc_count ->| ...->|
+	 *  ______________________________________________________
+	 * |  free   |   data            | free                   |
+	 * |_________|___________________|________________________|
+	 *           ^ rd_ptr            ^ wr_ptr
+	 */
+	DEBUGWRITE(printk(KERN_DEBUG "W d%d c %lu a: %p c: %p\n",
+			  port->port_nbr, count, port->active_tr_descr,
+			  port->catch_tr_descr));
 
-    /* Read variables that may be updated by interrupts */
-    spin_lock_irqsave(&port->lock, flags);
-    rd_ptr = port->out_rd_ptr;
-    out_buf_count = port->out_buf_count;
-    spin_unlock_irqrestore(&port->lock, flags);
+	/* Read variables that may be updated by interrupts */
+	spin_lock_irqsave(&port->lock, flags);
+	rd_ptr = port->out_rd_ptr;
+	out_buf_count = port->out_buf_count;
+	spin_unlock_irqrestore(&port->lock, flags);
 
-    /* Check if resources are available */
-    if (port->tr_running &&
-            ((port->use_dma && port->active_tr_descr == port->catch_tr_descr) ||
-             out_buf_count >= OUT_BUFFER_SIZE)) {
-        DEBUGWRITE(printk(KERN_DEBUG "sser%d full\n", dev));
-        return -EAGAIN;
-    }
+	/* Check if resources are available */
+	if (port->tr_running &&
+	    ((port->use_dma && port->active_tr_descr == port->catch_tr_descr) ||
+	     out_buf_count >= OUT_BUFFER_SIZE)) {
+		DEBUGWRITE(printk(KERN_DEBUG "sser%d full\n", dev));
+		return -EAGAIN;
+	}
 
-    buf_stop_ptr = port->out_buffer + OUT_BUFFER_SIZE;
+	buf_stop_ptr = port->out_buffer + OUT_BUFFER_SIZE;
 
-    /* Determine pointer to the first free byte, before copying. */
-    wr_ptr = rd_ptr + out_buf_count;
-    if (wr_ptr >= buf_stop_ptr)
-        wr_ptr -= OUT_BUFFER_SIZE;
+	/* Determine pointer to the first free byte, before copying. */
+	wr_ptr = rd_ptr + out_buf_count;
+	if (wr_ptr >= buf_stop_ptr)
+		wr_ptr -= OUT_BUFFER_SIZE;
 
-    /* If we wrap the ring buffer, let the user space program handle it by
-     * truncating the data. This could be more elegant, small buffer
-     * fragments may occur.
-     */
-    bytes_free = OUT_BUFFER_SIZE - out_buf_count;
-    if (wr_ptr + bytes_free > buf_stop_ptr)
-        bytes_free = buf_stop_ptr - wr_ptr;
-    trunc_count = (count < bytes_free) ? count : bytes_free;
+	/* If we wrap the ring buffer, let the user space program handle it by
+	 * truncating the data. This could be more elegant, small buffer
+	 * fragments may occur.
+	 */
+	bytes_free = OUT_BUFFER_SIZE - out_buf_count;
+	if (wr_ptr + bytes_free > buf_stop_ptr)
+		bytes_free = buf_stop_ptr - wr_ptr;
+	trunc_count = (count < bytes_free) ? count : bytes_free;
 
-    if (copy_from_user(wr_ptr, buf, trunc_count))
-        return -EFAULT;
+	if (copy_from_user(wr_ptr, buf, trunc_count))
+		return -EFAULT;
 
-    DEBUGOUTBUF(printk(KERN_DEBUG "%-4d + %-4d = %-4d     %p %p %p\n",
-                       out_buf_count, trunc_count,
-                       port->out_buf_count, port->out_buffer,
-                       wr_ptr, buf_stop_ptr));
+	DEBUGOUTBUF(printk(KERN_DEBUG "%-4d + %-4d = %-4d     %p %p %p\n",
+			   out_buf_count, trunc_count,
+			   port->out_buf_count, port->out_buffer,
+			   wr_ptr, buf_stop_ptr));
 
-    /* Make sure transmitter/receiver is running */
-    if (!port->started) {
-        reg_sser_rw_cfg cfg = REG_RD(sser, port->regi_sser, rw_cfg);
-        reg_sser_rw_rec_cfg rec_cfg = REG_RD(sser, port->regi_sser, rw_rec_cfg);
-        cfg.en = regk_sser_yes;
-        rec_cfg.rec_en = port->input;
-        REG_WR(sser, port->regi_sser, rw_cfg, cfg);
-        REG_WR(sser, port->regi_sser, rw_rec_cfg, rec_cfg);
-        port->started = 1;
-    }
+	/* Make sure transmitter/receiver is running */
+	if (!port->started) {
+		reg_sser_rw_cfg cfg = REG_RD(sser, port->regi_sser, rw_cfg);
+		reg_sser_rw_rec_cfg rec_cfg = REG_RD(sser, port->regi_sser, rw_rec_cfg);
+		cfg.en = regk_sser_yes;
+		rec_cfg.rec_en = port->input;
+		REG_WR(sser, port->regi_sser, rw_cfg, cfg);
+		REG_WR(sser, port->regi_sser, rw_rec_cfg, rec_cfg);
+		port->started = 1;
+	}
 
-    /* Setup wait if blocking */
-    if (!(file->f_flags & O_NONBLOCK)) {
-        add_wait_queue(&port->out_wait_q, &wait);
-        set_current_state(TASK_INTERRUPTIBLE);
-    }
+	/* Setup wait if blocking */
+	if (!(file->f_flags & O_NONBLOCK)) {
+		add_wait_queue(&port->out_wait_q, &wait);
+		set_current_state(TASK_INTERRUPTIBLE);
+	}
 
-    spin_lock_irqsave(&port->lock, flags);
-    port->out_buf_count += trunc_count;
-    if (port->use_dma) {
-        start_dma_out(port, wr_ptr, trunc_count);
-    } else if (!port->tr_running) {
-        reg_sser_rw_intr_mask intr_mask;
-        intr_mask = REG_RD(sser, port->regi_sser, rw_intr_mask);
-        /* Start sender by writing data */
-        send_word(port);
-        /* and enable transmitter ready IRQ */
-        intr_mask.trdy = 1;
-        REG_WR(sser, port->regi_sser, rw_intr_mask, intr_mask);
-    }
-    spin_unlock_irqrestore(&port->lock, flags);
+	spin_lock_irqsave(&port->lock, flags);
+	port->out_buf_count += trunc_count;
+	if (port->use_dma) {
+		start_dma_out(port, wr_ptr, trunc_count);
+	} else if (!port->tr_running) {
+		reg_sser_rw_intr_mask intr_mask;
+		intr_mask = REG_RD(sser, port->regi_sser, rw_intr_mask);
+		/* Start sender by writing data */
+		send_word(port);
+		/* and enable transmitter ready IRQ */
+		intr_mask.trdy = 1;
+		REG_WR(sser, port->regi_sser, rw_intr_mask, intr_mask);
+	}
+	spin_unlock_irqrestore(&port->lock, flags);
 
-    /* Exit if non blocking */
-    if (file->f_flags & O_NONBLOCK) {
-        DEBUGWRITE(printk(KERN_DEBUG "w d%d c %lu  %08x\n",
-                          port->port_nbr, trunc_count,
-                          REG_RD_INT(dma, port->regi_dmaout, r_intr)));
-        return trunc_count;
-    }
+	/* Exit if non blocking */
+	if (file->f_flags & O_NONBLOCK) {
+		DEBUGWRITE(printk(KERN_DEBUG "w d%d c %lu  %08x\n",
+				  port->port_nbr, trunc_count,
+				  REG_RD_INT(dma, port->regi_dmaout, r_intr)));
+		return trunc_count;
+	}
 
-    schedule();
-    set_current_state(TASK_RUNNING);
-    remove_wait_queue(&port->out_wait_q, &wait);
+	schedule();
+	set_current_state(TASK_RUNNING);
+	remove_wait_queue(&port->out_wait_q, &wait);
 
-    if (signal_pending(current))
-        return -EINTR;
+	if (signal_pending(current))
+		return -EINTR;
 
-    DEBUGWRITE(printk(KERN_DEBUG "w d%d c %lu\n",
-                      port->port_nbr, trunc_count));
-    return trunc_count;
+	DEBUGWRITE(printk(KERN_DEBUG "w d%d c %lu\n",
+			  port->port_nbr, trunc_count));
+	return trunc_count;
 }
 
 static ssize_t sync_serial_read(struct file * file, char * buf,
-                                size_t count, loff_t *ppos) {
-    int dev = iminor(file->f_path.dentry->d_inode);
-    int avail;
-    sync_port *port;
-    unsigned char* start;
-    unsigned char* end;
-    unsigned long flags;
+				size_t count, loff_t *ppos)
+{
+	int dev = iminor(file_inode(file));
+	int avail;
+	sync_port *port;
+	unsigned char* start;
+	unsigned char* end;
+	unsigned long flags;
 
-    if (dev < 0 || dev >= NBR_PORTS || !ports[dev].enabled) {
-        DEBUG(printk("Invalid minor %d\n", dev));
-        return -ENODEV;
-    }
-    port = &ports[dev];
+	if (dev < 0 || dev >= NBR_PORTS || !ports[dev].enabled)
+	{
+		DEBUG(printk("Invalid minor %d\n", dev));
+		return -ENODEV;
+	}
+	port = &ports[dev];
 
-    DEBUGREAD(printk("R%d c %d ri %lu wi %lu /%lu\n", dev, count, port->readp - port->flip, port->writep - port->flip, port->in_buffer_size));
+	DEBUGREAD(printk("R%d c %d ri %lu wi %lu /%lu\n", dev, count, port->readp - port->flip, port->writep - port->flip, port->in_buffer_size));
 
-    if (!port->started) {
-        reg_sser_rw_cfg cfg = REG_RD(sser, port->regi_sser, rw_cfg);
-        reg_sser_rw_tr_cfg tr_cfg = REG_RD(sser, port->regi_sser, rw_tr_cfg);
-        reg_sser_rw_rec_cfg rec_cfg = REG_RD(sser, port->regi_sser, rw_rec_cfg);
-        cfg.en = regk_sser_yes;
-        tr_cfg.tr_en = regk_sser_yes;
-        rec_cfg.rec_en = regk_sser_yes;
-        REG_WR(sser, port->regi_sser, rw_cfg, cfg);
-        REG_WR(sser, port->regi_sser, rw_tr_cfg, tr_cfg);
-        REG_WR(sser, port->regi_sser, rw_rec_cfg, rec_cfg);
-        port->started = 1;
-    }
+	if (!port->started)
+	{
+		reg_sser_rw_cfg cfg = REG_RD(sser, port->regi_sser, rw_cfg);
+		reg_sser_rw_tr_cfg tr_cfg = REG_RD(sser, port->regi_sser, rw_tr_cfg);
+		reg_sser_rw_rec_cfg rec_cfg = REG_RD(sser, port->regi_sser, rw_rec_cfg);
+		cfg.en = regk_sser_yes;
+		tr_cfg.tr_en = regk_sser_yes;
+		rec_cfg.rec_en = regk_sser_yes;
+		REG_WR(sser, port->regi_sser, rw_cfg, cfg);
+		REG_WR(sser, port->regi_sser, rw_tr_cfg, tr_cfg);
+		REG_WR(sser, port->regi_sser, rw_rec_cfg, rec_cfg);
+		port->started = 1;
+	}
 
-    /* Calculate number of available bytes */
-    /* Save pointers to avoid that they are modified by interrupt */
-    spin_lock_irqsave(&port->lock, flags);
-    start = (unsigned char*)port->readp; /* cast away volatile */
-    end = (unsigned char*)port->writep;  /* cast away volatile */
-    spin_unlock_irqrestore(&port->lock, flags);
-    while ((start == end) && !port->full) { /* No data */
-        DEBUGREAD(printk(KERN_DEBUG "&"));
-        if (file->f_flags & O_NONBLOCK)
-            return -EAGAIN;
+	/* Calculate number of available bytes */
+	/* Save pointers to avoid that they are modified by interrupt */
+	spin_lock_irqsave(&port->lock, flags);
+	start = (unsigned char*)port->readp; /* cast away volatile */
+	end = (unsigned char*)port->writep;  /* cast away volatile */
+	spin_unlock_irqrestore(&port->lock, flags);
+	while ((start == end) && !port->full) /* No data */
+	{
+		DEBUGREAD(printk(KERN_DEBUG "&"));
+		if (file->f_flags & O_NONBLOCK)
+			return -EAGAIN;
 
-        interruptible_sleep_on(&port->in_wait_q);
-        if (signal_pending(current))
-            return -EINTR;
+		interruptible_sleep_on(&port->in_wait_q);
+		if (signal_pending(current))
+			return -EINTR;
 
-        spin_lock_irqsave(&port->lock, flags);
-        start = (unsigned char*)port->readp; /* cast away volatile */
-        end = (unsigned char*)port->writep;  /* cast away volatile */
-        spin_unlock_irqrestore(&port->lock, flags);
-    }
+		spin_lock_irqsave(&port->lock, flags);
+		start = (unsigned char*)port->readp; /* cast away volatile */
+		end = (unsigned char*)port->writep;  /* cast away volatile */
+		spin_unlock_irqrestore(&port->lock, flags);
+	}
 
-    /* Lazy read, never return wrapped data. */
-    if (port->full)
-        avail = port->in_buffer_size;
-    else if (end > start)
-        avail = end - start;
-    else
-        avail = port->flip + port->in_buffer_size - start;
+	/* Lazy read, never return wrapped data. */
+	if (port->full)
+		avail = port->in_buffer_size;
+	else if (end > start)
+		avail = end - start;
+	else
+		avail = port->flip + port->in_buffer_size - start;
 
-    count = count > avail ? avail : count;
-    if (copy_to_user(buf, start, count))
-        return -EFAULT;
-    /* Disable interrupts while updating readp */
-    spin_lock_irqsave(&port->lock, flags);
-    port->readp += count;
-    if (port->readp >= port->flip + port->in_buffer_size) /* Wrap? */
-        port->readp = port->flip;
-    port->full = 0;
-    spin_unlock_irqrestore(&port->lock, flags);
-    DEBUGREAD(printk("r %d\n", count));
-    return count;
+	count = count > avail ? avail : count;
+	if (copy_to_user(buf, start, count))
+		return -EFAULT;
+	/* Disable interrupts while updating readp */
+	spin_lock_irqsave(&port->lock, flags);
+	port->readp += count;
+	if (port->readp >= port->flip + port->in_buffer_size) /* Wrap? */
+		port->readp = port->flip;
+	port->full = 0;
+	spin_unlock_irqrestore(&port->lock, flags);
+	DEBUGREAD(printk("r %d\n", count));
+	return count;
 }
 
 static void send_word(sync_port* port) {

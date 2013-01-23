@@ -755,11 +755,98 @@ out:
 }
 
 
-static void fsg_lun_close(struct fsg_lun *curlun) {
-    if (curlun->filp) {
-        curlun->last_offset = 0;
-        curlun->random_write_count = 0;
-        curlun->writeback_size = 0;
+static int fsg_lun_open(struct fsg_lun *curlun, const char *filename)
+{
+	int				ro;
+	struct file			*filp = NULL;
+	int				rc = -EINVAL;
+	struct inode			*inode = NULL;
+	loff_t				size;
+	loff_t				num_sectors;
+	loff_t				min_sectors;
+	unsigned int			blkbits;
+	unsigned int			blksize;
+
+	/* R/W if we can, R/O if we must */
+	ro = curlun->initially_ro;
+	if (!ro) {
+		filp = filp_open(filename, O_RDWR | O_LARGEFILE, 0);
+		if (PTR_ERR(filp) == -EROFS || PTR_ERR(filp) == -EACCES)
+			ro = 1;
+	}
+	if (ro)
+		filp = filp_open(filename, O_RDONLY | O_LARGEFILE, 0);
+	if (IS_ERR(filp)) {
+		LINFO(curlun, "unable to open backing file: %s\n", filename);
+		return PTR_ERR(filp);
+	}
+
+	if (!(filp->f_mode & FMODE_WRITE))
+		ro = 1;
+
+	inode = file_inode(filp);
+	if ((!S_ISREG(inode->i_mode) && !S_ISBLK(inode->i_mode))) {
+		LINFO(curlun, "invalid file type: %s\n", filename);
+		goto out;
+	}
+
+	/*
+	 * If we can't read the file, it's no good.
+	 * If we can't write the file, use it read-only.
+	 */
+	if (!(filp->f_op->read || filp->f_op->aio_read)) {
+		LINFO(curlun, "file not readable: %s\n", filename);
+		goto out;
+	}
+	if (!(filp->f_op->write || filp->f_op->aio_write))
+		ro = 1;
+
+	size = i_size_read(inode->i_mapping->host);
+	if (size < 0) {
+		LINFO(curlun, "unable to find file size: %s\n", filename);
+		rc = (int) size;
+		goto out;
+	}
+
+	if (curlun->cdrom) {
+		blksize = 2048;
+		blkbits = 11;
+	} else if (inode->i_bdev) {
+		blksize = bdev_logical_block_size(inode->i_bdev);
+		blkbits = blksize_bits(blksize);
+	} else {
+		blksize = 512;
+		blkbits = 9;
+	}
+
+	num_sectors = size >> blkbits; /* File size in logic-block-size blocks */
+	min_sectors = 1;
+	if (curlun->cdrom) {
+		min_sectors = 300;	/* Smallest track is 300 frames */
+		if (num_sectors >= 256*60*75) {
+			num_sectors = 256*60*75 - 1;
+			LINFO(curlun, "file too big: %s\n", filename);
+			LINFO(curlun, "using only first %d blocks\n",
+					(int) num_sectors);
+		}
+	}
+	if (num_sectors < min_sectors) {
+		LINFO(curlun, "file too small: %s\n", filename);
+		rc = -ETOOSMALL;
+		goto out;
+	}
+
+	if (fsg_lun_is_open(curlun))
+		fsg_lun_close(curlun);
+
+	curlun->blksize = blksize;
+	curlun->blkbits = blkbits;
+	curlun->ro = ro;
+	curlun->filp = filp;
+	curlun->file_length = size;
+	curlun->num_sectors = num_sectors;
+	LDBG(curlun, "open backing file: %s\n", filename);
+	return 0;
 
         LDBG(curlun, "close backing file\n");
         fput(curlun->filp);

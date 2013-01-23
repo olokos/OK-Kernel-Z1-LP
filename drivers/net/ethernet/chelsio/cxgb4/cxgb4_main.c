@@ -1937,43 +1937,44 @@ static const struct ethtool_ops cxgb_ethtool_ops = {
  * debugfs support
  */
 static ssize_t mem_read(struct file *file, char __user *buf, size_t count,
-                        loff_t *ppos) {
-    loff_t pos = *ppos;
-    loff_t avail = file->f_path.dentry->d_inode->i_size;
-    unsigned int mem = (uintptr_t)file->private_data & 3;
-    struct adapter *adap = file->private_data - mem;
+			loff_t *ppos)
+{
+	loff_t pos = *ppos;
+	loff_t avail = file_inode(file)->i_size;
+	unsigned int mem = (uintptr_t)file->private_data & 3;
+	struct adapter *adap = file->private_data - mem;
 
-    if (pos < 0)
-        return -EINVAL;
-    if (pos >= avail)
-        return 0;
-    if (count > avail - pos)
-        count = avail - pos;
+	if (pos < 0)
+		return -EINVAL;
+	if (pos >= avail)
+		return 0;
+	if (count > avail - pos)
+		count = avail - pos;
 
-    while (count) {
-        size_t len;
-        int ret, ofst;
-        __be32 data[16];
+	while (count) {
+		size_t len;
+		int ret, ofst;
+		__be32 data[16];
 
-        if (mem == MEM_MC)
-            ret = t4_mc_read(adap, pos, data, NULL);
-        else
-            ret = t4_edc_read(adap, mem, pos, data, NULL);
-        if (ret)
-            return ret;
+		if (mem == MEM_MC)
+			ret = t4_mc_read(adap, pos, data, NULL);
+		else
+			ret = t4_edc_read(adap, mem, pos, data, NULL);
+		if (ret)
+			return ret;
 
-        ofst = pos % sizeof(data);
-        len = min(count, sizeof(data) - ofst);
-        if (copy_to_user(buf, (u8 *)data + ofst, len))
-            return -EFAULT;
+		ofst = pos % sizeof(data);
+		len = min(count, sizeof(data) - ofst);
+		if (copy_to_user(buf, (u8 *)data + ofst, len))
+			return -EFAULT;
 
-        buf += len;
-        pos += len;
-        count -= len;
-    }
-    count = pos - *ppos;
-    *ppos = pos;
-    return count;
+		buf += len;
+		pos += len;
+		count -= len;
+	}
+	count = pos - *ppos;
+	*ppos = pos;
+	return count;
 }
 
 static const struct file_operations mem_debugfs_fops = {

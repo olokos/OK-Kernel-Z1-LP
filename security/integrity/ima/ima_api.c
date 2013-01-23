@@ -129,10 +129,12 @@ int ima_must_measure(struct inode *inode, int mask, int function)
 int ima_collect_measurement(struct integrity_iint_cache *iint,
 			    struct file *file)
 {
-	int result = -EEXIST;
+	struct inode *inode = file_inode(file);
+	const char *filename = file->f_dentry->d_name.name;
+	int result = 0;
 
-	if (!(iint->flags & IMA_MEASURED)) {
-		u64 i_version = file->f_dentry->d_inode->i_version;
+	if (!(iint->flags & IMA_COLLECTED)) {
+		u64 i_version = file_inode(file)->i_version;
 
 		memset(iint->digest, 0, IMA_DIGEST_SIZE);
 		result = ima_calc_hash(file, iint->digest);
@@ -163,7 +165,7 @@ void ima_store_measurement(struct integrity_iint_cache *iint,
 	const char *op = "add_template_measure";
 	const char *audit_cause = "ENOMEM";
 	int result = -ENOMEM;
-	struct inode *inode = file->f_dentry->d_inode;
+	struct inode *inode = file_inode(file);
 	struct ima_template_entry *entry;
 	int violation = 0;
 

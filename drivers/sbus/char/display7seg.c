@@ -98,59 +98,60 @@ static int d7s_release(struct inode *inode, struct file *f) {
     return 0;
 }
 
-static long d7s_ioctl(struct file *file, unsigned int cmd, unsigned long arg) {
-    struct d7s *p = d7s_device;
-    u8 regs = readb(p->regs);
-    int error = 0;
-    u8 ireg = 0;
+static long d7s_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
+{
+	struct d7s *p = d7s_device;
+	u8 regs = readb(p->regs);
+	int error = 0;
+	u8 ireg = 0;
 
-    if (D7S_MINOR != iminor(file->f_path.dentry->d_inode))
-        return -ENODEV;
+	if (D7S_MINOR != iminor(file_inode(file)))
+		return -ENODEV;
 
-    mutex_lock(&d7s_mutex);
-    switch (cmd) {
-    case D7SIOCWR:
-        /* assign device register values we mask-out D7S_FLIP
-         * if in sol_compat mode
-         */
-        if (get_user(ireg, (int __user *) arg)) {
-            error = -EFAULT;
-            break;
-        }
-        if (sol_compat) {
-            if (regs & D7S_FLIP)
-                ireg |= D7S_FLIP;
-            else
-                ireg &= ~D7S_FLIP;
-        }
-        writeb(ireg, p->regs);
-        break;
+	mutex_lock(&d7s_mutex);
+	switch (cmd) {
+	case D7SIOCWR:
+		/* assign device register values we mask-out D7S_FLIP
+		 * if in sol_compat mode
+		 */
+		if (get_user(ireg, (int __user *) arg)) {
+			error = -EFAULT;
+			break;
+		}
+		if (sol_compat) {
+			if (regs & D7S_FLIP)
+				ireg |= D7S_FLIP;
+			else
+				ireg &= ~D7S_FLIP;
+		}
+		writeb(ireg, p->regs);
+		break;
 
-    case D7SIOCRD:
-        /* retrieve device register values
-         * NOTE: Solaris implementation returns D7S_FLIP bit
-         * as toggled by user, even though it does not honor it.
-         * This driver will not misinform you about the state
-         * of your hardware while in sol_compat mode
-         */
-        if (put_user(regs, (int __user *) arg)) {
-            error = -EFAULT;
-            break;
-        }
-        break;
+	case D7SIOCRD:
+		/* retrieve device register values
+		 * NOTE: Solaris implementation returns D7S_FLIP bit
+		 * as toggled by user, even though it does not honor it.
+		 * This driver will not misinform you about the state
+		 * of your hardware while in sol_compat mode
+		 */
+		if (put_user(regs, (int __user *) arg)) {
+			error = -EFAULT;
+			break;
+		}
+		break;
 
-    case D7SIOCTM:
-        /* toggle device mode-- flip display orientation */
-        if (regs & D7S_FLIP)
-            regs &= ~D7S_FLIP;
-        else
-            regs |= D7S_FLIP;
-        writeb(regs, p->regs);
-        break;
-    };
-    mutex_unlock(&d7s_mutex);
+	case D7SIOCTM:
+		/* toggle device mode-- flip display orientation */
+		if (regs & D7S_FLIP)
+			regs &= ~D7S_FLIP;
+		else
+			regs |= D7S_FLIP;
+		writeb(regs, p->regs);
+		break;
+	}
+	mutex_unlock(&d7s_mutex);
 
-    return error;
+	return error;
 }
 
 static const struct file_operations d7s_fops = {

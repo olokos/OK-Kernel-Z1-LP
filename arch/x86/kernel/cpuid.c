@@ -79,42 +79,43 @@ static loff_t cpuid_seek(struct file *file, loff_t offset, int orig) {
 }
 
 static ssize_t cpuid_read(struct file *file, char __user *buf,
-                          size_t count, loff_t *ppos) {
-    char __user *tmp = buf;
-    struct cpuid_regs cmd;
-    int cpu = iminor(file->f_path.dentry->d_inode);
-    u64 pos = *ppos;
-    ssize_t bytes = 0;
-    int err = 0;
+			  size_t count, loff_t *ppos)
+{
+	char __user *tmp = buf;
+	struct cpuid_regs cmd;
+	int cpu = iminor(file_inode(file));
+	u64 pos = *ppos;
+	ssize_t bytes = 0;
+	int err = 0;
 
-    if (count % 16)
-        return -EINVAL;	/* Invalid chunk size */
+	if (count % 16)
+		return -EINVAL;	/* Invalid chunk size */
 
-    for (; count; count -= 16) {
-        cmd.eax = pos;
-        cmd.ecx = pos >> 32;
-        err = smp_call_function_single(cpu, cpuid_smp_cpuid, &cmd, 1);
-        if (err)
-            break;
-        if (copy_to_user(tmp, &cmd, 16)) {
-            err = -EFAULT;
-            break;
-        }
-        tmp += 16;
-        bytes += 16;
-        *ppos = ++pos;
-    }
+	for (; count; count -= 16) {
+		cmd.eax = pos;
+		cmd.ecx = pos >> 32;
+		err = smp_call_function_single(cpu, cpuid_smp_cpuid, &cmd, 1);
+		if (err)
+			break;
+		if (copy_to_user(tmp, &cmd, 16)) {
+			err = -EFAULT;
+			break;
+		}
+		tmp += 16;
+		bytes += 16;
+		*ppos = ++pos;
+	}
 
-    return bytes ? bytes : err;
+	return bytes ? bytes : err;
 }
 
 static int cpuid_open(struct inode *inode, struct file *file) {
     unsigned int cpu;
     struct cpuinfo_x86 *c;
 
-    cpu = iminor(file->f_path.dentry->d_inode);
-    if (cpu >= nr_cpu_ids || !cpu_online(cpu))
-        return -ENXIO;	/* No such CPU */
+	cpu = iminor(file_inode(file));
+	if (cpu >= nr_cpu_ids || !cpu_online(cpu))
+		return -ENXIO;	/* No such CPU */
 
     c = &cpu_data(cpu);
     if (c->cpuid_level < 0)

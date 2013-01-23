@@ -1797,50 +1797,51 @@ static int ipath_open(struct inode *in, struct file *fp) {
 
 /* Get port early, so can set affinity prior to memory allocation */
 static int ipath_assign_port(struct file *fp,
-                             const struct ipath_user_info *uinfo) {
-    int ret;
-    int i_minor;
-    unsigned swmajor, swminor;
+			      const struct ipath_user_info *uinfo)
+{
+	int ret;
+	int i_minor;
+	unsigned swmajor, swminor;
 
-    /* Check to be sure we haven't already initialized this file */
-    if (port_fp(fp)) {
-        ret = -EINVAL;
-        goto done;
-    }
+	/* Check to be sure we haven't already initialized this file */
+	if (port_fp(fp)) {
+		ret = -EINVAL;
+		goto done;
+	}
 
-    /* for now, if major version is different, bail */
-    swmajor = uinfo->spu_userversion >> 16;
-    if (swmajor != IPATH_USER_SWMAJOR) {
-        ipath_dbg("User major version %d not same as driver "
-                  "major %d\n", uinfo->spu_userversion >> 16,
-                  IPATH_USER_SWMAJOR);
-        ret = -ENODEV;
-        goto done;
-    }
+	/* for now, if major version is different, bail */
+	swmajor = uinfo->spu_userversion >> 16;
+	if (swmajor != IPATH_USER_SWMAJOR) {
+		ipath_dbg("User major version %d not same as driver "
+			  "major %d\n", uinfo->spu_userversion >> 16,
+			  IPATH_USER_SWMAJOR);
+		ret = -ENODEV;
+		goto done;
+	}
 
-    swminor = uinfo->spu_userversion & 0xffff;
-    if (swminor != IPATH_USER_SWMINOR)
-        ipath_dbg("User minor version %d not same as driver "
-                  "minor %d\n", swminor, IPATH_USER_SWMINOR);
+	swminor = uinfo->spu_userversion & 0xffff;
+	if (swminor != IPATH_USER_SWMINOR)
+		ipath_dbg("User minor version %d not same as driver "
+			  "minor %d\n", swminor, IPATH_USER_SWMINOR);
 
-    mutex_lock(&ipath_mutex);
+	mutex_lock(&ipath_mutex);
 
-    if (ipath_compatible_subports(swmajor, swminor) &&
-            uinfo->spu_subport_cnt &&
-            (ret = find_shared_port(fp, uinfo))) {
-        if (ret > 0)
-            ret = 0;
-        goto done_chk_sdma;
-    }
+	if (ipath_compatible_subports(swmajor, swminor) &&
+	    uinfo->spu_subport_cnt &&
+	    (ret = find_shared_port(fp, uinfo))) {
+		if (ret > 0)
+			ret = 0;
+		goto done_chk_sdma;
+	}
 
-    i_minor = iminor(fp->f_path.dentry->d_inode) - IPATH_USER_MINOR_BASE;
-    ipath_cdbg(VERBOSE, "open on dev %lx (minor %d)\n",
-               (long)fp->f_path.dentry->d_inode->i_rdev, i_minor);
+	i_minor = iminor(file_inode(fp)) - IPATH_USER_MINOR_BASE;
+	ipath_cdbg(VERBOSE, "open on dev %lx (minor %d)\n",
+		   (long)file_inode(fp)->i_rdev, i_minor);
 
-    if (i_minor)
-        ret = find_free_port(i_minor - 1, fp, uinfo);
-    else
-        ret = find_best_unit(fp, uinfo);
+	if (i_minor)
+		ret = find_free_port(i_minor - 1, fp, uinfo);
+	else
+		ret = find_best_unit(fp, uinfo);
 
 done_chk_sdma:
     if (!ret) {

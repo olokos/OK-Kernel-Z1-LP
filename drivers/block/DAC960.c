@@ -6187,23 +6187,24 @@ static int dac960_user_command_proc_open(struct inode *inode, struct file *file)
 }
 
 static ssize_t dac960_user_command_proc_write(struct file *file,
-        const char __user *Buffer,
-        size_t Count, loff_t *pos) {
-    DAC960_Controller_T *Controller = (DAC960_Controller_T *) PDE(file->f_path.dentry->d_inode)->data;
-    unsigned char CommandBuffer[80];
-    int Length;
-    if (Count > sizeof(CommandBuffer)-1) return -EINVAL;
-    if (copy_from_user(CommandBuffer, Buffer, Count)) return -EFAULT;
-    CommandBuffer[Count] = '\0';
-    Length = strlen(CommandBuffer);
-    if (Length > 0 && CommandBuffer[Length-1] == '\n')
-        CommandBuffer[--Length] = '\0';
-    if (Controller->FirmwareType == DAC960_V1_Controller)
-        return (DAC960_V1_ExecuteUserCommand(Controller, CommandBuffer)
-                ? Count : -EBUSY);
-    else
-        return (DAC960_V2_ExecuteUserCommand(Controller, CommandBuffer)
-                ? Count : -EBUSY);
+				       const char __user *Buffer,
+				       size_t Count, loff_t *pos)
+{
+  DAC960_Controller_T *Controller = (DAC960_Controller_T *) PDE(file_inode(file))->data;
+  unsigned char CommandBuffer[80];
+  int Length;
+  if (Count > sizeof(CommandBuffer)-1) return -EINVAL;
+  if (copy_from_user(CommandBuffer, Buffer, Count)) return -EFAULT;
+  CommandBuffer[Count] = '\0';
+  Length = strlen(CommandBuffer);
+  if (Length > 0 && CommandBuffer[Length-1] == '\n')
+    CommandBuffer[--Length] = '\0';
+  if (Controller->FirmwareType == DAC960_V1_Controller)
+    return (DAC960_V1_ExecuteUserCommand(Controller, CommandBuffer)
+	    ? Count : -EBUSY);
+  else
+    return (DAC960_V2_ExecuteUserCommand(Controller, CommandBuffer)
+	    ? Count : -EBUSY);
 }
 
 static const struct file_operations dac960_user_command_proc_fops = {

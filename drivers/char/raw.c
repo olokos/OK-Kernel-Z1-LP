@@ -50,40 +50,42 @@ MODULE_PARM_DESC(max_raw_minors, "Maximum number of raw devices (1-65536)");
  * Set the device's soft blocksize to the minimum possible.  This gives the
  * finest possible alignment and has no adverse impact on performance.
  */
-static int raw_open(struct inode *inode, struct file *filp) {
-    const int minor = iminor(inode);
-    struct block_device *bdev;
-    int err;
 
-    if (minor == 0) {	/* It is the control device */
-        filp->f_op = &raw_ctl_fops;
-        return 0;
-    }
+static int raw_open(struct inode *inode, struct file *filp)
+{
+	const int minor = iminor(inode);
+	struct block_device *bdev;
+	int err;
 
-    mutex_lock(&raw_mutex);
+	if (minor == 0) {	/* It is the control device */
+		filp->f_op = &raw_ctl_fops;
+		return 0;
+	}
 
-    /*
-     * All we need to do on open is check that the device is bound.
-     */
-    bdev = raw_devices[minor].binding;
-    err = -ENODEV;
-    if (!bdev)
-        goto out;
-    igrab(bdev->bd_inode);
-    err = blkdev_get(bdev, filp->f_mode | FMODE_EXCL, raw_open);
-    if (err)
-        goto out;
-    err = set_blocksize(bdev, bdev_logical_block_size(bdev));
-    if (err)
-        goto out1;
-    filp->f_flags |= O_DIRECT;
-    filp->f_mapping = bdev->bd_inode->i_mapping;
-    if (++raw_devices[minor].inuse == 1)
-        filp->f_path.dentry->d_inode->i_mapping =
-            bdev->bd_inode->i_mapping;
-    filp->private_data = bdev;
-    mutex_unlock(&raw_mutex);
-    return 0;
+	mutex_lock(&raw_mutex);
+
+	/*
+	 * All we need to do on open is check that the device is bound.
+	 */
+	bdev = raw_devices[minor].binding;
+	err = -ENODEV;
+	if (!bdev)
+		goto out;
+	igrab(bdev->bd_inode);
+	err = blkdev_get(bdev, filp->f_mode | FMODE_EXCL, raw_open);
+	if (err)
+		goto out;
+	err = set_blocksize(bdev, bdev_logical_block_size(bdev));
+	if (err)
+		goto out1;
+	filp->f_flags |= O_DIRECT;
+	filp->f_mapping = bdev->bd_inode->i_mapping;
+	if (++raw_devices[minor].inuse == 1)
+		file_inode(filp)->i_mapping =
+			bdev->bd_inode->i_mapping;
+	filp->private_data = bdev;
+	mutex_unlock(&raw_mutex);
+	return 0;
 
 out1:
     blkdev_put(bdev, filp->f_mode | FMODE_EXCL);

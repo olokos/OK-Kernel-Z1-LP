@@ -1129,29 +1129,30 @@ static int vpe_release(struct inode *inode, struct file *filp) {
 }
 
 static ssize_t vpe_write(struct file *file, const char __user * buffer,
-                         size_t count, loff_t * ppos) {
-    size_t ret = count;
-    struct vpe *v;
+			 size_t count, loff_t * ppos)
+{
+	size_t ret = count;
+	struct vpe *v;
 
-    if (iminor(file->f_path.dentry->d_inode) != minor)
-        return -ENODEV;
+	if (iminor(file_inode(file)) != minor)
+		return -ENODEV;
 
-    v = get_vpe(tclimit);
-    if (v == NULL)
-        return -ENODEV;
+	v = get_vpe(tclimit);
+	if (v == NULL)
+		return -ENODEV;
 
-    if ((count + v->len) > v->plen) {
-        printk(KERN_WARNING
-               "VPE loader: elf size too big. Perhaps strip uneeded symbols\n");
-        return -ENOMEM;
-    }
+	if ((count + v->len) > v->plen) {
+		printk(KERN_WARNING
+		       "VPE loader: elf size too big. Perhaps strip uneeded symbols\n");
+		return -ENOMEM;
+	}
 
-    count -= copy_from_user(v->pbuffer + v->len, buffer, count);
-    if (!count)
-        return -EFAULT;
+	count -= copy_from_user(v->pbuffer + v->len, buffer, count);
+	if (!count)
+		return -EFAULT;
 
-    v->len += count;
-    return ret;
+	v->len += count;
+	return ret;
 }
 
 static const struct file_operations vpe_fops = {

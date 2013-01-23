@@ -412,65 +412,66 @@ static struct raw3270_fn fs3270_fn = {
  * This routine is called whenever a 3270 fullscreen device is opened.
  */
 static int
-fs3270_open(struct inode *inode, struct file *filp) {
-    struct fs3270 *fp;
-    struct idal_buffer *ib;
-    int minor, rc = 0;
+fs3270_open(struct inode *inode, struct file *filp)
+{
+	struct fs3270 *fp;
+	struct idal_buffer *ib;
+	int minor, rc = 0;
 
-    if (imajor(filp->f_path.dentry->d_inode) != IBM_FS3270_MAJOR)
-        return -ENODEV;
-    minor = iminor(filp->f_path.dentry->d_inode);
-    /* Check for minor 0 multiplexer. */
-    if (minor == 0) {
-        struct tty_struct *tty = get_current_tty();
-        if (!tty || tty->driver->major != IBM_TTY3270_MAJOR) {
-            tty_kref_put(tty);
-            return -ENODEV;
-        }
-        minor = tty->index + RAW3270_FIRSTMINOR;
-        tty_kref_put(tty);
-    }
-    mutex_lock(&fs3270_mutex);
-    /* Check if some other program is already using fullscreen mode. */
-    fp = (struct fs3270 *) raw3270_find_view(&fs3270_fn, minor);
-    if (!IS_ERR(fp)) {
-        raw3270_put_view(&fp->view);
-        rc = -EBUSY;
-        goto out;
-    }
-    /* Allocate fullscreen view structure. */
-    fp = fs3270_alloc_view();
-    if (IS_ERR(fp)) {
-        rc = PTR_ERR(fp);
-        goto out;
-    }
+	if (imajor(file_inode(filp)) != IBM_FS3270_MAJOR)
+		return -ENODEV;
+	minor = iminor(file_inode(filp));
+	/* Check for minor 0 multiplexer. */
+	if (minor == 0) {
+		struct tty_struct *tty = get_current_tty();
+		if (!tty || tty->driver->major != IBM_TTY3270_MAJOR) {
+			tty_kref_put(tty);
+			return -ENODEV;
+		}
+		minor = tty->index + RAW3270_FIRSTMINOR;
+		tty_kref_put(tty);
+	}
+	mutex_lock(&fs3270_mutex);
+	/* Check if some other program is already using fullscreen mode. */
+	fp = (struct fs3270 *) raw3270_find_view(&fs3270_fn, minor);
+	if (!IS_ERR(fp)) {
+		raw3270_put_view(&fp->view);
+		rc = -EBUSY;
+		goto out;
+	}
+	/* Allocate fullscreen view structure. */
+	fp = fs3270_alloc_view();
+	if (IS_ERR(fp)) {
+		rc = PTR_ERR(fp);
+		goto out;
+	}
 
-    init_waitqueue_head(&fp->wait);
-    fp->fs_pid = get_pid(task_pid(current));
-    rc = raw3270_add_view(&fp->view, &fs3270_fn, minor);
-    if (rc) {
-        fs3270_free_view(&fp->view);
-        goto out;
-    }
+	init_waitqueue_head(&fp->wait);
+	fp->fs_pid = get_pid(task_pid(current));
+	rc = raw3270_add_view(&fp->view, &fs3270_fn, minor);
+	if (rc) {
+		fs3270_free_view(&fp->view);
+		goto out;
+	}
 
-    /* Allocate idal-buffer. */
-    ib = idal_buffer_alloc(2*fp->view.rows*fp->view.cols + 5, 0);
-    if (IS_ERR(ib)) {
-        raw3270_put_view(&fp->view);
-        raw3270_del_view(&fp->view);
-        rc = PTR_ERR(ib);
-        goto out;
-    }
-    fp->rdbuf = ib;
+	/* Allocate idal-buffer. */
+	ib = idal_buffer_alloc(2*fp->view.rows*fp->view.cols + 5, 0);
+	if (IS_ERR(ib)) {
+		raw3270_put_view(&fp->view);
+		raw3270_del_view(&fp->view);
+		rc = PTR_ERR(ib);
+		goto out;
+	}
+	fp->rdbuf = ib;
 
-    rc = raw3270_activate_view(&fp->view);
-    if (rc) {
-        raw3270_put_view(&fp->view);
-        raw3270_del_view(&fp->view);
-        goto out;
-    }
-    nonseekable_open(inode, filp);
-    filp->private_data = fp;
+	rc = raw3270_activate_view(&fp->view);
+	if (rc) {
+		raw3270_put_view(&fp->view);
+		raw3270_del_view(&fp->view);
+		goto out;
+	}
+	nonseekable_open(inode, filp);
+	filp->private_data = fp;
 out:
     mutex_unlock(&fs3270_mutex);
     return rc;

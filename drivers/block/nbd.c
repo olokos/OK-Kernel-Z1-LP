@@ -608,94 +608,132 @@ static int __nbd_ioctl(struct block_device *bdev, struct nbd_device *nbd,
                 if (max_part > 0)
                     bdev->bd_invalidated = 1;
                 return 0;
-            } else {
-                fput(file);
-            }
-        }
-        return -EINVAL;
-    }
+	}
+ 
+	case NBD_CLEAR_SOCK: {
+		struct file *file;
 
-    case NBD_SET_BLKSIZE:
-        nbd->blksize = arg;
-        nbd->bytesize &= ~(nbd->blksize-1);
-        bdev->bd_inode->i_size = nbd->bytesize;
-        set_blocksize(bdev, nbd->blksize);
-        set_capacity(nbd->disk, nbd->bytesize >> 9);
-        return 0;
+		nbd->sock = NULL;
+		file = nbd->file;
+		nbd->file = NULL;
+		nbd_clear_que(nbd);
+		BUG_ON(!list_empty(&nbd->queue_head));
+		BUG_ON(!list_empty(&nbd->waiting_queue));
+		if (file)
+			fput(file);
+		return 0;
+	}
 
-    case NBD_SET_SIZE:
-        nbd->bytesize = arg & ~(nbd->blksize-1);
-        bdev->bd_inode->i_size = nbd->bytesize;
-        set_blocksize(bdev, nbd->blksize);
-        set_capacity(nbd->disk, nbd->bytesize >> 9);
-        return 0;
+	case NBD_SET_SOCK: {
+		struct file *file;
+		if (nbd->file)
+			return -EBUSY;
+		file = fget(arg);
+		if (file) {
+			struct inode *inode = file_inode(file);
+			if (S_ISSOCK(inode->i_mode)) {
+				nbd->file = file;
+				nbd->sock = SOCKET_I(inode);
+				if (max_part > 0)
+					bdev->bd_invalidated = 1;
+				return 0;
+			} else {
+				fput(file);
+			}
+		}
+		return -EINVAL;
+	}
 
-    case NBD_SET_TIMEOUT:
-        nbd->xmit_timeout = arg * HZ;
-        return 0;
+	case NBD_SET_BLKSIZE:
+		nbd->blksize = arg;
+		nbd->bytesize &= ~(nbd->blksize-1);
+		bdev->bd_inode->i_size = nbd->bytesize;
+		set_blocksize(bdev, nbd->blksize);
+		set_capacity(nbd->disk, nbd->bytesize >> 9);
+		return 0;
 
-    case NBD_SET_SIZE_BLOCKS:
-        nbd->bytesize = ((u64) arg) * nbd->blksize;
-        bdev->bd_inode->i_size = nbd->bytesize;
-        set_blocksize(bdev, nbd->blksize);
-        set_capacity(nbd->disk, nbd->bytesize >> 9);
-        return 0;
+	case NBD_SET_SIZE:
+		nbd->bytesize = arg & ~(nbd->blksize-1);
+		bdev->bd_inode->i_size = nbd->bytesize;
+		set_blocksize(bdev, nbd->blksize);
+		set_capacity(nbd->disk, nbd->bytesize >> 9);
+		return 0;
 
-    case NBD_DO_IT: {
-        struct task_struct *thread;
-        struct file *file;
-        int error;
+	case NBD_SET_TIMEOUT:
+		nbd->xmit_timeout = arg * HZ;
+		return 0;
 
-        if (nbd->pid)
-            return -EBUSY;
-        if (!nbd->file)
-            return -EINVAL;
+	case NBD_SET_FLAGS:
+		nbd->flags = arg;
+		return 0;
 
-        mutex_unlock(&nbd->tx_lock);
+	case NBD_SET_SIZE_BLOCKS:
+		nbd->bytesize = ((u64) arg) * nbd->blksize;
+		bdev->bd_inode->i_size = nbd->bytesize;
+		set_blocksize(bdev, nbd->blksize);
+		set_capacity(nbd->disk, nbd->bytesize >> 9);
+		return 0;
 
-        thread = kthread_create(nbd_thread, nbd, nbd->disk->disk_name);
-        if (IS_ERR(thread)) {
-            mutex_lock(&nbd->tx_lock);
-            return PTR_ERR(thread);
-        }
-        wake_up_process(thread);
-        error = nbd_do_it(nbd);
-        kthread_stop(thread);
+	case NBD_DO_IT: {
+		struct task_struct *thread;
+		struct file *file;
+		int error;
 
-        mutex_lock(&nbd->tx_lock);
-        if (error)
-            return error;
-        sock_shutdown(nbd, 0);
-        file = nbd->file;
-        nbd->file = NULL;
-        nbd_clear_que(nbd);
-        dev_warn(disk_to_dev(nbd->disk), "queue cleared\n");
-        if (file)
-            fput(file);
-        nbd->bytesize = 0;
-        bdev->bd_inode->i_size = 0;
-        set_capacity(nbd->disk, 0);
-        if (max_part > 0)
-            ioctl_by_bdev(bdev, BLKRRPART, 0);
-        return nbd->harderror;
-    }
+		if (nbd->pid)
+			return -EBUSY;
+		if (!nbd->file)
+			return -EINVAL;
 
-    case NBD_CLEAR_QUE:
-        /*
-         * This is for compatibility only.  The queue is always cleared
-         * by NBD_DO_IT or NBD_CLEAR_SOCK.
-         */
-        BUG_ON(!nbd->sock && !list_empty(&nbd->queue_head));
-        return 0;
+		mutex_unlock(&nbd->tx_lock);
 
-    case NBD_PRINT_DEBUG:
-        dev_info(disk_to_dev(nbd->disk),
-                 "next = %p, prev = %p, head = %p\n",
-                 nbd->queue_head.next, nbd->queue_head.prev,
-                 &nbd->queue_head);
-        return 0;
-    }
-    return -ENOTTY;
+		if (nbd->flags & NBD_FLAG_SEND_TRIM)
+			queue_flag_set_unlocked(QUEUE_FLAG_DISCARD,
+				nbd->disk->queue);
+
+		thread = kthread_create(nbd_thread, nbd, nbd->disk->disk_name);
+		if (IS_ERR(thread)) {
+			mutex_lock(&nbd->tx_lock);
+			return PTR_ERR(thread);
+		}
+		wake_up_process(thread);
+		error = nbd_do_it(nbd);
+		kthread_stop(thread);
+
+		mutex_lock(&nbd->tx_lock);
+		if (error)
+			return error;
+		sock_shutdown(nbd, 0);
+		file = nbd->file;
+		nbd->file = NULL;
+		nbd_clear_que(nbd);
+		dev_warn(disk_to_dev(nbd->disk), "queue cleared\n");
+		queue_flag_clear_unlocked(QUEUE_FLAG_DISCARD, nbd->disk->queue);
+		if (file)
+			fput(file);
+		nbd->bytesize = 0;
+		bdev->bd_inode->i_size = 0;
+		set_capacity(nbd->disk, 0);
+		if (max_part > 0)
+			ioctl_by_bdev(bdev, BLKRRPART, 0);
+		return nbd->harderror;
+	}
+
+	case NBD_CLEAR_QUE:
+		/*
+		 * This is for compatibility only.  The queue is always cleared
+		 * by NBD_DO_IT or NBD_CLEAR_SOCK.
+		 */
+		BUG_ON(!nbd->sock && !list_empty(&nbd->queue_head));
+		return 0;
+
+	case NBD_PRINT_DEBUG:
+		dev_info(disk_to_dev(nbd->disk),
+			"next = %p, prev = %p, head = %p\n",
+			nbd->queue_head.next, nbd->queue_head.prev,
+			&nbd->queue_head);
+		return 0;
+	}
+	return -ENOTTY;
 }
 
 static int nbd_ioctl(struct block_device *bdev, fmode_t mode,

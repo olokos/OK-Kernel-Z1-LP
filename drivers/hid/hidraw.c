@@ -104,50 +104,51 @@ out:
 
 /* The first byte is expected to be a report number.
  * This function is to be called with the minors_lock mutex held */
-static ssize_t hidraw_send_report(struct file *file, const char __user *buffer, size_t count, unsigned char report_type) {
-    unsigned int minor = iminor(file->f_path.dentry->d_inode);
-    struct hid_device *dev;
-    __u8 *buf;
-    int ret = 0;
+static ssize_t hidraw_send_report(struct file *file, const char __user *buffer, size_t count, unsigned char report_type)
+{
+	unsigned int minor = iminor(file_inode(file));
+	struct hid_device *dev;
+	__u8 *buf;
+	int ret = 0;
 
-    if (!hidraw_table[minor]) {
-        ret = -ENODEV;
-        goto out;
-    }
+	if (!hidraw_table[minor]) {
+		ret = -ENODEV;
+		goto out;
+	}
 
-    dev = hidraw_table[minor]->hid;
+	dev = hidraw_table[minor]->hid;
 
-    if (!dev->hid_output_raw_report) {
-        ret = -ENODEV;
-        goto out;
-    }
+	if (!dev->hid_output_raw_report) {
+		ret = -ENODEV;
+		goto out;
+	}
 
-    if (count > HID_MAX_BUFFER_SIZE) {
-        hid_warn(dev, "pid %d passed too large report\n",
-                 task_pid_nr(current));
-        ret = -EINVAL;
-        goto out;
-    }
+	if (count > HID_MAX_BUFFER_SIZE) {
+		hid_warn(dev, "pid %d passed too large report\n",
+			 task_pid_nr(current));
+		ret = -EINVAL;
+		goto out;
+	}
 
-    if (count < 2) {
-        hid_warn(dev, "pid %d passed too short report\n",
-                 task_pid_nr(current));
-        ret = -EINVAL;
-        goto out;
-    }
+	if (count < 2) {
+		hid_warn(dev, "pid %d passed too short report\n",
+			 task_pid_nr(current));
+		ret = -EINVAL;
+		goto out;
+	}
 
-    buf = kmalloc(count * sizeof(__u8), GFP_KERNEL);
-    if (!buf) {
-        ret = -ENOMEM;
-        goto out;
-    }
+	buf = kmalloc(count * sizeof(__u8), GFP_KERNEL);
+	if (!buf) {
+		ret = -ENOMEM;
+		goto out;
+	}
 
-    if (copy_from_user(buf, buffer, count)) {
-        ret = -EFAULT;
-        goto out_free;
-    }
+	if (copy_from_user(buf, buffer, count)) {
+		ret = -EFAULT;
+		goto out_free;
+	}
 
-    ret = dev->hid_output_raw_report(dev, buf, count, report_type);
+	ret = dev->hid_output_raw_report(dev, buf, count, report_type);
 out_free:
     kfree(buf);
 out:
@@ -170,77 +171,61 @@ static ssize_t hidraw_write(struct file *file, const char __user *buffer, size_t
  * use numbered reports. The report_type parameter can be HID_FEATURE_REPORT
  * or HID_INPUT_REPORT.  This function is to be called with the minors_lock
  *  mutex held. */
-static ssize_t hidraw_get_report(struct file *file, char __user *buffer, size_t count, unsigned char report_type) {
-    unsigned int minor = iminor(file->f_path.dentry->d_inode);
-    struct hid_device *dev;
-    __u8 *buf;
-    int ret = 0, len;
-    unsigned char report_number;
+static ssize_t hidraw_get_report(struct file *file, char __user *buffer, size_t count, unsigned char report_type)
+{
+	unsigned int minor = iminor(file_inode(file));
+	struct hid_device *dev;
+	__u8 *buf;
+	int ret = 0, len;
+	unsigned char report_number;
 
-    dev = hidraw_table[minor]->hid;
+	dev = hidraw_table[minor]->hid;
 
-    if (!dev->hid_get_raw_report) {
-        ret = -ENODEV;
-        goto out;
-    }
+	if (!dev->hid_get_raw_report) {
+		ret = -ENODEV;
+		goto out;
+	}
 
-    if (count > HID_MAX_BUFFER_SIZE) {
-        printk(KERN_WARNING "hidraw: pid %d passed too large report\n",
-               task_pid_nr(current));
-        ret = -EINVAL;
-        goto out;
-    }
+	if (count > HID_MAX_BUFFER_SIZE) {
+		printk(KERN_WARNING "hidraw: pid %d passed too large report\n",
+				task_pid_nr(current));
+		ret = -EINVAL;
+		goto out;
+	}
 
-    if (count < 2) {
-        printk(KERN_WARNING "hidraw: pid %d passed too short report\n",
-               task_pid_nr(current));
-        ret = -EINVAL;
-        goto out;
-    }
+	if (count < 2) {
+		printk(KERN_WARNING "hidraw: pid %d passed too short report\n",
+				task_pid_nr(current));
+		ret = -EINVAL;
+		goto out;
+	}
 
-    buf = kmalloc(count * sizeof(__u8), GFP_KERNEL);
-    if (!buf) {
-        ret = -ENOMEM;
-        goto out;
-    }
+	buf = kmalloc(count * sizeof(__u8), GFP_KERNEL);
+	if (!buf) {
+		ret = -ENOMEM;
+		goto out;
+	}
 
-    /* Read the first byte from the user. This is the report number,
-     * which is passed to dev->hid_get_raw_report(). */
-    if (copy_from_user(&report_number, buffer, 1)) {
-        ret = -EFAULT;
-        goto out_free;
-    }
+	/* Read the first byte from the user. This is the report number,
+	 * which is passed to dev->hid_get_raw_report(). */
+	if (copy_from_user(&report_number, buffer, 1)) {
+		ret = -EFAULT;
+		goto out_free;
+	}
 
-#ifdef CONFIG_HID_SONY_PS3_CTRL_BT
-    if (report_type == HID_FEATREP_WDATASIZE) {
-        if (count < 3) {
-            printk(KERN_WARNING "hidraw: pid %d passed too short report\n",
-                   task_pid_nr(current));
-            ret = -EINVAL;
-            goto out_free;
-        }
+	ret = dev->hid_get_raw_report(dev, report_number, buf, count, report_type);
 
-        if (copy_from_user(buf, buffer, 3)) {
-            ret = -EFAULT;
-            goto out_free;
-        }
-    }
-#endif
+	if (ret < 0)
+		goto out_free;
 
-    ret = dev->hid_get_raw_report(dev, report_number, buf, count, report_type);
+	len = (ret < count) ? ret : count;
 
-    if (ret < 0)
-        goto out_free;
+	if (copy_to_user(buffer, buf, len)) {
+		ret = -EFAULT;
+		goto out_free;
+	}
 
-    len = (ret < count) ? ret : count;
-
-    if (copy_to_user(buffer, buf, len)) {
-        ret = -EFAULT;
-        goto out_free;
-    }
-
-    ret = len;
-
+	ret = len;
 out_free:
     kfree(buf);
 out:
@@ -335,137 +320,100 @@ unlock:
 }
 
 static long hidraw_ioctl(struct file *file, unsigned int cmd,
-                         unsigned long arg) {
-    struct inode *inode = file->f_path.dentry->d_inode;
-    unsigned int minor = iminor(inode);
-    long ret = 0;
-    struct hidraw *dev;
-    void __user *user_arg = (void __user*) arg;
+							unsigned long arg)
+{
+	struct inode *inode = file_inode(file);
+	unsigned int minor = iminor(inode);
+	long ret = 0;
+	struct hidraw *dev;
+	void __user *user_arg = (void __user*) arg;
 
-    mutex_lock(&minors_lock);
-    dev = hidraw_table[minor];
-    if (!dev) {
-        ret = -ENODEV;
-        goto out;
-    }
+	mutex_lock(&minors_lock);
+	dev = hidraw_table[minor];
+	if (!dev) {
+		ret = -ENODEV;
+		goto out;
+	}
 
-    switch (cmd) {
-    case HIDIOCGRDESCSIZE:
-        if (put_user(dev->hid->rsize, (int __user *)arg))
-            ret = -EFAULT;
-        break;
+	switch (cmd) {
+		case HIDIOCGRDESCSIZE:
+			if (put_user(dev->hid->rsize, (int __user *)arg))
+				ret = -EFAULT;
+			break;
 
-    case HIDIOCGRDESC: {
-        __u32 len;
+		case HIDIOCGRDESC:
+			{
+				__u32 len;
 
-        if (get_user(len, (int __user *)arg))
-            ret = -EFAULT;
-        else if (len > HID_MAX_DESCRIPTOR_SIZE - 1)
-            ret = -EINVAL;
-        else if (copy_to_user(user_arg + offsetof(
-                                  struct hidraw_report_descriptor,
-                                  value[0]),
-                              dev->hid->rdesc,
-                              min(dev->hid->rsize, len)))
-            ret = -EFAULT;
-        break;
-    }
-    case HIDIOCGRAWINFO: {
-        struct hidraw_devinfo dinfo;
+				if (get_user(len, (int __user *)arg))
+					ret = -EFAULT;
+				else if (len > HID_MAX_DESCRIPTOR_SIZE - 1)
+					ret = -EINVAL;
+				else if (copy_to_user(user_arg + offsetof(
+					struct hidraw_report_descriptor,
+					value[0]),
+					dev->hid->rdesc,
+					min(dev->hid->rsize, len)))
+					ret = -EFAULT;
+				break;
+			}
+		case HIDIOCGRAWINFO:
+			{
+				struct hidraw_devinfo dinfo;
 
-        dinfo.bustype = dev->hid->bus;
-        dinfo.vendor = dev->hid->vendor;
-        dinfo.product = dev->hid->product;
-        if (copy_to_user(user_arg, &dinfo, sizeof(dinfo)))
-            ret = -EFAULT;
-        break;
-    }
-    default: {
-        struct hid_device *hid = dev->hid;
-        if (_IOC_TYPE(cmd) != 'H') {
-            ret = -EINVAL;
-            break;
-        }
+				dinfo.bustype = dev->hid->bus;
+				dinfo.vendor = dev->hid->vendor;
+				dinfo.product = dev->hid->product;
+				if (copy_to_user(user_arg, &dinfo, sizeof(dinfo)))
+					ret = -EFAULT;
+				break;
+			}
+		default:
+			{
+				struct hid_device *hid = dev->hid;
+				if (_IOC_TYPE(cmd) != 'H') {
+					ret = -EINVAL;
+					break;
+				}
 
-        if (_IOC_NR(cmd) == _IOC_NR(HIDIOCSFEATURE(0))) {
-            int len = _IOC_SIZE(cmd);
-            ret = hidraw_send_report(file, user_arg, len, HID_FEATURE_REPORT);
-            break;
-        }
-        if (_IOC_NR(cmd) == _IOC_NR(HIDIOCGFEATURE(0))) {
-            int len = _IOC_SIZE(cmd);
-            ret = hidraw_get_report(file, user_arg, len, HID_FEATURE_REPORT);
-            break;
-        }
+				if (_IOC_NR(cmd) == _IOC_NR(HIDIOCSFEATURE(0))) {
+					int len = _IOC_SIZE(cmd);
+					ret = hidraw_send_report(file, user_arg, len, HID_FEATURE_REPORT);
+					break;
+				}
+				if (_IOC_NR(cmd) == _IOC_NR(HIDIOCGFEATURE(0))) {
+					int len = _IOC_SIZE(cmd);
+					ret = hidraw_get_report(file, user_arg, len, HID_FEATURE_REPORT);
+					break;
+				}
 
-#ifdef CONFIG_HID_SONY_PS3_CTRL_BT
-        if (_IOC_NR(cmd)
-                == _IOC_NR(HIDIOCSF_SKIPREPID(0))) {
-            int len = _IOC_SIZE(cmd);
-            if (dev->hid->bus != BUS_USB) {
-                ret = -EINVAL;
-                break;
-            }
+				/* Begin Read-only ioctls. */
+				if (_IOC_DIR(cmd) != _IOC_READ) {
+					ret = -EINVAL;
+					break;
+				}
 
-            ret = hidraw_send_report(file, user_arg,
-                                     len, HID_FEATREP_SKIPREPID);
-            break;
-        }
+				if (_IOC_NR(cmd) == _IOC_NR(HIDIOCGRAWNAME(0))) {
+					int len = strlen(hid->name) + 1;
+					if (len > _IOC_SIZE(cmd))
+						len = _IOC_SIZE(cmd);
+					ret = copy_to_user(user_arg, hid->name, len) ?
+						-EFAULT : len;
+					break;
+				}
 
-        if (_IOC_NR(cmd)
-                == _IOC_NR(HIDIOCSO_SKIPREPID(0))) {
-            int len = _IOC_SIZE(cmd);
-            if (dev->hid->bus != BUS_USB) {
-                ret = -EINVAL;
-                break;
-            }
+				if (_IOC_NR(cmd) == _IOC_NR(HIDIOCGRAWPHYS(0))) {
+					int len = strlen(hid->phys) + 1;
+					if (len > _IOC_SIZE(cmd))
+						len = _IOC_SIZE(cmd);
+					ret = copy_to_user(user_arg, hid->phys, len) ?
+						-EFAULT : len;
+					break;
+				}
+			}
 
-            ret = hidraw_send_report(file, user_arg,
-                                     len, HID_OUTREP_SKIPREPID);
-            break;
-        }
-
-        if (_IOC_NR(cmd)
-                == _IOC_NR(HIDIOCGF_WDATASIZE(0))) {
-            int len = _IOC_SIZE(cmd);
-            if (dev->hid->bus != BUS_BLUETOOTH) {
-                ret = -EINVAL;
-                break;
-            }
-
-            ret = hidraw_get_report(file, user_arg,
-                                    len, HID_FEATREP_WDATASIZE);
-            break;
-        }
-#endif
-
-        /* Begin Read-only ioctls. */
-        if (_IOC_DIR(cmd) != _IOC_READ) {
-            ret = -EINVAL;
-            break;
-        }
-
-        if (_IOC_NR(cmd) == _IOC_NR(HIDIOCGRAWNAME(0))) {
-            int len = strlen(hid->name) + 1;
-            if (len > _IOC_SIZE(cmd))
-                len = _IOC_SIZE(cmd);
-            ret = copy_to_user(user_arg, hid->name, len) ?
-                  -EFAULT : len;
-            break;
-        }
-
-        if (_IOC_NR(cmd) == _IOC_NR(HIDIOCGRAWPHYS(0))) {
-            int len = strlen(hid->phys) + 1;
-            if (len > _IOC_SIZE(cmd))
-                len = _IOC_SIZE(cmd);
-            ret = copy_to_user(user_arg, hid->phys, len) ?
-                  -EFAULT : len;
-            break;
-        }
-    }
-
-    ret = -ENOTTY;
-    }
+		ret = -ENOTTY;
+	}
 out:
     mutex_unlock(&minors_lock);
     return ret;

@@ -44,74 +44,71 @@ static unsigned int ibm_scan_log_dump;			/* RTAS token */
 static struct proc_dir_entry *proc_ppc64_scan_log_dump;	/* The proc file */
 
 static ssize_t scanlog_read(struct file *file, char __user *buf,
-                            size_t count, loff_t *ppos) {
-    struct inode * inode = file->f_path.dentry->d_inode;
-    struct proc_dir_entry *dp;
-    unsigned int *data;
-    int status;
-    unsigned long len, off;
-    unsigned int wait_time;
+			    size_t count, loff_t *ppos)
+{
+	struct proc_dir_entry *dp = PDE(file_inode(file));
+	unsigned int *data = (unsigned int *)dp->data;
+	int status;
+	unsigned long len, off;
+	unsigned int wait_time;
 
-    dp = PDE(inode);
-    data = (unsigned int *)dp->data;
+	if (count > RTAS_DATA_BUF_SIZE)
+		count = RTAS_DATA_BUF_SIZE;
 
-    if (count > RTAS_DATA_BUF_SIZE)
-        count = RTAS_DATA_BUF_SIZE;
+	if (count < 1024) {
+		/* This is the min supported by this RTAS call.  Rather
+		 * than do all the buffering we insist the user code handle
+		 * larger reads.  As long as cp works... :)
+		 */
+		printk(KERN_ERR "scanlog: cannot perform a small read (%ld)\n", count);
+		return -EINVAL;
+	}
 
-    if (count < 1024) {
-        /* This is the min supported by this RTAS call.  Rather
-         * than do all the buffering we insist the user code handle
-         * larger reads.  As long as cp works... :)
-         */
-        printk(KERN_ERR "scanlog: cannot perform a small read (%ld)\n", count);
-        return -EINVAL;
-    }
+	if (!access_ok(VERIFY_WRITE, buf, count))
+		return -EFAULT;
 
-    if (!access_ok(VERIFY_WRITE, buf, count))
-        return -EFAULT;
+	for (;;) {
+		wait_time = 500;	/* default wait if no data */
+		spin_lock(&rtas_data_buf_lock);
+		memcpy(rtas_data_buf, data, RTAS_DATA_BUF_SIZE);
+		status = rtas_call(ibm_scan_log_dump, 2, 1, NULL,
+				   (u32) __pa(rtas_data_buf), (u32) count);
+		memcpy(data, rtas_data_buf, RTAS_DATA_BUF_SIZE);
+		spin_unlock(&rtas_data_buf_lock);
 
-    for (;;) {
-        wait_time = 500;	/* default wait if no data */
-        spin_lock(&rtas_data_buf_lock);
-        memcpy(rtas_data_buf, data, RTAS_DATA_BUF_SIZE);
-        status = rtas_call(ibm_scan_log_dump, 2, 1, NULL,
-                           (u32) __pa(rtas_data_buf), (u32) count);
-        memcpy(data, rtas_data_buf, RTAS_DATA_BUF_SIZE);
-        spin_unlock(&rtas_data_buf_lock);
-
-        pr_debug("scanlog: status=%d, data[0]=%x, data[1]=%x, " \
-                 "data[2]=%x\n", status, data[0], data[1], data[2]);
-        switch (status) {
-        case SCANLOG_COMPLETE:
-            pr_debug("scanlog: hit eof\n");
-            return 0;
-        case SCANLOG_HWERROR:
-            pr_debug("scanlog: hardware error reading data\n");
-            return -EIO;
-        case SCANLOG_CONTINUE:
-            /* We may or may not have data yet */
-            len = data[1];
-            off = data[2];
-            if (len > 0) {
-                if (copy_to_user(buf, ((char *)data)+off, len))
-                    return -EFAULT;
-                return len;
-            }
-            /* Break to sleep default time */
-            break;
-        default:
-            /* Assume extended busy */
-            wait_time = rtas_busy_delay_time(status);
-            if (!wait_time) {
-                printk(KERN_ERR "scanlog: unknown error " \
-                       "from rtas: %d\n", status);
-                return -EIO;
-            }
-        }
-        /* Apparently no data yet.  Wait and try again. */
-        msleep_interruptible(wait_time);
-    }
-    /*NOTREACHED*/
+		pr_debug("scanlog: status=%d, data[0]=%x, data[1]=%x, " \
+			 "data[2]=%x\n", status, data[0], data[1], data[2]);
+		switch (status) {
+		    case SCANLOG_COMPLETE:
+			pr_debug("scanlog: hit eof\n");
+			return 0;
+		    case SCANLOG_HWERROR:
+			pr_debug("scanlog: hardware error reading data\n");
+			return -EIO;
+		    case SCANLOG_CONTINUE:
+			/* We may or may not have data yet */
+			len = data[1];
+			off = data[2];
+			if (len > 0) {
+				if (copy_to_user(buf, ((char *)data)+off, len))
+					return -EFAULT;
+				return len;
+			}
+			/* Break to sleep default time */
+			break;
+		    default:
+			/* Assume extended busy */
+			wait_time = rtas_busy_delay_time(status);
+			if (!wait_time) {
+				printk(KERN_ERR "scanlog: unknown error " \
+				       "from rtas: %d\n", status);
+				return -EIO;
+			}
+		}
+		/* Apparently no data yet.  Wait and try again. */
+		msleep_interruptible(wait_time);
+	}
+	/*NOTREACHED*/
 }
 
 static ssize_t scanlog_write(struct file * file, const char __user * buf,

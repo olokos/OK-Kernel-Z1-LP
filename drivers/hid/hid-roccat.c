@@ -369,28 +369,29 @@ void roccat_disconnect(int minor) {
 }
 EXPORT_SYMBOL_GPL(roccat_disconnect);
 
-static long roccat_ioctl(struct file *file, unsigned int cmd, unsigned long arg) {
-    struct inode *inode = file->f_path.dentry->d_inode;
-    struct roccat_device *device;
-    unsigned int minor = iminor(inode);
-    long retval = 0;
+static long roccat_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
+{
+	struct inode *inode = file_inode(file);
+	struct roccat_device *device;
+	unsigned int minor = iminor(inode);
+	long retval = 0;
 
-    mutex_lock(&devices_lock);
+	mutex_lock(&devices_lock);
 
-    device = devices[minor];
-    if (!device) {
-        retval = -ENODEV;
-        goto out;
-    }
+	device = devices[minor];
+	if (!device) {
+		retval = -ENODEV;
+		goto out;
+	}
 
-    switch (cmd) {
-    case ROCCATIOCGREPSIZE:
-        if (put_user(device->report_size, (int __user *)arg))
-            retval = -EFAULT;
-        break;
-    default:
-        retval = -ENOTTY;
-    }
+	switch (cmd) {
+	case ROCCATIOCGREPSIZE:
+		if (put_user(device->report_size, (int __user *)arg))
+			retval = -EFAULT;
+		break;
+	default:
+		retval = -ENOTTY;
+	}
 out:
     mutex_unlock(&devices_lock);
     return retval;

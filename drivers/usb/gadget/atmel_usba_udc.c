@@ -82,45 +82,46 @@ fail:
  * L/l: last transaction/not last transaction
  */
 static ssize_t queue_dbg_read(struct file *file, char __user *buf,
-                              size_t nbytes, loff_t *ppos) {
-    struct list_head *queue = file->private_data;
-    struct usba_request *req, *tmp_req;
-    size_t len, remaining, actual = 0;
-    char tmpbuf[38];
+		size_t nbytes, loff_t *ppos)
+{
+	struct list_head *queue = file->private_data;
+	struct usba_request *req, *tmp_req;
+	size_t len, remaining, actual = 0;
+	char tmpbuf[38];
 
-    if (!access_ok(VERIFY_WRITE, buf, nbytes))
-        return -EFAULT;
+	if (!access_ok(VERIFY_WRITE, buf, nbytes))
+		return -EFAULT;
 
-    mutex_lock(&file->f_dentry->d_inode->i_mutex);
-    list_for_each_entry_safe(req, tmp_req, queue, queue) {
-        len = snprintf(tmpbuf, sizeof(tmpbuf),
-                       "%8p %08x %c%c%c %5d %c%c%c\n",
-                       req->req.buf, req->req.length,
-                       req->req.no_interrupt ? 'i' : 'I',
-                       req->req.zero ? 'Z' : 'z',
-                       req->req.short_not_ok ? 's' : 'S',
-                       req->req.status,
-                       req->submitted ? 'F' : 'f',
-                       req->using_dma ? 'D' : 'd',
-                       req->last_transaction ? 'L' : 'l');
-        len = min(len, sizeof(tmpbuf));
-        if (len > nbytes)
-            break;
+	mutex_lock(&file_inode(file)->i_mutex);
+	list_for_each_entry_safe(req, tmp_req, queue, queue) {
+		len = snprintf(tmpbuf, sizeof(tmpbuf),
+				"%8p %08x %c%c%c %5d %c%c%c\n",
+				req->req.buf, req->req.length,
+				req->req.no_interrupt ? 'i' : 'I',
+				req->req.zero ? 'Z' : 'z',
+				req->req.short_not_ok ? 's' : 'S',
+				req->req.status,
+				req->submitted ? 'F' : 'f',
+				req->using_dma ? 'D' : 'd',
+				req->last_transaction ? 'L' : 'l');
+		len = min(len, sizeof(tmpbuf));
+		if (len > nbytes)
+			break;
 
-        list_del(&req->queue);
-        kfree(req);
+		list_del(&req->queue);
+		kfree(req);
 
-        remaining = __copy_to_user(buf, tmpbuf, len);
-        actual += len - remaining;
-        if (remaining)
-            break;
+		remaining = __copy_to_user(buf, tmpbuf, len);
+		actual += len - remaining;
+		if (remaining)
+			break;
 
-        nbytes -= len;
-        buf += len;
-    }
-    mutex_unlock(&file->f_dentry->d_inode->i_mutex);
+		nbytes -= len;
+		buf += len;
+	}
+	mutex_unlock(&file_inode(file)->i_mutex);
 
-    return actual;
+	return actual;
 }
 
 static int queue_dbg_release(struct inode *inode, struct file *file) {
@@ -162,17 +163,18 @@ out:
 }
 
 static ssize_t regs_dbg_read(struct file *file, char __user *buf,
-                             size_t nbytes, loff_t *ppos) {
-    struct inode *inode = file->f_dentry->d_inode;
-    int ret;
+		size_t nbytes, loff_t *ppos)
+{
+	struct inode *inode = file_inode(file);
+	int ret;
 
-    mutex_lock(&inode->i_mutex);
-    ret = simple_read_from_buffer(buf, nbytes, ppos,
-                                  file->private_data,
-                                  file->f_dentry->d_inode->i_size);
-    mutex_unlock(&inode->i_mutex);
+	mutex_lock(&inode->i_mutex);
+	ret = simple_read_from_buffer(buf, nbytes, ppos,
+			file->private_data,
+			file_inode(file)->i_size);
+	mutex_unlock(&inode->i_mutex);
 
-    return ret;
+	return ret;
 }
 
 static int regs_dbg_release(struct inode *inode, struct file *file) {

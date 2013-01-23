@@ -244,8 +244,71 @@ static void fd_free_device(void *p) {
     kfree(fd_dev);
 }
 
-static inline struct fd_request *FILE_REQ(struct se_task *task) {
-    return container_of(task, struct fd_request, fd_task);
+static int fd_do_rw(struct se_cmd *cmd, struct scatterlist *sgl,
+		u32 sgl_nents, int is_write)
+{
+	struct se_device *se_dev = cmd->se_dev;
+	struct fd_dev *dev = FD_DEV(se_dev);
+	struct file *fd = dev->fd_file;
+	struct scatterlist *sg;
+	struct iovec *iov;
+	mm_segment_t old_fs;
+	loff_t pos = (cmd->t_task_lba * se_dev->dev_attrib.block_size);
+	int ret = 0, i;
+
+	iov = kzalloc(sizeof(struct iovec) * sgl_nents, GFP_KERNEL);
+	if (!iov) {
+		pr_err("Unable to allocate fd_do_readv iov[]\n");
+		return -ENOMEM;
+	}
+
+	for_each_sg(sgl, sg, sgl_nents, i) {
+		iov[i].iov_len = sg->length;
+		iov[i].iov_base = kmap(sg_page(sg)) + sg->offset;
+	}
+
+	old_fs = get_fs();
+	set_fs(get_ds());
+
+	if (is_write)
+		ret = vfs_writev(fd, &iov[0], sgl_nents, &pos);
+	else
+		ret = vfs_readv(fd, &iov[0], sgl_nents, &pos);
+
+	set_fs(old_fs);
+
+	for_each_sg(sgl, sg, sgl_nents, i)
+		kunmap(sg_page(sg));
+
+	kfree(iov);
+
+	if (is_write) {
+		if (ret < 0 || ret != cmd->data_length) {
+			pr_err("%s() write returned %d\n", __func__, ret);
+			return (ret < 0 ? ret : -EINVAL);
+		}
+	} else {
+		/*
+		 * Return zeros and GOOD status even if the READ did not return
+		 * the expected virt_size for struct file w/o a backing struct
+		 * block_device.
+		 */
+		if (S_ISBLK(file_inode(fd)->i_mode)) {
+			if (ret < 0 || ret != cmd->data_length) {
+				pr_err("%s() returned %d, expecting %u for "
+						"S_ISBLK\n", __func__, ret,
+						cmd->data_length);
+				return (ret < 0 ? ret : -EINVAL);
+			}
+		} else {
+			if (ret < 0) {
+				pr_err("%s() returned %d for non S_ISBLK\n",
+						__func__, ret);
+				return ret;
+			}
+		}
+	}
+	return 1;
 }
 
 

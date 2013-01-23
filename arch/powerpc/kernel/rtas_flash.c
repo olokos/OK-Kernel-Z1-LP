@@ -185,32 +185,33 @@ static void free_flash_list(struct flash_block_list *f) {
     }
 }
 
-static int rtas_flash_release(struct inode *inode, struct file *file) {
-    struct proc_dir_entry *dp = PDE(file->f_path.dentry->d_inode);
-    struct rtas_update_flash_t *uf;
+static int rtas_flash_release(struct inode *inode, struct file *file)
+{
+	struct proc_dir_entry *dp = PDE(file_inode(file));
+	struct rtas_update_flash_t *uf;
+	
+	uf = (struct rtas_update_flash_t *) dp->data;
+	if (uf->flist) {    
+		/* File was opened in write mode for a new flash attempt */
+		/* Clear saved list */
+		if (rtas_firmware_flash_list) {
+			free_flash_list(rtas_firmware_flash_list);
+			rtas_firmware_flash_list = NULL;
+		}
 
-    uf = (struct rtas_update_flash_t *) dp->data;
-    if (uf->flist) {
-        /* File was opened in write mode for a new flash attempt */
-        /* Clear saved list */
-        if (rtas_firmware_flash_list) {
-            free_flash_list(rtas_firmware_flash_list);
-            rtas_firmware_flash_list = NULL;
-        }
+		if (uf->status != FLASH_AUTH)  
+			uf->status = flash_list_valid(uf->flist);
 
-        if (uf->status != FLASH_AUTH)
-            uf->status = flash_list_valid(uf->flist);
+		if (uf->status == FLASH_IMG_READY) 
+			rtas_firmware_flash_list = uf->flist;
+		else
+			free_flash_list(uf->flist);
 
-        if (uf->status == FLASH_IMG_READY)
-            rtas_firmware_flash_list = uf->flist;
-        else
-            free_flash_list(uf->flist);
+		uf->flist = NULL;
+	}
 
-        uf->flist = NULL;
-    }
-
-    atomic_dec(&dp->count);
-    return 0;
+	atomic_dec(&dp->count);
+	return 0;
 }
 
 static void get_flash_status_msg(int status, char *buf) {
@@ -245,11 +246,11 @@ static void get_flash_status_msg(int status, char *buf) {
 
 /* Reading the proc file will show status (not the firmware contents) */
 static ssize_t rtas_flash_read(struct file *file, char __user *buf,
-                               size_t count, loff_t *ppos) {
-    struct proc_dir_entry *dp = PDE(file->f_path.dentry->d_inode);
-    struct rtas_update_flash_t *uf;
-    char msg[RTAS_MSG_MAXLEN];
-
+			       size_t count, loff_t *ppos)
+{
+	struct proc_dir_entry *dp = PDE(file_inode(file));
+	struct rtas_update_flash_t *uf;
+	char msg[RTAS_MSG_MAXLEN];
     uf = dp->data;
 
     if (!strcmp(dp->name, FIRMWARE_FLASH_NAME)) {
@@ -272,56 +273,57 @@ void rtas_block_ctor(void *ptr) {
  * that we fail....
  */
 static ssize_t rtas_flash_write(struct file *file, const char __user *buffer,
-                                size_t count, loff_t *off) {
-    struct proc_dir_entry *dp = PDE(file->f_path.dentry->d_inode);
-    struct rtas_update_flash_t *uf;
-    char *p;
-    int next_free;
-    struct flash_block_list *fl;
+				size_t count, loff_t *off)
+{
+	struct proc_dir_entry *dp = PDE(file_inode(file));
+	struct rtas_update_flash_t *uf;
+	char *p;
+	int next_free;
+	struct flash_block_list *fl;
 
-    uf = (struct rtas_update_flash_t *) dp->data;
+	uf = (struct rtas_update_flash_t *) dp->data;
 
-    if (uf->status == FLASH_AUTH || count == 0)
-        return count;	/* discard data */
+	if (uf->status == FLASH_AUTH || count == 0)
+		return count;	/* discard data */
 
-    /* In the case that the image is not ready for flashing, the memory
-     * allocated for the block list will be freed upon the release of the
-     * proc file
-     */
-    if (uf->flist == NULL) {
-        uf->flist = kmem_cache_alloc(flash_block_cache, GFP_KERNEL);
-        if (!uf->flist)
-            return -ENOMEM;
-    }
+	/* In the case that the image is not ready for flashing, the memory
+	 * allocated for the block list will be freed upon the release of the 
+	 * proc file
+	 */
+	if (uf->flist == NULL) {
+		uf->flist = kmem_cache_alloc(flash_block_cache, GFP_KERNEL);
+		if (!uf->flist)
+			return -ENOMEM;
+	}
 
-    fl = uf->flist;
-    while (fl->next)
-        fl = fl->next; /* seek to last block_list for append */
-    next_free = fl->num_blocks;
-    if (next_free == FLASH_BLOCKS_PER_NODE) {
-        /* Need to allocate another block_list */
-        fl->next = kmem_cache_alloc(flash_block_cache, GFP_KERNEL);
-        if (!fl->next)
-            return -ENOMEM;
-        fl = fl->next;
-        next_free = 0;
-    }
+	fl = uf->flist;
+	while (fl->next)
+		fl = fl->next; /* seek to last block_list for append */
+	next_free = fl->num_blocks;
+	if (next_free == FLASH_BLOCKS_PER_NODE) {
+		/* Need to allocate another block_list */
+		fl->next = kmem_cache_alloc(flash_block_cache, GFP_KERNEL);
+		if (!fl->next)
+			return -ENOMEM;
+		fl = fl->next;
+		next_free = 0;
+	}
 
-    if (count > RTAS_BLK_SIZE)
-        count = RTAS_BLK_SIZE;
-    p = kmem_cache_alloc(flash_block_cache, GFP_KERNEL);
-    if (!p)
-        return -ENOMEM;
+	if (count > RTAS_BLK_SIZE)
+		count = RTAS_BLK_SIZE;
+	p = kmem_cache_alloc(flash_block_cache, GFP_KERNEL);
+	if (!p)
+		return -ENOMEM;
+	
+	if(copy_from_user(p, buffer, count)) {
+		kmem_cache_free(flash_block_cache, p);
+		return -EFAULT;
+	}
+	fl->blocks[next_free].data = p;
+	fl->blocks[next_free].length = count;
+	fl->num_blocks++;
 
-    if(copy_from_user(p, buffer, count)) {
-        kmem_cache_free(flash_block_cache, p);
-        return -EFAULT;
-    }
-    fl->blocks[next_free].data = p;
-    fl->blocks[next_free].length = count;
-    fl->num_blocks++;
-
-    return count;
+	return count;
 }
 
 static int rtas_excl_open(struct inode *inode, struct file *file) {
@@ -360,11 +362,12 @@ static void manage_flash(struct rtas_manage_flash_t *args_buf) {
 }
 
 static ssize_t manage_flash_read(struct file *file, char __user *buf,
-                                 size_t count, loff_t *ppos) {
-    struct proc_dir_entry *dp = PDE(file->f_path.dentry->d_inode);
-    struct rtas_manage_flash_t *args_buf;
-    char msg[RTAS_MSG_MAXLEN];
-    int msglen;
+			       size_t count, loff_t *ppos)
+{
+	struct proc_dir_entry *dp = PDE(file_inode(file));
+	struct rtas_manage_flash_t *args_buf;
+	char msg[RTAS_MSG_MAXLEN];
+	int msglen;
 
     args_buf = dp->data;
     if (args_buf == NULL)
@@ -376,37 +379,38 @@ static ssize_t manage_flash_read(struct file *file, char __user *buf,
 }
 
 static ssize_t manage_flash_write(struct file *file, const char __user *buf,
-                                  size_t count, loff_t *off) {
-    struct proc_dir_entry *dp = PDE(file->f_path.dentry->d_inode);
-    struct rtas_manage_flash_t *args_buf;
-    const char reject_str[] = "0";
-    const char commit_str[] = "1";
-    char stkbuf[10];
-    int op;
+				size_t count, loff_t *off)
+{
+	struct proc_dir_entry *dp = PDE(file_inode(file));
+	struct rtas_manage_flash_t *args_buf;
+	const char reject_str[] = "0";
+	const char commit_str[] = "1";
+	char stkbuf[10];
+	int op;
 
-    args_buf = (struct rtas_manage_flash_t *) dp->data;
-    if ((args_buf->status == MANAGE_AUTH) || (count == 0))
-        return count;
+	args_buf = (struct rtas_manage_flash_t *) dp->data;
+	if ((args_buf->status == MANAGE_AUTH) || (count == 0))
+		return count;
+		
+	op = -1;
+	if (buf) {
+		if (count > 9) count = 9;
+		if (copy_from_user (stkbuf, buf, count)) {
+			return -EFAULT;
+		}
+		if (strncmp(stkbuf, reject_str, strlen(reject_str)) == 0) 
+			op = RTAS_REJECT_TMP_IMG;
+		else if (strncmp(stkbuf, commit_str, strlen(commit_str)) == 0) 
+			op = RTAS_COMMIT_TMP_IMG;
+	}
+	
+	if (op == -1)   /* buf is empty, or contains invalid string */
+		return -EINVAL;
 
-    op = -1;
-    if (buf) {
-        if (count > 9) count = 9;
-        if (copy_from_user (stkbuf, buf, count)) {
-            return -EFAULT;
-        }
-        if (strncmp(stkbuf, reject_str, strlen(reject_str)) == 0)
-            op = RTAS_REJECT_TMP_IMG;
-        else if (strncmp(stkbuf, commit_str, strlen(commit_str)) == 0)
-            op = RTAS_COMMIT_TMP_IMG;
-    }
+	args_buf->op = op;
+	manage_flash(args_buf);
 
-    if (op == -1)   /* buf is empty, or contains invalid string */
-        return -EINVAL;
-
-    args_buf->op = op;
-    manage_flash(args_buf);
-
-    return count;
+	return count;
 }
 
 static void validate_flash(struct rtas_validate_flash_t *args_buf) {
@@ -444,11 +448,12 @@ static int get_validate_flash_msg(struct rtas_validate_flash_t *args_buf,
 }
 
 static ssize_t validate_flash_read(struct file *file, char __user *buf,
-                                   size_t count, loff_t *ppos) {
-    struct proc_dir_entry *dp = PDE(file->f_path.dentry->d_inode);
-    struct rtas_validate_flash_t *args_buf;
-    char msg[RTAS_MSG_MAXLEN];
-    int msglen;
+			       size_t count, loff_t *ppos)
+{
+	struct proc_dir_entry *dp = PDE(file_inode(file));
+	struct rtas_validate_flash_t *args_buf;
+	char msg[RTAS_MSG_MAXLEN];
+	int msglen;
 
     args_buf = dp->data;
 
@@ -458,46 +463,47 @@ static ssize_t validate_flash_read(struct file *file, char __user *buf,
 }
 
 static ssize_t validate_flash_write(struct file *file, const char __user *buf,
-                                    size_t count, loff_t *off) {
-    struct proc_dir_entry *dp = PDE(file->f_path.dentry->d_inode);
-    struct rtas_validate_flash_t *args_buf;
-    int rc;
+				    size_t count, loff_t *off)
+{
+	struct proc_dir_entry *dp = PDE(file_inode(file));
+	struct rtas_validate_flash_t *args_buf;
+	int rc;
 
-    args_buf = (struct rtas_validate_flash_t *) dp->data;
+	args_buf = (struct rtas_validate_flash_t *) dp->data;
 
-    if (dp->data == NULL) {
-        dp->data = kmalloc(sizeof(struct rtas_validate_flash_t),
-                           GFP_KERNEL);
-        if (dp->data == NULL)
-            return -ENOMEM;
-    }
+	if (dp->data == NULL) {
+		dp->data = kmalloc(sizeof(struct rtas_validate_flash_t), 
+				GFP_KERNEL);
+		if (dp->data == NULL) 
+			return -ENOMEM;
+	}
 
-    /* We are only interested in the first 4K of the
-     * candidate image */
-    if ((*off >= VALIDATE_BUF_SIZE) ||
-            (args_buf->status == VALIDATE_AUTH)) {
-        *off += count;
-        return count;
-    }
+	/* We are only interested in the first 4K of the
+	 * candidate image */
+	if ((*off >= VALIDATE_BUF_SIZE) || 
+		(args_buf->status == VALIDATE_AUTH)) {
+		*off += count;
+		return count;
+	}
 
-    if (*off + count >= VALIDATE_BUF_SIZE)  {
-        count = VALIDATE_BUF_SIZE - *off;
-        args_buf->status = VALIDATE_READY;
-    } else {
-        args_buf->status = VALIDATE_INCOMPLETE;
-    }
+	if (*off + count >= VALIDATE_BUF_SIZE)  {
+		count = VALIDATE_BUF_SIZE - *off;
+		args_buf->status = VALIDATE_READY;	
+	} else {
+		args_buf->status = VALIDATE_INCOMPLETE;
+	}
 
-    if (!access_ok(VERIFY_READ, buf, count)) {
-        rc = -EFAULT;
-        goto done;
-    }
-    if (copy_from_user(args_buf->buf + *off, buf, count)) {
-        rc = -EFAULT;
-        goto done;
-    }
+	if (!access_ok(VERIFY_READ, buf, count)) {
+		rc = -EFAULT;
+		goto done;
+	}
+	if (copy_from_user(args_buf->buf + *off, buf, count)) {
+		rc = -EFAULT;
+		goto done;
+	}
 
-    *off += count;
-    rc = count;
+	*off += count;
+	rc = count;
 done:
     if (rc < 0) {
         kfree(dp->data);
@@ -506,9 +512,10 @@ done:
     return rc;
 }
 
-static int validate_flash_release(struct inode *inode, struct file *file) {
-    struct proc_dir_entry *dp = PDE(file->f_path.dentry->d_inode);
-    struct rtas_validate_flash_t *args_buf;
+static int validate_flash_release(struct inode *inode, struct file *file)
+{
+	struct proc_dir_entry *dp = PDE(file_inode(file));
+	struct rtas_validate_flash_t *args_buf;
 
     args_buf = (struct rtas_validate_flash_t *) dp->data;
 

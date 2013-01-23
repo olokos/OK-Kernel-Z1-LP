@@ -333,66 +333,58 @@ static void free_buffers(struct page *page) {
  * This usage is similar to how swap files are handled, and allows us
  * to write to a file with no concerns of memory allocation failing.
  */
-static struct page *read_page(struct file *file, unsigned long index,
-                              struct bitmap *bitmap,
-                              unsigned long count) {
-    struct page *page = NULL;
-    struct inode *inode = file->f_path.dentry->d_inode;
-    struct buffer_head *bh;
-    sector_t block;
+static int read_page(struct file *file, unsigned long index,
+		     struct bitmap *bitmap,
+		     unsigned long count,
+		     struct page *page)
+{
+	int ret = 0;
+	struct inode *inode = file_inode(file);
+	struct buffer_head *bh;
+	sector_t block;
 
-    pr_debug("read bitmap file (%dB @ %llu)\n", (int)PAGE_SIZE,
-             (unsigned long long)index << PAGE_SHIFT);
+	pr_debug("read bitmap file (%dB @ %llu)\n", (int)PAGE_SIZE,
+		 (unsigned long long)index << PAGE_SHIFT);
 
-    page = alloc_page(GFP_KERNEL);
-    if (!page)
-        page = ERR_PTR(-ENOMEM);
-    if (IS_ERR(page))
-        goto out;
+	bh = alloc_page_buffers(page, 1<<inode->i_blkbits, 0);
+	if (!bh) {
+		ret = -ENOMEM;
+		goto out;
+	}
+	attach_page_buffers(page, bh);
+	block = index << (PAGE_SHIFT - inode->i_blkbits);
+	while (bh) {
+		if (count == 0)
+			bh->b_blocknr = 0;
+		else {
+			bh->b_blocknr = bmap(inode, block);
+			if (bh->b_blocknr == 0) {
+				/* Cannot use this file! */
+				ret = -EINVAL;
+				goto out;
+			}
+			bh->b_bdev = inode->i_sb->s_bdev;
+			if (count < (1<<inode->i_blkbits))
+				count = 0;
+			else
+				count -= (1<<inode->i_blkbits);
 
-    bh = alloc_page_buffers(page, 1<<inode->i_blkbits, 0);
-    if (!bh) {
-        put_page(page);
-        page = ERR_PTR(-ENOMEM);
-        goto out;
-    }
-    attach_page_buffers(page, bh);
-    block = index << (PAGE_SHIFT - inode->i_blkbits);
-    while (bh) {
-        if (count == 0)
-            bh->b_blocknr = 0;
-        else {
-            bh->b_blocknr = bmap(inode, block);
-            if (bh->b_blocknr == 0) {
-                /* Cannot use this file! */
-                free_buffers(page);
-                page = ERR_PTR(-EINVAL);
-                goto out;
-            }
-            bh->b_bdev = inode->i_sb->s_bdev;
-            if (count < (1<<inode->i_blkbits))
-                count = 0;
-            else
-                count -= (1<<inode->i_blkbits);
+			bh->b_end_io = end_bitmap_write;
+			bh->b_private = bitmap;
+			atomic_inc(&bitmap->pending_writes);
+			set_buffer_locked(bh);
+			set_buffer_mapped(bh);
+			submit_bh(READ, bh);
+		}
+		block++;
+		bh = bh->b_this_page;
+	}
+	page->index = index;
 
-            bh->b_end_io = end_bitmap_write;
-            bh->b_private = bitmap;
-            atomic_inc(&bitmap->pending_writes);
-            set_buffer_locked(bh);
-            set_buffer_mapped(bh);
-            submit_bh(READ, bh);
-        }
-        block++;
-        bh = bh->b_this_page;
-    }
-    page->index = index;
-
-    wait_event(bitmap->write_wait,
-               atomic_read(&bitmap->pending_writes)==0);
-    if (bitmap->flags & BITMAP_WRITE_ERROR) {
-        free_buffers(page);
-        page = ERR_PTR(-EIO);
-    }
+	wait_event(bitmap->write_wait,
+		   atomic_read(&bitmap->pending_writes)==0);
+	if (test_bit(BITMAP_WRITE_ERROR, &bitmap->flags))
+		ret = -EIO;
 out:
     if (IS_ERR(page))
         printk(KERN_ALERT "md: bitmap read error: (%dB @ %llu): %ld\n",
@@ -687,60 +679,92 @@ static inline unsigned long file_page_offset(struct bitmap *bitmap, unsigned lon
  * 1 page (e.g., x86) or less than 1 page -- so the bitmap might start on page
  * 0 or page 1
  */
-static inline struct page *filemap_get_page(struct bitmap *bitmap,
-        unsigned long chunk) {
-    if (file_page_index(bitmap, chunk) >= bitmap->file_pages)
-        return NULL;
-    return bitmap->filemap[file_page_index(bitmap, chunk)
-                           - file_page_index(bitmap, 0)];
+static inline struct page *filemap_get_page(struct bitmap_storage *store,
+					    unsigned long chunk)
+{
+	if (file_page_index(store, chunk) >= store->file_pages)
+		return NULL;
+	return store->filemap[file_page_index(store, chunk)
+			      - file_page_index(store, 0)];
 }
 
-static void bitmap_file_unmap(struct bitmap *bitmap) {
-    struct page **map, *sb_page;
-    unsigned long *attr;
-    int pages;
-    unsigned long flags;
+static int bitmap_storage_alloc(struct bitmap_storage *store,
+				unsigned long chunks, int with_super)
+{
+	int pnum;
+	unsigned long num_pages;
+	unsigned long bytes;
 
-    spin_lock_irqsave(&bitmap->lock, flags);
-    map = bitmap->filemap;
-    bitmap->filemap = NULL;
-    attr = bitmap->filemap_attr;
-    bitmap->filemap_attr = NULL;
-    pages = bitmap->file_pages;
-    bitmap->file_pages = 0;
-    sb_page = bitmap->sb_page;
-    bitmap->sb_page = NULL;
-    spin_unlock_irqrestore(&bitmap->lock, flags);
+	bytes = DIV_ROUND_UP(chunks, 8);
+	if (with_super)
+		bytes += sizeof(bitmap_super_t);
 
-    while (pages--)
-        if (map[pages] != sb_page) /* 0 is sb_page, release it below */
-            free_buffers(map[pages]);
-    kfree(map);
-    kfree(attr);
+	num_pages = DIV_ROUND_UP(bytes, PAGE_SIZE);
 
-    if (sb_page)
-        free_buffers(sb_page);
+	store->filemap = kmalloc(sizeof(struct page *)
+				 * num_pages, GFP_KERNEL);
+	if (!store->filemap)
+		return -ENOMEM;
+
+	if (with_super && !store->sb_page) {
+		store->sb_page = alloc_page(GFP_KERNEL|__GFP_ZERO);
+		if (store->sb_page == NULL)
+			return -ENOMEM;
+		store->sb_page->index = 0;
+	}
+	pnum = 0;
+	if (store->sb_page) {
+		store->filemap[0] = store->sb_page;
+		pnum = 1;
+	}
+	for ( ; pnum < num_pages; pnum++) {
+		store->filemap[pnum] = alloc_page(GFP_KERNEL|__GFP_ZERO);
+		if (!store->filemap[pnum]) {
+			store->file_pages = pnum;
+			return -ENOMEM;
+		}
+		store->filemap[pnum]->index = pnum;
+	}
+	store->file_pages = pnum;
+
+	/* We need 4 bits per page, rounded up to a multiple
+	 * of sizeof(unsigned long) */
+	store->filemap_attr = kzalloc(
+		roundup(DIV_ROUND_UP(num_pages*4, 8), sizeof(unsigned long)),
+		GFP_KERNEL);
+	if (!store->filemap_attr)
+		return -ENOMEM;
+
+	store->bytes = bytes;
+
+	return 0;
 }
 
-static void bitmap_file_put(struct bitmap *bitmap) {
-    struct file *file;
-    unsigned long flags;
+static void bitmap_file_unmap(struct bitmap_storage *store)
+{
+	struct page **map, *sb_page;
+	int pages;
+	struct file *file;
 
-    spin_lock_irqsave(&bitmap->lock, flags);
-    file = bitmap->file;
-    bitmap->file = NULL;
-    spin_unlock_irqrestore(&bitmap->lock, flags);
+	file = store->file;
+	map = store->filemap;
+	pages = store->file_pages;
+	sb_page = store->sb_page;
 
-    if (file)
-        wait_event(bitmap->write_wait,
-                   atomic_read(&bitmap->pending_writes)==0);
-    bitmap_file_unmap(bitmap);
+	while (pages--)
+		if (map[pages] != sb_page) /* 0 is sb_page, release it below */
+			free_buffers(map[pages]);
+	kfree(map);
+	kfree(store->filemap_attr);
 
-    if (file) {
-        struct inode *inode = file->f_path.dentry->d_inode;
-        invalidate_mapping_pages(inode->i_mapping, 0, -1);
-        fput(file);
-    }
+	if (sb_page)
+		free_buffers(sb_page);
+
+	if (file) {
+		struct inode *inode = file_inode(file);
+		invalidate_mapping_pages(inode->i_mapping, 0, -1);
+		fput(file);
+	}
 }
 
 /*

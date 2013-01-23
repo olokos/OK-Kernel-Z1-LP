@@ -292,14 +292,14 @@ salinfo_event_open(struct inode *inode, struct file *file) {
 }
 
 static ssize_t
-salinfo_event_read(struct file *file, char __user *buffer, size_t count, loff_t *ppos) {
-    struct inode *inode = file->f_path.dentry->d_inode;
-    struct proc_dir_entry *entry = PDE(inode);
-    struct salinfo_data *data = entry->data;
-    char cmd[32];
-    size_t size;
-    int i, n, cpu = -1;
-
+salinfo_event_read(struct file *file, char __user *buffer, size_t count, loff_t *ppos)
+{
+	struct inode *inode = file_inode(file);
+	struct proc_dir_entry *entry = PDE(inode);
+	struct salinfo_data *data = entry->data;
+	char cmd[32];
+	size_t size;
+	int i, n, cpu = -1;
 retry:
     if (cpus_empty(data->cpu_event) && down_trylock(&data->mutex)) {
         if (file->f_flags & O_NONBLOCK)
@@ -448,24 +448,25 @@ retry:
 }
 
 static ssize_t
-salinfo_log_read(struct file *file, char __user *buffer, size_t count, loff_t *ppos) {
-    struct inode *inode = file->f_path.dentry->d_inode;
-    struct proc_dir_entry *entry = PDE(inode);
-    struct salinfo_data *data = entry->data;
-    u8 *buf;
-    u64 bufsize;
+salinfo_log_read(struct file *file, char __user *buffer, size_t count, loff_t *ppos)
+{
+	struct inode *inode = file_inode(file);
+	struct proc_dir_entry *entry = PDE(inode);
+	struct salinfo_data *data = entry->data;
+	u8 *buf;
+	u64 bufsize;
 
-    if (data->state == STATE_LOG_RECORD) {
-        buf = data->log_buffer;
-        bufsize = data->log_size;
-    } else if (data->state == STATE_OEMDATA) {
-        buf = data->oemdata;
-        bufsize = data->oemdata_size;
-    } else {
-        buf = NULL;
-        bufsize = 0;
-    }
-    return simple_read_from_buffer(buffer, count, ppos, buf, bufsize);
+	if (data->state == STATE_LOG_RECORD) {
+		buf = data->log_buffer;
+		bufsize = data->log_size;
+	} else if (data->state == STATE_OEMDATA) {
+		buf = data->oemdata;
+		bufsize = data->oemdata_size;
+	} else {
+		buf = NULL;
+		bufsize = 0;
+	}
+	return simple_read_from_buffer(buffer, count, ppos, buf, bufsize);
 }
 
 static void
@@ -506,48 +507,49 @@ salinfo_log_clear(struct salinfo_data *data, int cpu) {
 }
 
 static ssize_t
-salinfo_log_write(struct file *file, const char __user *buffer, size_t count, loff_t *ppos) {
-    struct inode *inode = file->f_path.dentry->d_inode;
-    struct proc_dir_entry *entry = PDE(inode);
-    struct salinfo_data *data = entry->data;
-    char cmd[32];
-    size_t size;
-    u32 offset;
-    int cpu;
+salinfo_log_write(struct file *file, const char __user *buffer, size_t count, loff_t *ppos)
+{
+	struct inode *inode = file_inode(file);
+	struct proc_dir_entry *entry = PDE(inode);
+	struct salinfo_data *data = entry->data;
+	char cmd[32];
+	size_t size;
+	u32 offset;
+	int cpu;
 
-    size = sizeof(cmd);
-    if (count < size)
-        size = count;
-    if (copy_from_user(cmd, buffer, size))
-        return -EFAULT;
+	size = sizeof(cmd);
+	if (count < size)
+		size = count;
+	if (copy_from_user(cmd, buffer, size))
+		return -EFAULT;
 
-    if (sscanf(cmd, "read %d", &cpu) == 1) {
-        salinfo_log_new_read(cpu, data);
-    } else if (sscanf(cmd, "clear %d", &cpu) == 1) {
-        int ret;
-        if ((ret = salinfo_log_clear(data, cpu)))
-            count = ret;
-    } else if (sscanf(cmd, "oemdata %d %d", &cpu, &offset) == 2) {
-        if (data->state != STATE_LOG_RECORD && data->state != STATE_OEMDATA)
-            return -EINVAL;
-        if (offset > data->log_size - sizeof(efi_guid_t))
-            return -EINVAL;
-        data->state = STATE_OEMDATA;
-        if (salinfo_platform_oemdata) {
-            struct salinfo_platform_oemdata_parms parms = {
-                .efi_guid = data->log_buffer + offset,
-                .oemdata = &data->oemdata,
-                .oemdata_size = &data->oemdata_size
-            };
-            call_on_cpu(cpu, salinfo_platform_oemdata_cpu, &parms);
-            if (parms.ret)
-                count = parms.ret;
-        } else
-            data->oemdata_size = 0;
-    } else
-        return -EINVAL;
+	if (sscanf(cmd, "read %d", &cpu) == 1) {
+		salinfo_log_new_read(cpu, data);
+	} else if (sscanf(cmd, "clear %d", &cpu) == 1) {
+		int ret;
+		if ((ret = salinfo_log_clear(data, cpu)))
+			count = ret;
+	} else if (sscanf(cmd, "oemdata %d %d", &cpu, &offset) == 2) {
+		if (data->state != STATE_LOG_RECORD && data->state != STATE_OEMDATA)
+			return -EINVAL;
+		if (offset > data->log_size - sizeof(efi_guid_t))
+			return -EINVAL;
+		data->state = STATE_OEMDATA;
+		if (salinfo_platform_oemdata) {
+			struct salinfo_platform_oemdata_parms parms = {
+				.efi_guid = data->log_buffer + offset,
+				.oemdata = &data->oemdata,
+				.oemdata_size = &data->oemdata_size
+			};
+			call_on_cpu(cpu, salinfo_platform_oemdata_cpu, &parms);
+			if (parms.ret)
+				count = parms.ret;
+		} else
+			data->oemdata_size = 0;
+	} else
+		return -EINVAL;
 
-    return count;
+	return count;
 }
 
 static const struct file_operations salinfo_data_fops = {
