@@ -374,8 +374,9 @@ static int vlsi_seq_show(struct seq_file *seq, void *v) {
     return 0;
 }
 
-static int vlsi_seq_open(struct inode *inode, struct file *file) {
-    return single_open(file, vlsi_seq_show, PDE(inode)->data);
+static int vlsi_seq_open(struct inode *inode, struct file *file)
+{
+	return single_open(file, vlsi_seq_show, PDE_DATA(inode));
 }
 
 static const struct file_operations vlsi_proc_fops = {

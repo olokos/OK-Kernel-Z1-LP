@@ -1451,22 +1451,21 @@ static ssize_t write_flush(struct file *file, const char __user *buf,
 static ssize_t cache_read_procfs(struct file *filp, char __user *buf,
 				 size_t count, loff_t *ppos)
 {
-	struct cache_detail *cd = PDE(filp->f_path.dentry->d_inode)->data;
-
+	struct cache_detail *cd = PDE_DATA(file_inode(filp));
 	return cache_read(filp, buf, count, ppos, cd);
 }
 
 static ssize_t cache_write_procfs(struct file *filp, const char __user *buf,
 				  size_t count, loff_t *ppos)
 {
-	struct cache_detail *cd = PDE(filp->f_path.dentry->d_inode)->data;
+	struct cache_detail *cd = PDE_DATA(file_inode(filp));
 
 	return cache_write(filp, buf, count, ppos, cd);
 }
 
 static unsigned int cache_poll_procfs(struct file *filp, poll_table *wait)
 {
-	struct cache_detail *cd = PDE(filp->f_path.dentry->d_inode)->data;
+	struct cache_detail *cd = PDE_DATA(file_inode(filp));
 
 	return cache_poll(filp, wait, cd);
 }
@@ -1474,22 +1473,22 @@ static unsigned int cache_poll_procfs(struct file *filp, poll_table *wait)
 static long cache_ioctl_procfs(struct file *filp,
 			       unsigned int cmd, unsigned long arg)
 {
-	struct inode *inode = filp->f_path.dentry->d_inode;
-	struct cache_detail *cd = PDE(inode)->data;
+	struct inode *inode = file_inode(filp);
+	struct cache_detail *cd = PDE_DATA(inode);
 
 	return cache_ioctl(inode, filp, cmd, arg, cd);
 }
 
 static int cache_open_procfs(struct inode *inode, struct file *filp)
 {
-	struct cache_detail *cd = PDE(inode)->data;
+	struct cache_detail *cd = PDE_DATA(inode);
 
 	return cache_open(inode, filp, cd);
 }
 
 static int cache_release_procfs(struct inode *inode, struct file *filp)
 {
-	struct cache_detail *cd = PDE(inode)->data;
+	struct cache_detail *cd = PDE_DATA(inode);
 
 	return cache_release(inode, filp, cd);
 }
@@ -1507,14 +1506,14 @@ static const struct file_operations cache_file_operations_procfs = {
 
 static int content_open_procfs(struct inode *inode, struct file *filp)
 {
-	struct cache_detail *cd = PDE(inode)->data;
+	struct cache_detail *cd = PDE_DATA(inode);
 
 	return content_open(inode, filp, cd);
 }
 
 static int content_release_procfs(struct inode *inode, struct file *filp)
 {
-	struct cache_detail *cd = PDE(inode)->data;
+	struct cache_detail *cd = PDE_DATA(inode);
 
 	return content_release(inode, filp, cd);
 }
@@ -1528,14 +1527,14 @@ static const struct file_operations content_file_operations_procfs = {
 
 static int open_flush_procfs(struct inode *inode, struct file *filp)
 {
-	struct cache_detail *cd = PDE(inode)->data;
+	struct cache_detail *cd = PDE_DATA(inode);
 
 	return open_flush(inode, filp, cd);
 }
 
 static int release_flush_procfs(struct inode *inode, struct file *filp)
 {
-	struct cache_detail *cd = PDE(inode)->data;
+	struct cache_detail *cd = PDE_DATA(inode);
 
 	return release_flush(inode, filp, cd);
 }
@@ -1543,7 +1542,7 @@ static int release_flush_procfs(struct inode *inode, struct file *filp)
 static ssize_t read_flush_procfs(struct file *filp, char __user *buf,
 			    size_t count, loff_t *ppos)
 {
-	struct cache_detail *cd = PDE(filp->f_path.dentry->d_inode)->data;
+	struct cache_detail *cd = PDE_DATA(file_inode(filp));
 
 	return read_flush(filp, buf, count, ppos, cd);
 }
@@ -1552,7 +1551,7 @@ static ssize_t write_flush_procfs(struct file *filp,
 				  const char __user *buf,
 				  size_t count, loff_t *ppos)
 {
-	struct cache_detail *cd = PDE(filp->f_path.dentry->d_inode)->data;
+	struct cache_detail *cd = PDE_DATA(file_inode(filp));
 
 	return write_flush(filp, buf, count, ppos, cd);
 }

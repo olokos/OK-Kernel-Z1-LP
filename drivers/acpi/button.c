@@ -121,8 +121,9 @@ static int acpi_button_state_seq_show(struct seq_file *seq, void *offset) {
     return 0;
 }
 
-static int acpi_button_state_open_fs(struct inode *inode, struct file *file) {
-    return single_open(file, acpi_button_state_seq_show, PDE(inode)->data);
+static int acpi_button_state_open_fs(struct inode *inode, struct file *file)
+{
+	return single_open(file, acpi_button_state_seq_show, PDE_DATA(inode));
 }
 
 static const struct file_operations acpi_button_state_fops = {

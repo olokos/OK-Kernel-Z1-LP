@@ -43,154 +43,161 @@ proc_bus_pci_lseek(struct file *file, loff_t off, int whence) {
 }
 
 static ssize_t
-proc_bus_pci_read(struct file *file, char __user *buf, size_t nbytes, loff_t *ppos) {
-    const struct inode *ino = file->f_path.dentry->d_inode;
-    const struct proc_dir_entry *dp = PDE(ino);
-    struct pci_dev *dev = dp->data;
-    unsigned int pos = *ppos;
-    unsigned int cnt, size;
+proc_bus_pci_read(struct file *file, char __user *buf, size_t nbytes, loff_t *ppos)
+{
+	struct pci_dev *dev = PDE_DATA(file_inode(file));
+	unsigned int pos = *ppos;
+	unsigned int cnt, size;
 
-    /*
-     * Normal users can read only the standardized portion of the
-     * configuration space as several chips lock up when trying to read
-     * undefined locations (think of Intel PIIX4 as a typical example).
-     */
+	/*
+	 * Normal users can read only the standardized portion of the
+	 * configuration space as several chips lock up when trying to read
+	 * undefined locations (think of Intel PIIX4 as a typical example).
+	 */
 
-    if (capable(CAP_SYS_ADMIN))
-        size = dp->size;
-    else if (dev->hdr_type == PCI_HEADER_TYPE_CARDBUS)
-        size = 128;
-    else
-        size = 64;
+	if (capable(CAP_SYS_ADMIN))
+		size = dev->cfg_size;
+	else if (dev->hdr_type == PCI_HEADER_TYPE_CARDBUS)
+		size = 128;
+	else
+		size = 64;
 
-    if (pos >= size)
-        return 0;
-    if (nbytes >= size)
-        nbytes = size;
-    if (pos + nbytes > size)
-        nbytes = size - pos;
-    cnt = nbytes;
+	if (pos >= size)
+		return 0;
+	if (nbytes >= size)
+		nbytes = size;
+	if (pos + nbytes > size)
+		nbytes = size - pos;
+	cnt = nbytes;
 
-    if (!access_ok(VERIFY_WRITE, buf, cnt))
-        return -EINVAL;
+	if (!access_ok(VERIFY_WRITE, buf, cnt))
+		return -EINVAL;
 
-    if ((pos & 1) && cnt) {
-        unsigned char val;
-        pci_user_read_config_byte(dev, pos, &val);
-        __put_user(val, buf);
-        buf++;
-        pos++;
-        cnt--;
-    }
+	pci_config_pm_runtime_get(dev);
 
-    if ((pos & 3) && cnt > 2) {
-        unsigned short val;
-        pci_user_read_config_word(dev, pos, &val);
-        __put_user(cpu_to_le16(val), (__le16 __user *) buf);
-        buf += 2;
-        pos += 2;
-        cnt -= 2;
-    }
+	if ((pos & 1) && cnt) {
+		unsigned char val;
+		pci_user_read_config_byte(dev, pos, &val);
+		__put_user(val, buf);
+		buf++;
+		pos++;
+		cnt--;
+	}
 
-    while (cnt >= 4) {
-        unsigned int val;
-        pci_user_read_config_dword(dev, pos, &val);
-        __put_user(cpu_to_le32(val), (__le32 __user *) buf);
-        buf += 4;
-        pos += 4;
-        cnt -= 4;
-    }
+	if ((pos & 3) && cnt > 2) {
+		unsigned short val;
+		pci_user_read_config_word(dev, pos, &val);
+		__put_user(cpu_to_le16(val), (__le16 __user *) buf);
+		buf += 2;
+		pos += 2;
+		cnt -= 2;
+	}
 
-    if (cnt >= 2) {
-        unsigned short val;
-        pci_user_read_config_word(dev, pos, &val);
-        __put_user(cpu_to_le16(val), (__le16 __user *) buf);
-        buf += 2;
-        pos += 2;
-        cnt -= 2;
-    }
+	while (cnt >= 4) {
+		unsigned int val;
+		pci_user_read_config_dword(dev, pos, &val);
+		__put_user(cpu_to_le32(val), (__le32 __user *) buf);
+		buf += 4;
+		pos += 4;
+		cnt -= 4;
+	}
 
-    if (cnt) {
-        unsigned char val;
-        pci_user_read_config_byte(dev, pos, &val);
-        __put_user(val, buf);
-        buf++;
-        pos++;
-        cnt--;
-    }
+	if (cnt >= 2) {
+		unsigned short val;
+		pci_user_read_config_word(dev, pos, &val);
+		__put_user(cpu_to_le16(val), (__le16 __user *) buf);
+		buf += 2;
+		pos += 2;
+		cnt -= 2;
+	}
 
-    *ppos = pos;
-    return nbytes;
+	if (cnt) {
+		unsigned char val;
+		pci_user_read_config_byte(dev, pos, &val);
+		__put_user(val, buf);
+		buf++;
+		pos++;
+		cnt--;
+	}
+
+	pci_config_pm_runtime_put(dev);
+
+	*ppos = pos;
+	return nbytes;
 }
 
 static ssize_t
-proc_bus_pci_write(struct file *file, const char __user *buf, size_t nbytes, loff_t *ppos) {
-    struct inode *ino = file->f_path.dentry->d_inode;
-    const struct proc_dir_entry *dp = PDE(ino);
-    struct pci_dev *dev = dp->data;
-    int pos = *ppos;
-    int size = dp->size;
-    int cnt;
+proc_bus_pci_write(struct file *file, const char __user *buf, size_t nbytes, loff_t *ppos)
+{
+	struct inode *ino = file_inode(file);
+	struct pci_dev *dev = PDE_DATA(ino);
+	int pos = *ppos;
+	int size = dev->cfg_size;
+	int cnt;
 
-    if (pos >= size)
-        return 0;
-    if (nbytes >= size)
-        nbytes = size;
-    if (pos + nbytes > size)
-        nbytes = size - pos;
-    cnt = nbytes;
+	if (pos >= size)
+		return 0;
+	if (nbytes >= size)
+		nbytes = size;
+	if (pos + nbytes > size)
+		nbytes = size - pos;
+	cnt = nbytes;
 
-    if (!access_ok(VERIFY_READ, buf, cnt))
-        return -EINVAL;
+	if (!access_ok(VERIFY_READ, buf, cnt))
+		return -EINVAL;
 
-    if ((pos & 1) && cnt) {
-        unsigned char val;
-        __get_user(val, buf);
-        pci_user_write_config_byte(dev, pos, val);
-        buf++;
-        pos++;
-        cnt--;
-    }
+	pci_config_pm_runtime_get(dev);
 
-    if ((pos & 3) && cnt > 2) {
-        __le16 val;
-        __get_user(val, (__le16 __user *) buf);
-        pci_user_write_config_word(dev, pos, le16_to_cpu(val));
-        buf += 2;
-        pos += 2;
-        cnt -= 2;
-    }
+	if ((pos & 1) && cnt) {
+		unsigned char val;
+		__get_user(val, buf);
+		pci_user_write_config_byte(dev, pos, val);
+		buf++;
+		pos++;
+		cnt--;
+	}
 
-    while (cnt >= 4) {
-        __le32 val;
-        __get_user(val, (__le32 __user *) buf);
-        pci_user_write_config_dword(dev, pos, le32_to_cpu(val));
-        buf += 4;
-        pos += 4;
-        cnt -= 4;
-    }
+	if ((pos & 3) && cnt > 2) {
+		__le16 val;
+		__get_user(val, (__le16 __user *) buf);
+		pci_user_write_config_word(dev, pos, le16_to_cpu(val));
+		buf += 2;
+		pos += 2;
+		cnt -= 2;
+	}
 
-    if (cnt >= 2) {
-        __le16 val;
-        __get_user(val, (__le16 __user *) buf);
-        pci_user_write_config_word(dev, pos, le16_to_cpu(val));
-        buf += 2;
-        pos += 2;
-        cnt -= 2;
-    }
+	while (cnt >= 4) {
+		__le32 val;
+		__get_user(val, (__le32 __user *) buf);
+		pci_user_write_config_dword(dev, pos, le32_to_cpu(val));
+		buf += 4;
+		pos += 4;
+		cnt -= 4;
+	}
 
-    if (cnt) {
-        unsigned char val;
-        __get_user(val, buf);
-        pci_user_write_config_byte(dev, pos, val);
-        buf++;
-        pos++;
-        cnt--;
-    }
+	if (cnt >= 2) {
+		__le16 val;
+		__get_user(val, (__le16 __user *) buf);
+		pci_user_write_config_word(dev, pos, le16_to_cpu(val));
+		buf += 2;
+		pos += 2;
+		cnt -= 2;
+	}
 
-    *ppos = pos;
-    i_size_write(ino, dp->size);
-    return nbytes;
+	if (cnt) {
+		unsigned char val;
+		__get_user(val, buf);
+		pci_user_write_config_byte(dev, pos, val);
+		buf++;
+		pos++;
+		cnt--;
+	}
+
+	pci_config_pm_runtime_put(dev);
+
+	*ppos = pos;
+	i_size_write(ino, dev->cfg_size);
+	return nbytes;
 }
 
 struct pci_filp_private {
@@ -199,9 +206,9 @@ struct pci_filp_private {
 };
 
 static long proc_bus_pci_ioctl(struct file *file, unsigned int cmd,
-                               unsigned long arg) {
-    const struct proc_dir_entry *dp = PDE(file->f_dentry->d_inode);
-    struct pci_dev *dev = dp->data;
+			       unsigned long arg)
+{
+	struct pci_dev *dev = PDE_DATA(file_inode(file));
 #ifdef HAVE_PCI_MMAP
     struct pci_filp_private *fpriv = file->private_data;
 #endif /* HAVE_PCI_MMAP */
@@ -239,32 +246,31 @@ static long proc_bus_pci_ioctl(struct file *file, unsigned int cmd,
 }
 
 #ifdef HAVE_PCI_MMAP
-static int proc_bus_pci_mmap(struct file *file, struct vm_area_struct *vma) {
-    struct inode *inode = file->f_path.dentry->d_inode;
-    const struct proc_dir_entry *dp = PDE(inode);
-    struct pci_dev *dev = dp->data;
-    struct pci_filp_private *fpriv = file->private_data;
-    int i, ret;
+static int proc_bus_pci_mmap(struct file *file, struct vm_area_struct *vma)
+{
+	struct pci_dev *dev = PDE_DATA(file_inode(file));
+	struct pci_filp_private *fpriv = file->private_data;
+	int i, ret;
 
-    if (!capable(CAP_SYS_RAWIO))
-        return -EPERM;
+	if (!capable(CAP_SYS_RAWIO))
+		return -EPERM;
 
-    /* Make sure the caller is mapping a real resource for this device */
-    for (i = 0; i < PCI_ROM_RESOURCE; i++) {
-        if (pci_mmap_fits(dev, i, vma,  PCI_MMAP_PROCFS))
-            break;
-    }
+	/* Make sure the caller is mapping a real resource for this device */
+	for (i = 0; i < PCI_ROM_RESOURCE; i++) {
+		if (pci_mmap_fits(dev, i, vma,  PCI_MMAP_PROCFS))
+			break;
+	}
 
-    if (i >= PCI_ROM_RESOURCE)
-        return -ENODEV;
+	if (i >= PCI_ROM_RESOURCE)
+		return -ENODEV;
 
-    ret = pci_mmap_page_range(dev, vma,
-                              fpriv->mmap_state,
-                              fpriv->write_combine);
-    if (ret < 0)
-        return ret;
+	ret = pci_mmap_page_range(dev, vma,
+				  fpriv->mmap_state,
+				  fpriv->write_combine);
+	if (ret < 0)
+		return ret;
 
-    return 0;
+	return 0;
 }
 
 static int proc_bus_pci_open(struct inode *inode, struct file *file) {

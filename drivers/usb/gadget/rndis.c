@@ -1149,51 +1149,53 @@ rndis_ul_max_pkt_per_xfer_rcvd);
 }
 
 static ssize_t rndis_proc_write(struct file *file, const char __user *buffer,
-                                size_t count, loff_t *ppos) {
-    rndis_params *p = PDE(file->f_path.dentry->d_inode)->data;
-    u32 speed = 0;
-    int i, fl_speed = 0;
+				size_t count, loff_t *ppos)
+{
+	rndis_params *p = PDE_DATA(file_inode(file));
+	u32 speed = 0;
+	int i, fl_speed = 0;
 
-    for (i = 0; i < count; i++) {
-        char c;
-        if (get_user(c, buffer))
-            return -EFAULT;
-        switch (c) {
-        case '0':
-        case '1':
-        case '2':
-        case '3':
-        case '4':
-        case '5':
-        case '6':
-        case '7':
-        case '8':
-        case '9':
-            fl_speed = 1;
-            speed = speed * 10 + c - '0';
-            break;
-        case 'C':
-        case 'c':
-            rndis_signal_connect(p->confignr);
-            break;
-        case 'D':
-        case 'd':
-            rndis_signal_disconnect(p->confignr);
-            break;
-        default:
-            if (fl_speed) p->speed = speed;
-            else pr_debug("%c is not valid\n", c);
-            break;
-        }
+	for (i = 0; i < count; i++) {
+		char c;
+		if (get_user(c, buffer))
+			return -EFAULT;
+		switch (c) {
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9':
+			fl_speed = 1;
+			speed = speed * 10 + c - '0';
+			break;
+		case 'C':
+		case 'c':
+			rndis_signal_connect(p->confignr);
+			break;
+		case 'D':
+		case 'd':
+			rndis_signal_disconnect(p->confignr);
+			break;
+		default:
+			if (fl_speed) p->speed = speed;
+			else pr_debug("%c is not valid\n", c);
+			break;
+		}
 
-        buffer++;
-    }
+		buffer++;
+	}
 
-    return count;
+	return count;
 }
 
-static int rndis_proc_open(struct inode *inode, struct file *file) {
-    return single_open(file, rndis_proc_show, PDE(inode)->data);
+static int rndis_proc_open(struct inode *inode, struct file *file)
+{
+	return single_open(file, rndis_proc_show, PDE_DATA(inode));
 }
 
 static const struct file_operations rndis_proc_fops = {

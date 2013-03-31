@@ -827,111 +827,93 @@ u16 b1dma_send_message(struct capi_ctr *ctrl, struct sk_buff *skb) {
 
 /* ------------------------------------------------------------- */
 
-static int b1dmactl_proc_show(struct seq_file *m, void *v) {
-    struct capi_ctr *ctrl = m->private;
-    avmctrl_info *cinfo = (avmctrl_info *)(ctrl->driverdata);
-    avmcard *card = cinfo->card;
-    u8 flag;
-    char *s;
-    u32 txoff, txlen, rxoff, rxlen, csr;
-    unsigned long flags;
+static int b1dmactl_proc_show(struct seq_file *m, void *v)
+{
+	struct capi_ctr *ctrl = m->private;
+	avmctrl_info *cinfo = (avmctrl_info *)(ctrl->driverdata);
+	avmcard *card = cinfo->card;
+	u8 flag;
+	char *s;
+	u32 txoff, txlen, rxoff, rxlen, csr;
+	unsigned long flags;
 
-    seq_printf(m, "%-16s %s\n", "name", card->name);
-    seq_printf(m, "%-16s 0x%x\n", "io", card->port);
-    seq_printf(m, "%-16s %d\n", "irq", card->irq);
-    seq_printf(m, "%-16s 0x%lx\n", "membase", card->membase);
-    switch (card->cardtype) {
-    case avm_b1isa:
-        s = "B1 ISA";
-        break;
-    case avm_b1pci:
-        s = "B1 PCI";
-        break;
-    case avm_b1pcmcia:
-        s = "B1 PCMCIA";
-        break;
-    case avm_m1:
-        s = "M1";
-        break;
-    case avm_m2:
-        s = "M2";
-        break;
-    case avm_t1isa:
-        s = "T1 ISA (HEMA)";
-        break;
-    case avm_t1pci:
-        s = "T1 PCI";
-        break;
-    case avm_c4:
-        s = "C4";
-        break;
-    case avm_c2:
-        s = "C2";
-        break;
-    default:
-        s = "???";
-        break;
-    }
-    seq_printf(m, "%-16s %s\n", "type", s);
-    if ((s = cinfo->version[VER_DRIVER]) != NULL)
-        seq_printf(m, "%-16s %s\n", "ver_driver", s);
-    if ((s = cinfo->version[VER_CARDTYPE]) != NULL)
-        seq_printf(m, "%-16s %s\n", "ver_cardtype", s);
-    if ((s = cinfo->version[VER_SERIAL]) != NULL)
-        seq_printf(m, "%-16s %s\n", "ver_serial", s);
+	seq_printf(m, "%-16s %s\n", "name", card->name);
+	seq_printf(m, "%-16s 0x%x\n", "io", card->port);
+	seq_printf(m, "%-16s %d\n", "irq", card->irq);
+	seq_printf(m, "%-16s 0x%lx\n", "membase", card->membase);
+	switch (card->cardtype) {
+	case avm_b1isa: s = "B1 ISA"; break;
+	case avm_b1pci: s = "B1 PCI"; break;
+	case avm_b1pcmcia: s = "B1 PCMCIA"; break;
+	case avm_m1: s = "M1"; break;
+	case avm_m2: s = "M2"; break;
+	case avm_t1isa: s = "T1 ISA (HEMA)"; break;
+	case avm_t1pci: s = "T1 PCI"; break;
+	case avm_c4: s = "C4"; break;
+	case avm_c2: s = "C2"; break;
+	default: s = "???"; break;
+	}
+	seq_printf(m, "%-16s %s\n", "type", s);
+	if ((s = cinfo->version[VER_DRIVER]) != NULL)
+		seq_printf(m, "%-16s %s\n", "ver_driver", s);
+	if ((s = cinfo->version[VER_CARDTYPE]) != NULL)
+		seq_printf(m, "%-16s %s\n", "ver_cardtype", s);
+	if ((s = cinfo->version[VER_SERIAL]) != NULL)
+		seq_printf(m, "%-16s %s\n", "ver_serial", s);
 
-    if (card->cardtype != avm_m1) {
-        flag = ((u8 *)(ctrl->profile.manu))[3];
-        if (flag)
-            seq_printf(m, "%-16s%s%s%s%s%s%s%s\n",
-                       "protocol",
-                       (flag & 0x01) ? " DSS1" : "",
-                       (flag & 0x02) ? " CT1" : "",
-                       (flag & 0x04) ? " VN3" : "",
-                       (flag & 0x08) ? " NI1" : "",
-                       (flag & 0x10) ? " AUSTEL" : "",
-                       (flag & 0x20) ? " ESS" : "",
-                       (flag & 0x40) ? " 1TR6" : ""
-                      );
-    }
-    if (card->cardtype != avm_m1) {
-        flag = ((u8 *)(ctrl->profile.manu))[5];
-        if (flag)
-            seq_printf(m, "%-16s%s%s%s%s\n",
-                       "linetype",
-                       (flag & 0x01) ? " point to point" : "",
-                       (flag & 0x02) ? " point to multipoint" : "",
-                       (flag & 0x08) ? " leased line without D-channel" : "",
-                       (flag & 0x04) ? " leased line with D-channel" : ""
-                      );
-    }
-    seq_printf(m, "%-16s %s\n", "cardname", cinfo->cardname);
+	if (card->cardtype != avm_m1) {
+		flag = ((u8 *)(ctrl->profile.manu))[3];
+		if (flag)
+			seq_printf(m, "%-16s%s%s%s%s%s%s%s\n",
+				   "protocol",
+				   (flag & 0x01) ? " DSS1" : "",
+				   (flag & 0x02) ? " CT1" : "",
+				   (flag & 0x04) ? " VN3" : "",
+				   (flag & 0x08) ? " NI1" : "",
+				   (flag & 0x10) ? " AUSTEL" : "",
+				   (flag & 0x20) ? " ESS" : "",
+				   (flag & 0x40) ? " 1TR6" : ""
+				);
+	}
+	if (card->cardtype != avm_m1) {
+		flag = ((u8 *)(ctrl->profile.manu))[5];
+		if (flag)
+			seq_printf(m, "%-16s%s%s%s%s\n",
+				   "linetype",
+				   (flag & 0x01) ? " point to point" : "",
+				   (flag & 0x02) ? " point to multipoint" : "",
+				   (flag & 0x08) ? " leased line without D-channel" : "",
+				   (flag & 0x04) ? " leased line with D-channel" : ""
+				);
+	}
+	seq_printf(m, "%-16s %s\n", "cardname", cinfo->cardname);
 
 
-    spin_lock_irqsave(&card->lock, flags);
+	spin_lock_irqsave(&card->lock, flags);
 
-    txoff = (dma_addr_t)b1dma_readl(card, AMCC_TXPTR)-card->dma->sendbuf.dmaaddr;
-    txlen = b1dma_readl(card, AMCC_TXLEN);
+	txoff = (dma_addr_t)b1dma_readl(card, AMCC_TXPTR)-card->dma->sendbuf.dmaaddr;
+	txlen = b1dma_readl(card, AMCC_TXLEN);
 
-    rxoff = (dma_addr_t)b1dma_readl(card, AMCC_RXPTR)-card->dma->recvbuf.dmaaddr;
-    rxlen = b1dma_readl(card, AMCC_RXLEN);
+	rxoff = (dma_addr_t)b1dma_readl(card, AMCC_RXPTR)-card->dma->recvbuf.dmaaddr;
+	rxlen = b1dma_readl(card, AMCC_RXLEN);
 
-    csr  = b1dma_readl(card, AMCC_INTCSR);
+	csr  = b1dma_readl(card, AMCC_INTCSR);
 
-    spin_unlock_irqrestore(&card->lock, flags);
+	spin_unlock_irqrestore(&card->lock, flags);
 
-    seq_printf(m, "%-16s 0x%lx\n", "csr (cached)", (unsigned long)card->csr);
-    seq_printf(m, "%-16s 0x%lx\n", "csr", (unsigned long)csr);
-    seq_printf(m, "%-16s %lu\n", "txoff", (unsigned long)txoff);
-    seq_printf(m, "%-16s %lu\n", "txlen", (unsigned long)txlen);
-    seq_printf(m, "%-16s %lu\n", "rxoff", (unsigned long)rxoff);
-    seq_printf(m, "%-16s %lu\n", "rxlen", (unsigned long)rxlen);
+	seq_printf(m, "%-16s 0x%lx\n", "csr (cached)", (unsigned long)card->csr);
+	seq_printf(m, "%-16s 0x%lx\n", "csr", (unsigned long)csr);
+	seq_printf(m, "%-16s %lu\n", "txoff", (unsigned long)txoff);
+	seq_printf(m, "%-16s %lu\n", "txlen", (unsigned long)txlen);
+	seq_printf(m, "%-16s %lu\n", "rxoff", (unsigned long)rxoff);
+	seq_printf(m, "%-16s %lu\n", "rxlen", (unsigned long)rxlen);
 
-    return 0;
+	return 0;
 }
 
-static int b1dmactl_proc_open(struct inode *inode, struct file *file) {
-    return single_open(file, b1dmactl_proc_show, PDE(inode)->data);
+static int b1dmactl_proc_open(struct inode *inode, struct file *file)
+{
+	return single_open(file, b1dmactl_proc_show, PDE_DATA(inode));
 }
 
 const struct file_operations b1dmactl_proc_fops = {

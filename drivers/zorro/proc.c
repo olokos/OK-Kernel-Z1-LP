@@ -44,33 +44,32 @@ proc_bus_zorro_lseek(struct file *file, loff_t off, int whence) {
 }
 
 static ssize_t
-proc_bus_zorro_read(struct file *file, char __user *buf, size_t nbytes, loff_t *ppos) {
-    struct inode *ino = file->f_path.dentry->d_inode;
-    struct proc_dir_entry *dp = PDE(ino);
-    struct zorro_dev *z = dp->data;
-    struct ConfigDev cd;
-    loff_t pos = *ppos;
+proc_bus_zorro_read(struct file *file, char __user *buf, size_t nbytes, loff_t *ppos)
+{
+	struct zorro_dev *z = PDE_DATA(file_inode(file));
+	struct ConfigDev cd;
+	loff_t pos = *ppos;
 
-    if (pos >= sizeof(struct ConfigDev))
-        return 0;
-    if (nbytes >= sizeof(struct ConfigDev))
-        nbytes = sizeof(struct ConfigDev);
-    if (pos + nbytes > sizeof(struct ConfigDev))
-        nbytes = sizeof(struct ConfigDev) - pos;
+	if (pos >= sizeof(struct ConfigDev))
+		return 0;
+	if (nbytes >= sizeof(struct ConfigDev))
+		nbytes = sizeof(struct ConfigDev);
+	if (pos + nbytes > sizeof(struct ConfigDev))
+		nbytes = sizeof(struct ConfigDev) - pos;
 
-    /* Construct a ConfigDev */
-    memset(&cd, 0, sizeof(cd));
-    cd.cd_Rom = z->rom;
-    cd.cd_SlotAddr = z->slotaddr;
-    cd.cd_SlotSize = z->slotsize;
-    cd.cd_BoardAddr = (void *)zorro_resource_start(z);
-    cd.cd_BoardSize = zorro_resource_len(z);
+	/* Construct a ConfigDev */
+	memset(&cd, 0, sizeof(cd));
+	cd.cd_Rom = z->rom;
+	cd.cd_SlotAddr = z->slotaddr;
+	cd.cd_SlotSize = z->slotsize;
+	cd.cd_BoardAddr = (void *)zorro_resource_start(z);
+	cd.cd_BoardSize = zorro_resource_len(z);
 
-    if (copy_to_user(buf, (void *)&cd + pos, nbytes))
-        return -EFAULT;
-    *ppos += nbytes;
+	if (copy_to_user(buf, (void *)&cd + pos, nbytes))
+		return -EFAULT;
+	*ppos += nbytes;
 
-    return nbytes;
+	return nbytes;
 }
 
 static const struct file_operations proc_bus_zorro_operations = {

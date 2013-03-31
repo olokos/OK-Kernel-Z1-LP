@@ -185,8 +185,9 @@ static int acpi_ac_seq_show(struct seq_file *seq, void *offset) {
     return 0;
 }
 
-static int acpi_ac_open_fs(struct inode *inode, struct file *file) {
-    return single_open(file, acpi_ac_seq_show, PDE(inode)->data);
+static int acpi_ac_open_fs(struct inode *inode, struct file *file)
+{
+	return single_open(file, acpi_ac_seq_show, PDE_DATA(inode));
 }
 
 static int acpi_ac_add_fs(struct acpi_device *device) {

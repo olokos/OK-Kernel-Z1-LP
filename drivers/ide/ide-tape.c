@@ -1807,8 +1807,9 @@ static int idetape_name_proc_show(struct seq_file *m, void *v) {
     return 0;
 }
 
-static int idetape_name_proc_open(struct inode *inode, struct file *file) {
-    return single_open(file, idetape_name_proc_show, PDE(inode)->data);
+static int idetape_name_proc_open(struct inode *inode, struct file *file)
+{
+	return single_open(file, idetape_name_proc_show, PDE_DATA(inode));
 }
 
 static const struct file_operations idetape_name_proc_fops = {

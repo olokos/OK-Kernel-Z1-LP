@@ -309,8 +309,9 @@ static int ida_proc_show(struct seq_file *m, void *v) {
     return 0;
 }
 
-static int ida_proc_open(struct inode *inode, struct file *file) {
-    return single_open(file, ida_proc_show, PDE(inode)->data);
+static int ida_proc_open(struct inode *inode, struct file *file)
+{
+	return single_open(file, ida_proc_show, PDE_DATA(inode));
 }
 
 static const struct file_operations ida_proc_fops = {

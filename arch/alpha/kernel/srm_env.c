@@ -101,40 +101,42 @@ static int srm_env_proc_show(struct seq_file *m, void *v) {
     return ret;
 }
 
-static int srm_env_proc_open(struct inode *inode, struct file *file) {
-    return single_open(file, srm_env_proc_show, PDE(inode)->data);
+static int srm_env_proc_open(struct inode *inode, struct file *file)
+{
+	return single_open(file, srm_env_proc_show, PDE_DATA(inode));
 }
 
 static ssize_t srm_env_proc_write(struct file *file, const char __user *buffer,
-                                  size_t count, loff_t *pos) {
-    int res;
-    srm_env_t	*entry = PDE(file->f_path.dentry->d_inode)->data;
-    char		*buf = (char *) __get_free_page(GFP_USER);
-    unsigned long	ret1, ret2;
+				  size_t count, loff_t *pos)
+{
+	int res;
+	srm_env_t	*entry = PDE_DATA(file_inode(file));
+	char		*buf = (char *) __get_free_page(GFP_USER);
+	unsigned long	ret1, ret2;
 
-    if (!buf)
-        return -ENOMEM;
+	if (!buf)
+		return -ENOMEM;
 
-    res = -EINVAL;
-    if (count >= PAGE_SIZE)
-        goto out;
+	res = -EINVAL;
+	if (count >= PAGE_SIZE)
+		goto out;
 
-    res = -EFAULT;
-    if (copy_from_user(buf, buffer, count))
-        goto out;
-    buf[count] = '\0';
+	res = -EFAULT;
+	if (copy_from_user(buf, buffer, count))
+		goto out;
+	buf[count] = '\0';
 
-    ret1 = callback_setenv(entry->id, buf, count);
-    if ((ret1 >> 61) == 0) {
-        do
-            ret2 = callback_save_env();
-        while((ret2 >> 61) == 1);
-        res = (int) ret1;
-    }
+	ret1 = callback_setenv(entry->id, buf, count);
+	if ((ret1 >> 61) == 0) {
+		do
+			ret2 = callback_save_env();
+		while((ret2 >> 61) == 1);
+		res = (int) ret1;
+	}
 
-out:
-    free_page((unsigned long)buf);
-    return res;
+ out:
+	free_page((unsigned long)buf);
+	return res;
 }
 
 static const struct file_operations srm_env_proc_fops = {

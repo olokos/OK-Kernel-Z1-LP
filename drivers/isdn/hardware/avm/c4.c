@@ -1118,8 +1118,9 @@ static int c4_proc_show(struct seq_file *m, void *v) {
     return 0;
 }
 
-static int c4_proc_open(struct inode *inode, struct file *file) {
-    return single_open(file, c4_proc_show, PDE(inode)->data);
+static int c4_proc_open(struct inode *inode, struct file *file)
+{
+	return single_open(file, c4_proc_show, PDE_DATA(inode));
 }
 
 static const struct file_operations c4_proc_fops = {

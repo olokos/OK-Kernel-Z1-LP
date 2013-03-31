@@ -223,132 +223,111 @@ hysdn_conf_read(struct file *file, char __user *buf, size_t count, loff_t *off) 
 /* open conf file */
 /******************/
 static int
-hysdn_conf_open(struct inode *ino, struct file *filep) {
-    hysdn_card *card;
-    struct proc_dir_entry *pd;
-    struct conf_writedata *cnf;
-    char *cp, *tmp;
+hysdn_conf_open(struct inode *ino, struct file *filep)
+{
+	hysdn_card *card;
+	struct conf_writedata *cnf;
+	char *cp, *tmp;
 
-    /* now search the addressed card */
-    mutex_lock(&hysdn_conf_mutex);
-    card = card_root;
-    while (card) {
-        pd = card->procconf;
-        if (pd == PDE(ino))
-            break;
-        card = card->next;	/* search next entry */
-    }
-    if (!card) {
-        mutex_unlock(&hysdn_conf_mutex);
-        return (-ENODEV);	/* device is unknown/invalid */
-    }
-    if (card->debug_flags & (LOG_PROC_OPEN | LOG_PROC_ALL))
-        hysdn_addlog(card, "config open for uid=%d gid=%d mode=0x%x",
-                     filep->f_cred->fsuid, filep->f_cred->fsgid,
-                     filep->f_mode);
+	/* now search the addressed card */
+	mutex_lock(&hysdn_conf_mutex);
+	card = PDE_DATA(ino);
+	if (card->debug_flags & (LOG_PROC_OPEN | LOG_PROC_ALL))
+		hysdn_addlog(card, "config open for uid=%d gid=%d mode=0x%x",
+			     filep->f_cred->fsuid, filep->f_cred->fsgid,
+			     filep->f_mode);
 
-    if ((filep->f_mode & (FMODE_READ | FMODE_WRITE)) == FMODE_WRITE) {
-        /* write only access -> write boot file or conf line */
+	if ((filep->f_mode & (FMODE_READ | FMODE_WRITE)) == FMODE_WRITE) {
+		/* write only access -> write boot file or conf line */
 
-        if (!(cnf = kmalloc(sizeof(struct conf_writedata), GFP_KERNEL))) {
-            mutex_unlock(&hysdn_conf_mutex);
-            return (-EFAULT);
-        }
-        cnf->card = card;
-        cnf->buf_size = 0;	/* nothing buffered */
-        cnf->state = CONF_STATE_DETECT;		/* start auto detect */
-        filep->private_data = cnf;
+		if (!(cnf = kmalloc(sizeof(struct conf_writedata), GFP_KERNEL))) {
+			mutex_unlock(&hysdn_conf_mutex);
+			return (-EFAULT);
+		}
+		cnf->card = card;
+		cnf->buf_size = 0;	/* nothing buffered */
+		cnf->state = CONF_STATE_DETECT;		/* start auto detect */
+		filep->private_data = cnf;
 
-    } else if ((filep->f_mode & (FMODE_READ | FMODE_WRITE)) == FMODE_READ) {
-        /* read access -> output card info data */
+	} else if ((filep->f_mode & (FMODE_READ | FMODE_WRITE)) == FMODE_READ) {
+		/* read access -> output card info data */
 
-        if (!(tmp = kmalloc(INFO_OUT_LEN * 2 + 2, GFP_KERNEL))) {
-            mutex_unlock(&hysdn_conf_mutex);
-            return (-EFAULT);	/* out of memory */
-        }
-        filep->private_data = tmp;	/* start of string */
+		if (!(tmp = kmalloc(INFO_OUT_LEN * 2 + 2, GFP_KERNEL))) {
+			mutex_unlock(&hysdn_conf_mutex);
+			return (-EFAULT);	/* out of memory */
+		}
+		filep->private_data = tmp;	/* start of string */
 
-        /* first output a headline */
-        sprintf(tmp, "id bus slot type irq iobase dp-mem     b-chans fax-chans state device");
-        cp = tmp;	/* start of string */
-        while (*cp)
-            cp++;
-        while (((cp - tmp) % (INFO_OUT_LEN + 1)) != INFO_OUT_LEN)
-            *cp++ = ' ';
-        *cp++ = '\n';
+		/* first output a headline */
+		sprintf(tmp, "id bus slot type irq iobase dp-mem     b-chans fax-chans state device");
+		cp = tmp;	/* start of string */
+		while (*cp)
+			cp++;
+		while (((cp - tmp) % (INFO_OUT_LEN + 1)) != INFO_OUT_LEN)
+			*cp++ = ' ';
+		*cp++ = '\n';
 
-        /* and now the data */
-        sprintf(cp, "%d  %3d %4d %4d %3d 0x%04x 0x%08lx %7d %9d %3d   %s",
-                card->myid,
-                card->bus,
-                PCI_SLOT(card->devfn),
-                card->brdtype,
-                card->irq,
-                card->iobase,
-                card->membase,
-                card->bchans,
-                card->faxchans,
-                card->state,
-                hysdn_net_getname(card));
-        while (*cp)
-            cp++;
-        while (((cp - tmp) % (INFO_OUT_LEN + 1)) != INFO_OUT_LEN)
-            *cp++ = ' ';
-        *cp++ = '\n';
-        *cp = 0;	/* end of string */
-    } else {		/* simultaneous read/write access forbidden ! */
-        mutex_unlock(&hysdn_conf_mutex);
-        return (-EPERM);	/* no permission this time */
-    }
-    mutex_unlock(&hysdn_conf_mutex);
-    return nonseekable_open(ino, filep);
+		/* and now the data */
+		sprintf(cp, "%d  %3d %4d %4d %3d 0x%04x 0x%08lx %7d %9d %3d   %s",
+			card->myid,
+			card->bus,
+			PCI_SLOT(card->devfn),
+			card->brdtype,
+			card->irq,
+			card->iobase,
+			card->membase,
+			card->bchans,
+			card->faxchans,
+			card->state,
+			hysdn_net_getname(card));
+		while (*cp)
+			cp++;
+		while (((cp - tmp) % (INFO_OUT_LEN + 1)) != INFO_OUT_LEN)
+			*cp++ = ' ';
+		*cp++ = '\n';
+		*cp = 0;	/* end of string */
+	} else {		/* simultaneous read/write access forbidden ! */
+		mutex_unlock(&hysdn_conf_mutex);
+		return (-EPERM);	/* no permission this time */
+	}
+	mutex_unlock(&hysdn_conf_mutex);
+	return nonseekable_open(ino, filep);
 }				/* hysdn_conf_open */
 
 /***************************/
 /* close a config file.    */
 /***************************/
 static int
-hysdn_conf_close(struct inode *ino, struct file *filep) {
-    hysdn_card *card;
-    struct conf_writedata *cnf;
-    int retval = 0;
-    struct proc_dir_entry *pd;
+hysdn_conf_close(struct inode *ino, struct file *filep)
+{
+	hysdn_card *card;
+	struct conf_writedata *cnf;
+	int retval = 0;
 
-    mutex_lock(&hysdn_conf_mutex);
-    /* search the addressed card */
-    card = card_root;
-    while (card) {
-        pd = card->procconf;
-        if (pd == PDE(ino))
-            break;
-        card = card->next;	/* search next entry */
-    }
-    if (!card) {
-        mutex_unlock(&hysdn_conf_mutex);
-        return (-ENODEV);	/* device is unknown/invalid */
-    }
-    if (card->debug_flags & (LOG_PROC_OPEN | LOG_PROC_ALL))
-        hysdn_addlog(card, "config close for uid=%d gid=%d mode=0x%x",
-                     filep->f_cred->fsuid, filep->f_cred->fsgid,
-                     filep->f_mode);
+	mutex_lock(&hysdn_conf_mutex);
+	card = PDE_DATA(ino);
+	if (card->debug_flags & (LOG_PROC_OPEN | LOG_PROC_ALL))
+		hysdn_addlog(card, "config close for uid=%d gid=%d mode=0x%x",
+			     filep->f_cred->fsuid, filep->f_cred->fsgid,
+			     filep->f_mode);
 
-    if ((filep->f_mode & (FMODE_READ | FMODE_WRITE)) == FMODE_WRITE) {
-        /* write only access -> write boot file or conf line */
-        if (filep->private_data) {
-            cnf = filep->private_data;
+	if ((filep->f_mode & (FMODE_READ | FMODE_WRITE)) == FMODE_WRITE) {
+		/* write only access -> write boot file or conf line */
+		if (filep->private_data) {
+			cnf = filep->private_data;
 
-            if (cnf->state == CONF_STATE_POF)
-                retval = pof_write_close(cnf->card);	/* close the pof write */
-            kfree(filep->private_data);	/* free allocated memory for buffer */
+			if (cnf->state == CONF_STATE_POF)
+				retval = pof_write_close(cnf->card);	/* close the pof write */
+			kfree(filep->private_data);	/* free allocated memory for buffer */
 
-        }		/* handle write private data */
-    } else if ((filep->f_mode & (FMODE_READ | FMODE_WRITE)) == FMODE_READ) {
-        /* read access -> output card info data */
+		}		/* handle write private data */
+	} else if ((filep->f_mode & (FMODE_READ | FMODE_WRITE)) == FMODE_READ) {
+		/* read access -> output card info data */
 
-        kfree(filep->private_data);	/* release memory */
-    }
-    mutex_unlock(&hysdn_conf_mutex);
-    return (retval);
+		kfree(filep->private_data);	/* release memory */
+	}
+	mutex_unlock(&hysdn_conf_mutex);
+	return (retval);
 }				/* hysdn_conf_close */
 
 /******************************************************/

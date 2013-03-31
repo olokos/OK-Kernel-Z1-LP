@@ -166,60 +166,63 @@ static int led_proc_show(struct seq_file *m, void *v) {
     return 0;
 }
 
-static int led_proc_open(struct inode *inode, struct file *file) {
-    return single_open(file, led_proc_show, PDE(inode)->data);
+static int led_proc_open(struct inode *inode, struct file *file)
+{
+	return single_open(file, led_proc_show, PDE_DATA(inode));
 }
 
 
 static ssize_t led_proc_write(struct file *file, const char *buf,
-                              size_t count, loff_t *pos) {
-    void *data = PDE(file->f_path.dentry->d_inode)->data;
-    char *cur, lbuf[32];
-    int d;
+	size_t count, loff_t *pos)
+{
+	void *data = PDE_DATA(file_inode(file));
+	char *cur, lbuf[32];
+	int d;
 
-    if (!capable(CAP_SYS_ADMIN))
-        return -EACCES;
+	if (!capable(CAP_SYS_ADMIN))
+		return -EACCES;
 
-    if (count >= sizeof(lbuf))
-        count = sizeof(lbuf)-1;
+	if (count >= sizeof(lbuf))
+		count = sizeof(lbuf)-1;
 
-    if (copy_from_user(lbuf, buf, count))
-        return -EFAULT;
-    lbuf[count] = 0;
+	if (copy_from_user(lbuf, buf, count))
+		return -EFAULT;
+	lbuf[count] = 0;
 
-    cur = lbuf;
+	cur = lbuf;
 
-    switch ((long)data) {
-    case LED_NOLCD:
-        d = *cur++ - '0';
-        if (d != 0 && d != 1) goto parse_error;
-        led_heartbeat = d;
+	switch ((long)data)
+	{
+	case LED_NOLCD:
+		d = *cur++ - '0';
+		if (d != 0 && d != 1) goto parse_error;
+		led_heartbeat = d;
 
-        if (*cur++ != ' ') goto parse_error;
+		if (*cur++ != ' ') goto parse_error;
 
-        d = *cur++ - '0';
-        if (d != 0 && d != 1) goto parse_error;
-        led_diskio = d;
+		d = *cur++ - '0';
+		if (d != 0 && d != 1) goto parse_error;
+		led_diskio = d;
 
-        if (*cur++ != ' ') goto parse_error;
+		if (*cur++ != ' ') goto parse_error;
 
-        d = *cur++ - '0';
-        if (d != 0 && d != 1) goto parse_error;
-        led_lanrxtx = d;
+		d = *cur++ - '0';
+		if (d != 0 && d != 1) goto parse_error;
+		led_lanrxtx = d;
 
-        break;
-    case LED_HASLCD:
-        if (*cur && cur[strlen(cur)-1] == '\n')
-            cur[strlen(cur)-1] = 0;
-        if (*cur == 0)
-            cur = lcd_text_default;
-        lcd_print(cur);
-        break;
-    default:
-        return 0;
-    }
-
-    return count;
+		break;
+	case LED_HASLCD:
+		if (*cur && cur[strlen(cur)-1] == '\n')
+			cur[strlen(cur)-1] = 0;
+		if (*cur == 0) 
+			cur = lcd_text_default;
+		lcd_print(cur);
+		break;
+	default:
+		return 0;
+	}
+	
+	return count;
 
 parse_error:
     if ((long)data == LED_NOLCD)

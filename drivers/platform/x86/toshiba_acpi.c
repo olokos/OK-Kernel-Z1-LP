@@ -497,8 +497,9 @@ static int lcd_proc_show(struct seq_file *m, void *v) {
     return -EIO;
 }
 
-static int lcd_proc_open(struct inode *inode, struct file *file) {
-    return single_open(file, lcd_proc_show, PDE(inode)->data);
+static int lcd_proc_open(struct inode *inode, struct file *file)
+{
+	return single_open(file, lcd_proc_show, PDE_DATA(inode));
 }
 
 static int set_lcd(struct toshiba_acpi_dev *dev, int value) {
@@ -515,27 +516,29 @@ static int set_lcd_status(struct backlight_device *bd) {
 }
 
 static ssize_t lcd_proc_write(struct file *file, const char __user *buf,
-                              size_t count, loff_t *pos) {
-    struct toshiba_acpi_dev *dev = PDE(file->f_path.dentry->d_inode)->data;
-    char cmd[42];
-    size_t len;
-    int value;
-    int ret;
+			      size_t count, loff_t *pos)
+{
+	struct toshiba_acpi_dev *dev = PDE_DATA(file_inode(file));
+	char cmd[42];
+	size_t len;
+	int value;
+	int ret;
+	int levels = dev->backlight_dev->props.max_brightness + 1;
 
-    len = min(count, sizeof(cmd) - 1);
-    if (copy_from_user(cmd, buf, len))
-        return -EFAULT;
-    cmd[len] = '\0';
+	len = min(count, sizeof(cmd) - 1);
+	if (copy_from_user(cmd, buf, len))
+		return -EFAULT;
+	cmd[len] = '\0';
 
-    if (sscanf(cmd, " brightness : %i", &value) == 1 &&
-            value >= 0 && value < HCI_LCD_BRIGHTNESS_LEVELS) {
-        ret = set_lcd(dev, value);
-        if (ret == 0)
-            ret = count;
-    } else {
-        ret = -EINVAL;
-    }
-    return ret;
+	if (sscanf(cmd, " brightness : %i", &value) == 1 &&
+	    value >= 0 && value < levels) {
+		ret = set_lcd_brightness(dev, value);
+		if (ret == 0)
+			ret = count;
+	} else {
+		ret = -EINVAL;
+	}
+	return ret;
 }
 
 static const struct file_operations lcd_proc_fops = {
@@ -572,69 +575,72 @@ static int video_proc_show(struct seq_file *m, void *v) {
     return ret;
 }
 
-static int video_proc_open(struct inode *inode, struct file *file) {
-    return single_open(file, video_proc_show, PDE(inode)->data);
+static int video_proc_open(struct inode *inode, struct file *file)
+{
+	return single_open(file, video_proc_show, PDE_DATA(inode));
 }
 
 static ssize_t video_proc_write(struct file *file, const char __user *buf,
-                                size_t count, loff_t *pos) {
-    struct toshiba_acpi_dev *dev = PDE(file->f_path.dentry->d_inode)->data;
-    char *cmd, *buffer;
-    int ret;
-    int value;
-    int remain = count;
-    int lcd_out = -1;
-    int crt_out = -1;
-    int tv_out = -1;
-    u32 video_out;
+				size_t count, loff_t *pos)
+{
+	struct toshiba_acpi_dev *dev = PDE_DATA(file_inode(file));
+	char *cmd, *buffer;
+	int ret;
+	int value;
+	int remain = count;
+	int lcd_out = -1;
+	int crt_out = -1;
+	int tv_out = -1;
+	u32 video_out;
 
-    cmd = kmalloc(count + 1, GFP_KERNEL);
-    if (!cmd)
-        return -ENOMEM;
-    if (copy_from_user(cmd, buf, count)) {
-        kfree(cmd);
-        return -EFAULT;
-    }
-    cmd[count] = '\0';
+	cmd = kmalloc(count + 1, GFP_KERNEL);
+	if (!cmd)
+		return -ENOMEM;
+	if (copy_from_user(cmd, buf, count)) {
+		kfree(cmd);
+		return -EFAULT;
+	}
+	cmd[count] = '\0';
 
-    buffer = cmd;
+	buffer = cmd;
 
-    /* scan expression.  Multiple expressions may be delimited with ;
-     *
-     *  NOTE: to keep scanning simple, invalid fields are ignored
-     */
-    while (remain) {
-        if (sscanf(buffer, " lcd_out : %i", &value) == 1)
-            lcd_out = value & 1;
-        else if (sscanf(buffer, " crt_out : %i", &value) == 1)
-            crt_out = value & 1;
-        else if (sscanf(buffer, " tv_out : %i", &value) == 1)
-            tv_out = value & 1;
-        /* advance to one character past the next ; */
-        do {
-            ++buffer;
-            --remain;
-        } while (remain && *(buffer - 1) != ';');
-    }
+	/* scan expression.  Multiple expressions may be delimited with ;
+	 *
+	 *  NOTE: to keep scanning simple, invalid fields are ignored
+	 */
+	while (remain) {
+		if (sscanf(buffer, " lcd_out : %i", &value) == 1)
+			lcd_out = value & 1;
+		else if (sscanf(buffer, " crt_out : %i", &value) == 1)
+			crt_out = value & 1;
+		else if (sscanf(buffer, " tv_out : %i", &value) == 1)
+			tv_out = value & 1;
+		/* advance to one character past the next ; */
+		do {
+			++buffer;
+			--remain;
+		}
+		while (remain && *(buffer - 1) != ';');
+	}
 
-    kfree(cmd);
+	kfree(cmd);
 
-    ret = get_video_status(dev, &video_out);
-    if (!ret) {
-        unsigned int new_video_out = video_out;
-        if (lcd_out != -1)
-            _set_bit(&new_video_out, HCI_VIDEO_OUT_LCD, lcd_out);
-        if (crt_out != -1)
-            _set_bit(&new_video_out, HCI_VIDEO_OUT_CRT, crt_out);
-        if (tv_out != -1)
-            _set_bit(&new_video_out, HCI_VIDEO_OUT_TV, tv_out);
-        /* To avoid unnecessary video disruption, only write the new
-         * video setting if something changed. */
-        if (new_video_out != video_out)
-            ret = write_acpi_int(METHOD_VIDEO_OUT, new_video_out);
-    }
+	ret = get_video_status(dev, &video_out);
+	if (!ret) {
+		unsigned int new_video_out = video_out;
+		if (lcd_out != -1)
+			_set_bit(&new_video_out, HCI_VIDEO_OUT_LCD, lcd_out);
+		if (crt_out != -1)
+			_set_bit(&new_video_out, HCI_VIDEO_OUT_CRT, crt_out);
+		if (tv_out != -1)
+			_set_bit(&new_video_out, HCI_VIDEO_OUT_TV, tv_out);
+		/* To avoid unnecessary video disruption, only write the new
+		 * video setting if something changed. */
+		if (new_video_out != video_out)
+			ret = write_acpi_int(METHOD_VIDEO_OUT, new_video_out);
+	}
 
-    return ret ? ret : count;
+	return ret ? ret : count;
 }
 
 static const struct file_operations video_proc_fops = {
@@ -667,35 +673,37 @@ static int fan_proc_show(struct seq_file *m, void *v) {
     return ret;
 }
 
-static int fan_proc_open(struct inode *inode, struct file *file) {
-    return single_open(file, fan_proc_show, PDE(inode)->data);
+static int fan_proc_open(struct inode *inode, struct file *file)
+{
+	return single_open(file, fan_proc_show, PDE_DATA(inode));
 }
 
 static ssize_t fan_proc_write(struct file *file, const char __user *buf,
-                              size_t count, loff_t *pos) {
-    struct toshiba_acpi_dev *dev = PDE(file->f_path.dentry->d_inode)->data;
-    char cmd[42];
-    size_t len;
-    int value;
-    u32 hci_result;
+			      size_t count, loff_t *pos)
+{
+	struct toshiba_acpi_dev *dev = PDE_DATA(file_inode(file));
+	char cmd[42];
+	size_t len;
+	int value;
+	u32 hci_result;
 
-    len = min(count, sizeof(cmd) - 1);
-    if (copy_from_user(cmd, buf, len))
-        return -EFAULT;
-    cmd[len] = '\0';
+	len = min(count, sizeof(cmd) - 1);
+	if (copy_from_user(cmd, buf, len))
+		return -EFAULT;
+	cmd[len] = '\0';
 
-    if (sscanf(cmd, " force_on : %i", &value) == 1 &&
-            value >= 0 && value <= 1) {
-        hci_write1(dev, HCI_FAN, value, &hci_result);
-        if (hci_result != HCI_SUCCESS)
-            return -EIO;
-        else
-            dev->force_fan = value;
-    } else {
-        return -EINVAL;
-    }
+	if (sscanf(cmd, " force_on : %i", &value) == 1 &&
+	    value >= 0 && value <= 1) {
+		hci_write1(dev, HCI_FAN, value, &hci_result);
+		if (hci_result != HCI_SUCCESS)
+			return -EIO;
+		else
+			dev->force_fan = value;
+	} else {
+		return -EINVAL;
+	}
 
-    return count;
+	return count;
 }
 
 static const struct file_operations fan_proc_fops = {
@@ -736,29 +744,31 @@ static int keys_proc_show(struct seq_file *m, void *v) {
     return 0;
 }
 
-static int keys_proc_open(struct inode *inode, struct file *file) {
-    return single_open(file, keys_proc_show, PDE(inode)->data);
+static int keys_proc_open(struct inode *inode, struct file *file)
+{
+	return single_open(file, keys_proc_show, PDE_DATA(inode));
 }
 
 static ssize_t keys_proc_write(struct file *file, const char __user *buf,
-                               size_t count, loff_t *pos) {
-    struct toshiba_acpi_dev *dev = PDE(file->f_path.dentry->d_inode)->data;
-    char cmd[42];
-    size_t len;
-    int value;
+			       size_t count, loff_t *pos)
+{
+	struct toshiba_acpi_dev *dev = PDE_DATA(file_inode(file));
+	char cmd[42];
+	size_t len;
+	int value;
 
-    len = min(count, sizeof(cmd) - 1);
-    if (copy_from_user(cmd, buf, len))
-        return -EFAULT;
-    cmd[len] = '\0';
+	len = min(count, sizeof(cmd) - 1);
+	if (copy_from_user(cmd, buf, len))
+		return -EFAULT;
+	cmd[len] = '\0';
 
-    if (sscanf(cmd, " hotkey_ready : %i", &value) == 1 && value == 0) {
-        dev->key_event_valid = 0;
-    } else {
-        return -EINVAL;
-    }
+	if (sscanf(cmd, " hotkey_ready : %i", &value) == 1 && value == 0) {
+		dev->key_event_valid = 0;
+	} else {
+		return -EINVAL;
+	}
 
-    return count;
+	return count;
 }
 
 static const struct file_operations keys_proc_fops = {
@@ -776,8 +786,9 @@ static int version_proc_show(struct seq_file *m, void *v) {
     return 0;
 }
 
-static int version_proc_open(struct inode *inode, struct file *file) {
-    return single_open(file, version_proc_show, PDE(inode)->data);
+static int version_proc_open(struct inode *inode, struct file *file)
+{
+	return single_open(file, version_proc_show, PDE_DATA(inode));
 }
 
 static const struct file_operations version_proc_fops = {

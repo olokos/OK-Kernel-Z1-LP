@@ -518,151 +518,158 @@ acpi_sbs_remove_fs(struct proc_dir_entry **dir,
 
 /* Smart Battery Interface */
 static struct proc_dir_entry *acpi_battery_dir = NULL;
-
-static inline char *acpi_battery_units(struct acpi_battery *battery) {
-    return acpi_battery_mode(battery) ? " mW" : " mA";
+static inline char *acpi_battery_units(struct acpi_battery *battery)
+{
+	return acpi_battery_mode(battery) ? " mW" : " mA";
 }
 
 
-static int acpi_battery_read_info(struct seq_file *seq, void *offset) {
-    struct acpi_battery *battery = seq->private;
-    struct acpi_sbs *sbs = battery->sbs;
-    int result = 0;
+static int acpi_battery_read_info(struct seq_file *seq, void *offset)
+{
+	struct acpi_battery *battery = seq->private;
+	struct acpi_sbs *sbs = battery->sbs;
+	int result = 0;
 
-    mutex_lock(&sbs->lock);
+	mutex_lock(&sbs->lock);
 
-    seq_printf(seq, "present:                 %s\n",
-               (battery->present) ? "yes" : "no");
-    if (!battery->present)
-        goto end;
+	seq_printf(seq, "present:                 %s\n",
+		   (battery->present) ? "yes" : "no");
+	if (!battery->present)
+		goto end;
 
-    seq_printf(seq, "design capacity:         %i%sh\n",
-               battery->design_capacity * acpi_battery_scale(battery),
-               acpi_battery_units(battery));
-    seq_printf(seq, "last full capacity:      %i%sh\n",
-               battery->full_charge_capacity * acpi_battery_scale(battery),
-               acpi_battery_units(battery));
-    seq_printf(seq, "battery technology:      rechargeable\n");
-    seq_printf(seq, "design voltage:          %i mV\n",
-               battery->design_voltage * acpi_battery_vscale(battery));
-    seq_printf(seq, "design capacity warning: unknown\n");
-    seq_printf(seq, "design capacity low:     unknown\n");
-    seq_printf(seq, "cycle count:		  %i\n", battery->cycle_count);
-    seq_printf(seq, "capacity granularity 1:  unknown\n");
-    seq_printf(seq, "capacity granularity 2:  unknown\n");
-    seq_printf(seq, "model number:            %s\n", battery->device_name);
-    seq_printf(seq, "serial number:           %i\n",
-               battery->serial_number);
-    seq_printf(seq, "battery type:            %s\n",
-               battery->device_chemistry);
-    seq_printf(seq, "OEM info:                %s\n",
-               battery->manufacturer_name);
-end:
-    mutex_unlock(&sbs->lock);
-    return result;
+	seq_printf(seq, "design capacity:         %i%sh\n",
+		   battery->design_capacity * acpi_battery_scale(battery),
+		   acpi_battery_units(battery));
+	seq_printf(seq, "last full capacity:      %i%sh\n",
+		   battery->full_charge_capacity * acpi_battery_scale(battery),
+		   acpi_battery_units(battery));
+	seq_printf(seq, "battery technology:      rechargeable\n");
+	seq_printf(seq, "design voltage:          %i mV\n",
+		   battery->design_voltage * acpi_battery_vscale(battery));
+	seq_printf(seq, "design capacity warning: unknown\n");
+	seq_printf(seq, "design capacity low:     unknown\n");
+	seq_printf(seq, "cycle count:		  %i\n", battery->cycle_count);
+	seq_printf(seq, "capacity granularity 1:  unknown\n");
+	seq_printf(seq, "capacity granularity 2:  unknown\n");
+	seq_printf(seq, "model number:            %s\n", battery->device_name);
+	seq_printf(seq, "serial number:           %i\n",
+		   battery->serial_number);
+	seq_printf(seq, "battery type:            %s\n",
+		   battery->device_chemistry);
+	seq_printf(seq, "OEM info:                %s\n",
+		   battery->manufacturer_name);
+      end:
+	mutex_unlock(&sbs->lock);
+	return result;
 }
 
-static int acpi_battery_info_open_fs(struct inode *inode, struct file *file) {
-    return single_open(file, acpi_battery_read_info, PDE(inode)->data);
+static int acpi_battery_info_open_fs(struct inode *inode, struct file *file)
+{
+	return single_open(file, acpi_battery_read_info, PDE_DATA(inode));
 }
 
-static int acpi_battery_read_state(struct seq_file *seq, void *offset) {
-    struct acpi_battery *battery = seq->private;
-    struct acpi_sbs *sbs = battery->sbs;
-    int rate;
+static int acpi_battery_read_state(struct seq_file *seq, void *offset)
+{
+	struct acpi_battery *battery = seq->private;
+	struct acpi_sbs *sbs = battery->sbs;
+	int rate;
 
-    mutex_lock(&sbs->lock);
-    seq_printf(seq, "present:                 %s\n",
-               (battery->present) ? "yes" : "no");
-    if (!battery->present)
-        goto end;
+	mutex_lock(&sbs->lock);
+	seq_printf(seq, "present:                 %s\n",
+		   (battery->present) ? "yes" : "no");
+	if (!battery->present)
+		goto end;
 
-    acpi_battery_get_state(battery);
-    seq_printf(seq, "capacity state:          %s\n",
-               (battery->state & 0x0010) ? "critical" : "ok");
-    seq_printf(seq, "charging state:          %s\n",
-               (battery->rate_now < 0) ? "discharging" :
-               ((battery->rate_now > 0) ? "charging" : "charged"));
-    rate = abs(battery->rate_now) * acpi_battery_ipscale(battery);
-    rate *= (acpi_battery_mode(battery))?(battery->voltage_now *
-                                          acpi_battery_vscale(battery)/1000):1;
-    seq_printf(seq, "present rate:            %d%s\n", rate,
-               acpi_battery_units(battery));
-    seq_printf(seq, "remaining capacity:      %i%sh\n",
-               battery->capacity_now * acpi_battery_scale(battery),
-               acpi_battery_units(battery));
-    seq_printf(seq, "present voltage:         %i mV\n",
-               battery->voltage_now * acpi_battery_vscale(battery));
+	acpi_battery_get_state(battery);
+	seq_printf(seq, "capacity state:          %s\n",
+		   (battery->state & 0x0010) ? "critical" : "ok");
+	seq_printf(seq, "charging state:          %s\n",
+		   (battery->rate_now < 0) ? "discharging" :
+		   ((battery->rate_now > 0) ? "charging" : "charged"));
+	rate = abs(battery->rate_now) * acpi_battery_ipscale(battery);
+	rate *= (acpi_battery_mode(battery))?(battery->voltage_now *
+			acpi_battery_vscale(battery)/1000):1;
+	seq_printf(seq, "present rate:            %d%s\n", rate,
+		   acpi_battery_units(battery));
+	seq_printf(seq, "remaining capacity:      %i%sh\n",
+		   battery->capacity_now * acpi_battery_scale(battery),
+		   acpi_battery_units(battery));
+	seq_printf(seq, "present voltage:         %i mV\n",
+		   battery->voltage_now * acpi_battery_vscale(battery));
 
-end:
-    mutex_unlock(&sbs->lock);
-    return 0;
+      end:
+	mutex_unlock(&sbs->lock);
+	return 0;
 }
 
-static int acpi_battery_state_open_fs(struct inode *inode, struct file *file) {
-    return single_open(file, acpi_battery_read_state, PDE(inode)->data);
+static int acpi_battery_state_open_fs(struct inode *inode, struct file *file)
+{
+	return single_open(file, acpi_battery_read_state, PDE_DATA(inode));
 }
 
-static int acpi_battery_read_alarm(struct seq_file *seq, void *offset) {
-    struct acpi_battery *battery = seq->private;
-    struct acpi_sbs *sbs = battery->sbs;
-    int result = 0;
+static int acpi_battery_read_alarm(struct seq_file *seq, void *offset)
+{
+	struct acpi_battery *battery = seq->private;
+	struct acpi_sbs *sbs = battery->sbs;
+	int result = 0;
 
-    mutex_lock(&sbs->lock);
+	mutex_lock(&sbs->lock);
 
-    if (!battery->present) {
-        seq_printf(seq, "present:                 no\n");
-        goto end;
-    }
+	if (!battery->present) {
+		seq_printf(seq, "present:                 no\n");
+		goto end;
+	}
 
-    acpi_battery_get_alarm(battery);
-    seq_printf(seq, "alarm:                   ");
-    if (battery->alarm_capacity)
-        seq_printf(seq, "%i%sh\n",
-                   battery->alarm_capacity *
-                   acpi_battery_scale(battery),
-                   acpi_battery_units(battery));
-    else
-        seq_printf(seq, "disabled\n");
-end:
-    mutex_unlock(&sbs->lock);
-    return result;
+	acpi_battery_get_alarm(battery);
+	seq_printf(seq, "alarm:                   ");
+	if (battery->alarm_capacity)
+		seq_printf(seq, "%i%sh\n",
+			   battery->alarm_capacity *
+			   acpi_battery_scale(battery),
+			   acpi_battery_units(battery));
+	else
+		seq_printf(seq, "disabled\n");
+      end:
+	mutex_unlock(&sbs->lock);
+	return result;
 }
 
 static ssize_t
 acpi_battery_write_alarm(struct file *file, const char __user * buffer,
-                         size_t count, loff_t * ppos) {
-    struct seq_file *seq = file->private_data;
-    struct acpi_battery *battery = seq->private;
-    struct acpi_sbs *sbs = battery->sbs;
-    char alarm_string[12] = { '\0' };
-    int result = 0;
-    mutex_lock(&sbs->lock);
-    if (!battery->present) {
-        result = -ENODEV;
-        goto end;
-    }
-    if (count > sizeof(alarm_string) - 1) {
-        result = -EINVAL;
-        goto end;
-    }
-    if (copy_from_user(alarm_string, buffer, count)) {
-        result = -EFAULT;
-        goto end;
-    }
-    alarm_string[count] = 0;
-    battery->alarm_capacity = simple_strtoul(alarm_string, NULL, 0) /
-                              acpi_battery_scale(battery);
-    acpi_battery_set_alarm(battery);
-end:
-    mutex_unlock(&sbs->lock);
-    if (result)
-        return result;
-    return count;
+			 size_t count, loff_t * ppos)
+{
+	struct seq_file *seq = file->private_data;
+	struct acpi_battery *battery = seq->private;
+	struct acpi_sbs *sbs = battery->sbs;
+	char alarm_string[12] = { '\0' };
+	int result = 0;
+	mutex_lock(&sbs->lock);
+	if (!battery->present) {
+		result = -ENODEV;
+		goto end;
+	}
+	if (count > sizeof(alarm_string) - 1) {
+		result = -EINVAL;
+		goto end;
+	}
+	if (copy_from_user(alarm_string, buffer, count)) {
+		result = -EFAULT;
+		goto end;
+	}
+	alarm_string[count] = 0;
+	battery->alarm_capacity = simple_strtoul(alarm_string, NULL, 0) /
+					acpi_battery_scale(battery);
+	acpi_battery_set_alarm(battery);
+      end:
+	mutex_unlock(&sbs->lock);
+	if (result)
+		return result;
+	return count;
 }
 
-static int acpi_battery_alarm_open_fs(struct inode *inode, struct file *file) {
-    return single_open(file, acpi_battery_read_alarm, PDE(inode)->data);
+static int acpi_battery_alarm_open_fs(struct inode *inode, struct file *file)
+{
+	return single_open(file, acpi_battery_read_alarm, PDE_DATA(inode));
 }
 
 static const struct file_operations acpi_battery_info_fops = {
@@ -707,8 +714,9 @@ static int acpi_ac_read_state(struct seq_file *seq, void *offset) {
     return 0;
 }
 
-static int acpi_ac_state_open_fs(struct inode *inode, struct file *file) {
-    return single_open(file, acpi_ac_read_state, PDE(inode)->data);
+static int acpi_ac_state_open_fs(struct inode *inode, struct file *file)
+{
+	return single_open(file, acpi_ac_read_state, PDE_DATA(inode));
 }
 
 static const struct file_operations acpi_ac_state_fops = {

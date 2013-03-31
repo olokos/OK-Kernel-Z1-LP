@@ -31,60 +31,34 @@
 
 static struct proc_dir_entry *proc_ide_root;
 
-static int ide_imodel_proc_show(struct seq_file *m, void *v) {
-    ide_hwif_t	*hwif = (ide_hwif_t *) m->private;
-    const char	*name;
+static int ide_imodel_proc_show(struct seq_file *m, void *v)
+{
+	ide_hwif_t	*hwif = (ide_hwif_t *) m->private;
+	const char	*name;
 
-    switch (hwif->chipset) {
-    case ide_generic:
-        name = "generic";
-        break;
-    case ide_pci:
-        name = "pci";
-        break;
-    case ide_cmd640:
-        name = "cmd640";
-        break;
-    case ide_dtc2278:
-        name = "dtc2278";
-        break;
-    case ide_ali14xx:
-        name = "ali14xx";
-        break;
-    case ide_qd65xx:
-        name = "qd65xx";
-        break;
-    case ide_umc8672:
-        name = "umc8672";
-        break;
-    case ide_ht6560b:
-        name = "ht6560b";
-        break;
-    case ide_4drives:
-        name = "4drives";
-        break;
-    case ide_pmac:
-        name = "mac-io";
-        break;
-    case ide_au1xxx:
-        name = "au1xxx";
-        break;
-    case ide_palm3710:
-        name = "palm3710";
-        break;
-    case ide_acorn:
-        name = "acorn";
-        break;
-    default:
-        name = "(unknown)";
-        break;
-    }
-    seq_printf(m, "%s\n", name);
-    return 0;
+	switch (hwif->chipset) {
+	case ide_generic:	name = "generic";	break;
+	case ide_pci:		name = "pci";		break;
+	case ide_cmd640:	name = "cmd640";	break;
+	case ide_dtc2278:	name = "dtc2278";	break;
+	case ide_ali14xx:	name = "ali14xx";	break;
+	case ide_qd65xx:	name = "qd65xx";	break;
+	case ide_umc8672:	name = "umc8672";	break;
+	case ide_ht6560b:	name = "ht6560b";	break;
+	case ide_4drives:	name = "4drives";	break;
+	case ide_pmac:		name = "mac-io";	break;
+	case ide_au1xxx:	name = "au1xxx";	break;
+	case ide_palm3710:      name = "palm3710";      break;
+	case ide_acorn:		name = "acorn";		break;
+	default:		name = "(unknown)";	break;
+	}
+	seq_printf(m, "%s\n", name);
+	return 0;
 }
 
-static int ide_imodel_proc_open(struct inode *inode, struct file *file) {
-    return single_open(file, ide_imodel_proc_show, PDE(inode)->data);
+static int ide_imodel_proc_open(struct inode *inode, struct file *file)
+{
+	return single_open(file, ide_imodel_proc_show, PDE_DATA(inode));
 }
 
 static const struct file_operations ide_imodel_proc_fops = {
@@ -105,8 +79,9 @@ static int ide_mate_proc_show(struct seq_file *m, void *v) {
     return 0;
 }
 
-static int ide_mate_proc_open(struct inode *inode, struct file *file) {
-    return single_open(file, ide_mate_proc_show, PDE(inode)->data);
+static int ide_mate_proc_open(struct inode *inode, struct file *file)
+{
+	return single_open(file, ide_mate_proc_show, PDE_DATA(inode));
 }
 
 static const struct file_operations ide_mate_proc_fops = {
@@ -124,8 +99,9 @@ static int ide_channel_proc_show(struct seq_file *m, void *v) {
     return 0;
 }
 
-static int ide_channel_proc_open(struct inode *inode, struct file *file) {
-    return single_open(file, ide_channel_proc_show, PDE(inode)->data);
+static int ide_channel_proc_open(struct inode *inode, struct file *file)
+{
+	return single_open(file, ide_channel_proc_show, PDE_DATA(inode));
 }
 
 static const struct file_operations ide_channel_proc_fops = {
@@ -162,8 +138,9 @@ static int ide_identify_proc_show(struct seq_file *m, void *v) {
     return 0;
 }
 
-static int ide_identify_proc_open(struct inode *inode, struct file *file) {
-    return single_open(file, ide_identify_proc_show, PDE(inode)->data);
+static int ide_identify_proc_open(struct inode *inode, struct file *file)
+{
+	return single_open(file, ide_identify_proc_show, PDE_DATA(inode));
 }
 
 static const struct file_operations ide_identify_proc_fops = {
@@ -288,156 +265,160 @@ static const struct ide_proc_devset ide_generic_settings[] = {
     { NULL },
 };
 
-static void proc_ide_settings_warn(void) {
-    printk_once(KERN_WARNING "Warning: /proc/ide/hd?/settings interface is "
-                "obsolete, and will be removed soon!\n");
+static void proc_ide_settings_warn(void)
+{
+	printk_once(KERN_WARNING "Warning: /proc/ide/hd?/settings interface is "
+			    "obsolete, and will be removed soon!\n");
 }
 
-static int ide_settings_proc_show(struct seq_file *m, void *v) {
-    const struct ide_proc_devset *setting, *g, *d;
-    const struct ide_devset *ds;
-    ide_drive_t	*drive = (ide_drive_t *) m->private;
-    int		rc, mul_factor, div_factor;
+static int ide_settings_proc_show(struct seq_file *m, void *v)
+{
+	const struct ide_proc_devset *setting, *g, *d;
+	const struct ide_devset *ds;
+	ide_drive_t	*drive = (ide_drive_t *) m->private;
+	int		rc, mul_factor, div_factor;
 
-    proc_ide_settings_warn();
+	proc_ide_settings_warn();
 
-    mutex_lock(&ide_setting_mtx);
-    g = ide_generic_settings;
-    d = drive->settings;
-    seq_printf(m, "name\t\t\tvalue\t\tmin\t\tmax\t\tmode\n");
-    seq_printf(m, "----\t\t\t-----\t\t---\t\t---\t\t----\n");
-    while (g->name || (d && d->name)) {
-        /* read settings in the alphabetical order */
-        if (g->name && d && d->name) {
-            if (strcmp(d->name, g->name) < 0)
-                setting = d++;
-            else
-                setting = g++;
-        } else if (d && d->name) {
-            setting = d++;
-        } else
-            setting = g++;
-        mul_factor = setting->mulf ? setting->mulf(drive) : 1;
-        div_factor = setting->divf ? setting->divf(drive) : 1;
-        seq_printf(m, "%-24s", setting->name);
-        rc = ide_read_setting(drive, setting);
-        if (rc >= 0)
-            seq_printf(m, "%-16d", rc * mul_factor / div_factor);
-        else
-            seq_printf(m, "%-16s", "write-only");
-        seq_printf(m, "%-16d%-16d", (setting->min * mul_factor + div_factor - 1) / div_factor, setting->max * mul_factor / div_factor);
-        ds = setting->setting;
-        if (ds->get)
-            seq_printf(m, "r");
-        if (ds->set)
-            seq_printf(m, "w");
-        seq_printf(m, "\n");
-    }
-    mutex_unlock(&ide_setting_mtx);
-    return 0;
+	mutex_lock(&ide_setting_mtx);
+	g = ide_generic_settings;
+	d = drive->settings;
+	seq_printf(m, "name\t\t\tvalue\t\tmin\t\tmax\t\tmode\n");
+	seq_printf(m, "----\t\t\t-----\t\t---\t\t---\t\t----\n");
+	while (g->name || (d && d->name)) {
+		/* read settings in the alphabetical order */
+		if (g->name && d && d->name) {
+			if (strcmp(d->name, g->name) < 0)
+				setting = d++;
+			else
+				setting = g++;
+		} else if (d && d->name) {
+			setting = d++;
+		} else
+			setting = g++;
+		mul_factor = setting->mulf ? setting->mulf(drive) : 1;
+		div_factor = setting->divf ? setting->divf(drive) : 1;
+		seq_printf(m, "%-24s", setting->name);
+		rc = ide_read_setting(drive, setting);
+		if (rc >= 0)
+			seq_printf(m, "%-16d", rc * mul_factor / div_factor);
+		else
+			seq_printf(m, "%-16s", "write-only");
+		seq_printf(m, "%-16d%-16d", (setting->min * mul_factor + div_factor - 1) / div_factor, setting->max * mul_factor / div_factor);
+		ds = setting->setting;
+		if (ds->get)
+			seq_printf(m, "r");
+		if (ds->set)
+			seq_printf(m, "w");
+		seq_printf(m, "\n");
+	}
+	mutex_unlock(&ide_setting_mtx);
+	return 0;
 }
 
-static int ide_settings_proc_open(struct inode *inode, struct file *file) {
-    return single_open(file, ide_settings_proc_show, PDE(inode)->data);
+static int ide_settings_proc_open(struct inode *inode, struct file *file)
+{
+	return single_open(file, ide_settings_proc_show, PDE_DATA(inode));
 }
 
 #define MAX_LEN	30
 
 static ssize_t ide_settings_proc_write(struct file *file, const char __user *buffer,
-                                       size_t count, loff_t *pos) {
-    ide_drive_t	*drive = (ide_drive_t *) PDE(file->f_path.dentry->d_inode)->data;
-    char		name[MAX_LEN + 1];
-    int		for_real = 0, mul_factor, div_factor;
-    unsigned long	n;
+				       size_t count, loff_t *pos)
+{
+	ide_drive_t	*drive = PDE_DATA(file_inode(file));
+	char		name[MAX_LEN + 1];
+	int		for_real = 0, mul_factor, div_factor;
+	unsigned long	n;
 
-    const struct ide_proc_devset *setting;
-    char *buf, *s;
+	const struct ide_proc_devset *setting;
+	char *buf, *s;
 
-    if (!capable(CAP_SYS_ADMIN))
-        return -EACCES;
+	if (!capable(CAP_SYS_ADMIN))
+		return -EACCES;
 
-    proc_ide_settings_warn();
+	proc_ide_settings_warn();
 
-    if (count >= PAGE_SIZE)
-        return -EINVAL;
+	if (count >= PAGE_SIZE)
+		return -EINVAL;
 
-    s = buf = (char *)__get_free_page(GFP_USER);
-    if (!buf)
-        return -ENOMEM;
+	s = buf = (char *)__get_free_page(GFP_USER);
+	if (!buf)
+		return -ENOMEM;
 
-    if (copy_from_user(buf, buffer, count)) {
-        free_page((unsigned long)buf);
-        return -EFAULT;
-    }
+	if (copy_from_user(buf, buffer, count)) {
+		free_page((unsigned long)buf);
+		return -EFAULT;
+	}
 
-    buf[count] = '\0';
+	buf[count] = '\0';
 
-    /*
-     * Skip over leading whitespace
-     */
-    while (count && isspace(*s)) {
-        --count;
-        ++s;
-    }
-    /*
-     * Do one full pass to verify all parameters,
-     * then do another to actually write the new settings.
-     */
-    do {
-        char *p = s;
-        n = count;
-        while (n > 0) {
-            unsigned val;
-            char *q = p;
+	/*
+	 * Skip over leading whitespace
+	 */
+	while (count && isspace(*s)) {
+		--count;
+		++s;
+	}
+	/*
+	 * Do one full pass to verify all parameters,
+	 * then do another to actually write the new settings.
+	 */
+	do {
+		char *p = s;
+		n = count;
+		while (n > 0) {
+			unsigned val;
+			char *q = p;
 
-            while (n > 0 && *p != ':') {
-                --n;
-                p++;
-            }
-            if (*p != ':')
-                goto parse_error;
-            if (p - q > MAX_LEN)
-                goto parse_error;
-            memcpy(name, q, p - q);
-            name[p - q] = 0;
+			while (n > 0 && *p != ':') {
+				--n;
+				p++;
+			}
+			if (*p != ':')
+				goto parse_error;
+			if (p - q > MAX_LEN)
+				goto parse_error;
+			memcpy(name, q, p - q);
+			name[p - q] = 0;
 
-            if (n > 0) {
-                --n;
-                p++;
-            } else
-                goto parse_error;
+			if (n > 0) {
+				--n;
+				p++;
+			} else
+				goto parse_error;
 
-            val = simple_strtoul(p, &q, 10);
-            n -= q - p;
-            p = q;
-            if (n > 0 && !isspace(*p))
-                goto parse_error;
-            while (n > 0 && isspace(*p)) {
-                --n;
-                ++p;
-            }
+			val = simple_strtoul(p, &q, 10);
+			n -= q - p;
+			p = q;
+			if (n > 0 && !isspace(*p))
+				goto parse_error;
+			while (n > 0 && isspace(*p)) {
+				--n;
+				++p;
+			}
 
-            mutex_lock(&ide_setting_mtx);
-            /* generic settings first, then driver specific ones */
-            setting = ide_find_setting(ide_generic_settings, name);
-            if (!setting) {
-                if (drive->settings)
-                    setting = ide_find_setting(drive->settings, name);
-                if (!setting) {
-                    mutex_unlock(&ide_setting_mtx);
-                    goto parse_error;
-                }
-            }
-            if (for_real) {
-                mul_factor = setting->mulf ? setting->mulf(drive) : 1;
-                div_factor = setting->divf ? setting->divf(drive) : 1;
-                ide_write_setting(drive, setting, val * div_factor / mul_factor);
-            }
-            mutex_unlock(&ide_setting_mtx);
-        }
-    } while (!for_real++);
-    free_page((unsigned long)buf);
-    return count;
+			mutex_lock(&ide_setting_mtx);
+			/* generic settings first, then driver specific ones */
+			setting = ide_find_setting(ide_generic_settings, name);
+			if (!setting) {
+				if (drive->settings)
+					setting = ide_find_setting(drive->settings, name);
+				if (!setting) {
+					mutex_unlock(&ide_setting_mtx);
+					goto parse_error;
+				}
+			}
+			if (for_real) {
+				mul_factor = setting->mulf ? setting->mulf(drive) : 1;
+				div_factor = setting->divf ? setting->divf(drive) : 1;
+				ide_write_setting(drive, setting, val * div_factor / mul_factor);
+			}
+			mutex_unlock(&ide_setting_mtx);
+		}
+	} while (!for_real++);
+	free_page((unsigned long)buf);
+	return count;
 parse_error:
     free_page((unsigned long)buf);
     printk("%s(): parse error\n", __func__);
@@ -481,8 +462,9 @@ static int ide_geometry_proc_show(struct seq_file *m, void *v) {
     return 0;
 }
 
-static int ide_geometry_proc_open(struct inode *inode, struct file *file) {
-    return single_open(file, ide_geometry_proc_show, PDE(inode)->data);
+static int ide_geometry_proc_open(struct inode *inode, struct file *file)
+{
+	return single_open(file, ide_geometry_proc_show, PDE_DATA(inode));
 }
 
 const struct file_operations ide_geometry_proc_fops = {
@@ -502,8 +484,9 @@ static int ide_dmodel_proc_show(struct seq_file *seq, void *v) {
     return 0;
 }
 
-static int ide_dmodel_proc_open(struct inode *inode, struct file *file) {
-    return single_open(file, ide_dmodel_proc_show, PDE(inode)->data);
+static int ide_dmodel_proc_open(struct inode *inode, struct file *file)
+{
+	return single_open(file, ide_dmodel_proc_show, PDE_DATA(inode));
 }
 
 static const struct file_operations ide_dmodel_proc_fops = {
@@ -514,65 +497,69 @@ static const struct file_operations ide_dmodel_proc_fops = {
     .release	= single_release,
 };
 
-static int ide_driver_proc_show(struct seq_file *m, void *v) {
-    ide_drive_t		*drive = (ide_drive_t *)m->private;
-    struct device		*dev = &drive->gendev;
-    struct ide_driver	*ide_drv;
+static int ide_driver_proc_show(struct seq_file *m, void *v)
+{
+	ide_drive_t		*drive = (ide_drive_t *)m->private;
+	struct device		*dev = &drive->gendev;
+	struct ide_driver	*ide_drv;
 
-    if (dev->driver) {
-        ide_drv = to_ide_driver(dev->driver);
-        seq_printf(m, "%s version %s\n",
-                   dev->driver->name, ide_drv->version);
-    } else
-        seq_printf(m, "ide-default version 0.9.newide\n");
-    return 0;
+	if (dev->driver) {
+		ide_drv = to_ide_driver(dev->driver);
+		seq_printf(m, "%s version %s\n",
+				dev->driver->name, ide_drv->version);
+	} else
+		seq_printf(m, "ide-default version 0.9.newide\n");
+	return 0;
 }
 
-static int ide_driver_proc_open(struct inode *inode, struct file *file) {
-    return single_open(file, ide_driver_proc_show, PDE(inode)->data);
+static int ide_driver_proc_open(struct inode *inode, struct file *file)
+{
+	return single_open(file, ide_driver_proc_show, PDE_DATA(inode));
 }
 
-static int ide_replace_subdriver(ide_drive_t *drive, const char *driver) {
-    struct device *dev = &drive->gendev;
-    int ret = 1;
-    int err;
+static int ide_replace_subdriver(ide_drive_t *drive, const char *driver)
+{
+	struct device *dev = &drive->gendev;
+	int ret = 1;
+	int err;
 
-    device_release_driver(dev);
-    /* FIXME: device can still be in use by previous driver */
-    strlcpy(drive->driver_req, driver, sizeof(drive->driver_req));
-    err = device_attach(dev);
-    if (err < 0)
-        printk(KERN_WARNING "IDE: %s: device_attach error: %d\n",
-               __func__, err);
-    drive->driver_req[0] = 0;
-    if (dev->driver == NULL) {
-        err = device_attach(dev);
-        if (err < 0)
-            printk(KERN_WARNING
-                   "IDE: %s: device_attach(2) error: %d\n",
-                   __func__, err);
-    }
-    if (dev->driver && !strcmp(dev->driver->name, driver))
-        ret = 0;
+	device_release_driver(dev);
+	/* FIXME: device can still be in use by previous driver */
+	strlcpy(drive->driver_req, driver, sizeof(drive->driver_req));
+	err = device_attach(dev);
+	if (err < 0)
+		printk(KERN_WARNING "IDE: %s: device_attach error: %d\n",
+			__func__, err);
+	drive->driver_req[0] = 0;
+	if (dev->driver == NULL) {
+		err = device_attach(dev);
+		if (err < 0)
+			printk(KERN_WARNING
+				"IDE: %s: device_attach(2) error: %d\n",
+				__func__, err);
+	}
+	if (dev->driver && !strcmp(dev->driver->name, driver))
+		ret = 0;
 
-    return ret;
+	return ret;
 }
 
 static ssize_t ide_driver_proc_write(struct file *file, const char __user *buffer,
-                                     size_t count, loff_t *pos) {
-    ide_drive_t	*drive = (ide_drive_t *) PDE(file->f_path.dentry->d_inode)->data;
-    char name[32];
+				     size_t count, loff_t *pos)
+{
+	ide_drive_t	*drive = PDE_DATA(file_inode(file));
+	char name[32];
 
-    if (!capable(CAP_SYS_ADMIN))
-        return -EACCES;
-    if (count > 31)
-        count = 31;
-    if (copy_from_user(name, buffer, count))
-        return -EFAULT;
-    name[count] = '\0';
-    if (ide_replace_subdriver(drive, name))
-        return -EINVAL;
-    return count;
+	if (!capable(CAP_SYS_ADMIN))
+		return -EACCES;
+	if (count > 31)
+		count = 31;
+	if (copy_from_user(name, buffer, count))
+		return -EFAULT;
+	name[count] = '\0';
+	if (ide_replace_subdriver(drive, name))
+		return -EINVAL;
+	return count;
 }
 
 static const struct file_operations ide_driver_proc_fops = {
@@ -584,36 +571,26 @@ static const struct file_operations ide_driver_proc_fops = {
     .write		= ide_driver_proc_write,
 };
 
-static int ide_media_proc_show(struct seq_file *m, void *v) {
-    ide_drive_t	*drive = (ide_drive_t *) m->private;
-    const char	*media;
+static int ide_media_proc_show(struct seq_file *m, void *v)
+{
+	ide_drive_t	*drive = (ide_drive_t *) m->private;
+	const char	*media;
 
-    switch (drive->media) {
-    case ide_disk:
-        media = "disk\n";
-        break;
-    case ide_cdrom:
-        media = "cdrom\n";
-        break;
-    case ide_tape:
-        media = "tape\n";
-        break;
-    case ide_floppy:
-        media = "floppy\n";
-        break;
-    case ide_optical:
-        media = "optical\n";
-        break;
-    default:
-        media = "UNKNOWN\n";
-        break;
-    }
-    seq_puts(m, media);
-    return 0;
+	switch (drive->media) {
+	case ide_disk:		media = "disk\n";	break;
+	case ide_cdrom:		media = "cdrom\n";	break;
+	case ide_tape:		media = "tape\n";	break;
+	case ide_floppy:	media = "floppy\n";	break;
+	case ide_optical:	media = "optical\n";	break;
+	default:		media = "UNKNOWN\n";	break;
+	}
+	seq_puts(m, media);
+	return 0;
 }
 
-static int ide_media_proc_open(struct inode *inode, struct file *file) {
-    return single_open(file, ide_media_proc_show, PDE(inode)->data);
+static int ide_media_proc_open(struct inode *inode, struct file *file)
+{
+	return single_open(file, ide_media_proc_show, PDE_DATA(inode));
 }
 
 static const struct file_operations ide_media_proc_fops = {
