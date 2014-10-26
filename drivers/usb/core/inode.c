@@ -107,271 +107,285 @@ static const match_table_t tokens = {
     {Opt_err, NULL}
 };
 
-static int parse_options(struct super_block *s, char *data) {
-    char *p;
-    int option;
+static int parse_options(struct super_block *s, char *data)
+{
+	char *p;
+	int option;
 
-    /* (re)set to defaults. */
-    devuid = 0;
-    busuid = 0;
-    listuid = 0;
-    devgid = 0;
-    busgid = 0;
-    listgid = 0;
-    devmode = USBFS_DEFAULT_DEVMODE;
-    busmode = USBFS_DEFAULT_BUSMODE;
-    listmode = USBFS_DEFAULT_LISTMODE;
+	/* (re)set to defaults. */
+	devuid = 0;
+	busuid = 0;
+	listuid = 0;
+	devgid = 0;
+	busgid = 0;
+	listgid = 0;
+	devmode = USBFS_DEFAULT_DEVMODE;
+	busmode = USBFS_DEFAULT_BUSMODE;
+	listmode = USBFS_DEFAULT_LISTMODE;
 
-    while ((p = strsep(&data, ",")) != NULL) {
-        substring_t args[MAX_OPT_ARGS];
-        int token;
-        if (!*p)
-            continue;
+	while ((p = strsep(&data, ",")) != NULL) {
+		substring_t args[MAX_OPT_ARGS];
+		int token;
+		if (!*p)
+			continue;
 
-        token = match_token(p, tokens, args);
-        switch (token) {
-        case Opt_devuid:
-            if (match_int(&args[0], &option))
-                return -EINVAL;
-            devuid = option;
-            break;
-        case Opt_devgid:
-            if (match_int(&args[0], &option))
-                return -EINVAL;
-            devgid = option;
-            break;
-        case Opt_devmode:
-            if (match_octal(&args[0], &option))
-                return -EINVAL;
-            devmode = option & S_IRWXUGO;
-            break;
-        case Opt_busuid:
-            if (match_int(&args[0], &option))
-                return -EINVAL;
-            busuid = option;
-            break;
-        case Opt_busgid:
-            if (match_int(&args[0], &option))
-                return -EINVAL;
-            busgid = option;
-            break;
-        case Opt_busmode:
-            if (match_octal(&args[0], &option))
-                return -EINVAL;
-            busmode = option & S_IRWXUGO;
-            break;
-        case Opt_listuid:
-            if (match_int(&args[0], &option))
-                return -EINVAL;
-            listuid = option;
-            break;
-        case Opt_listgid:
-            if (match_int(&args[0], &option))
-                return -EINVAL;
-            listgid = option;
-            break;
-        case Opt_listmode:
-            if (match_octal(&args[0], &option))
-                return -EINVAL;
-            listmode = option & S_IRWXUGO;
-            break;
-        default:
-            printk(KERN_ERR "usbfs: unrecognised mount option "
-                   "\"%s\" or missing value\n", p);
-            return -EINVAL;
-        }
-    }
+		token = match_token(p, tokens, args);
+		switch (token) {
+		case Opt_devuid:
+			if (match_int(&args[0], &option))
+			       return -EINVAL;
+			devuid = option;
+			break;
+		case Opt_devgid:
+			if (match_int(&args[0], &option))
+			       return -EINVAL;
+			devgid = option;
+			break;
+		case Opt_devmode:
+			if (match_octal(&args[0], &option))
+				return -EINVAL;
+			devmode = option & S_IRWXUGO;
+			break;
+		case Opt_busuid:
+			if (match_int(&args[0], &option))
+			       return -EINVAL;
+			busuid = option;
+			break;
+		case Opt_busgid:
+			if (match_int(&args[0], &option))
+			       return -EINVAL;
+			busgid = option;
+			break;
+		case Opt_busmode:
+			if (match_octal(&args[0], &option))
+				return -EINVAL;
+			busmode = option & S_IRWXUGO;
+			break;
+		case Opt_listuid:
+			if (match_int(&args[0], &option))
+			       return -EINVAL;
+			listuid = option;
+			break;
+		case Opt_listgid:
+			if (match_int(&args[0], &option))
+			       return -EINVAL;
+			listgid = option;
+			break;
+		case Opt_listmode:
+			if (match_octal(&args[0], &option))
+				return -EINVAL;
+			listmode = option & S_IRWXUGO;
+			break;
+		default:
+			printk(KERN_ERR "usbfs: unrecognised mount option "
+			       "\"%s\" or missing value\n", p);
+			return -EINVAL;
+		}
+	}
 
-    return 0;
+	return 0;
 }
 
-static void update_special(struct dentry *special) {
-    special->d_inode->i_uid = listuid;
-    special->d_inode->i_gid = listgid;
-    special->d_inode->i_mode = S_IFREG | listmode;
+static void update_special(struct dentry *special)
+{
+	special->d_inode->i_uid = listuid;
+	special->d_inode->i_gid = listgid;
+	special->d_inode->i_mode = S_IFREG | listmode;
 }
 
-static void update_dev(struct dentry *dev) {
-    dev->d_inode->i_uid = devuid;
-    dev->d_inode->i_gid = devgid;
-    dev->d_inode->i_mode = S_IFREG | devmode;
+static void update_dev(struct dentry *dev)
+{
+	dev->d_inode->i_uid = devuid;
+	dev->d_inode->i_gid = devgid;
+	dev->d_inode->i_mode = S_IFREG | devmode;
 }
 
-static void update_bus(struct dentry *bus) {
-    struct dentry *dev = NULL;
+static void update_bus(struct dentry *bus)
+{
+	struct dentry *dev = NULL;
 
-    bus->d_inode->i_uid = busuid;
-    bus->d_inode->i_gid = busgid;
-    bus->d_inode->i_mode = S_IFDIR | busmode;
+	bus->d_inode->i_uid = busuid;
+	bus->d_inode->i_gid = busgid;
+	bus->d_inode->i_mode = S_IFDIR | busmode;
 
-    mutex_lock(&bus->d_inode->i_mutex);
+	mutex_lock(&bus->d_inode->i_mutex);
 
-    list_for_each_entry(dev, &bus->d_subdirs, d_u.d_child)
-    if (dev->d_inode)
-        update_dev(dev);
+	list_for_each_entry(dev, &bus->d_subdirs, d_child)
+		if (dev->d_inode)
+			update_dev(dev);
 
-    mutex_unlock(&bus->d_inode->i_mutex);
+	mutex_unlock(&bus->d_inode->i_mutex);
 }
 
-static void update_sb(struct super_block *sb) {
-    struct dentry *root = sb->s_root;
-    struct dentry *bus = NULL;
+static void update_sb(struct super_block *sb)
+{
+	struct dentry *root = sb->s_root;
+	struct dentry *bus = NULL;
 
-    if (!root)
-        return;
+	if (!root)
+		return;
 
-    mutex_lock_nested(&root->d_inode->i_mutex, I_MUTEX_PARENT);
+	mutex_lock_nested(&root->d_inode->i_mutex, I_MUTEX_PARENT);
 
-    list_for_each_entry(bus, &root->d_subdirs, d_u.d_child) {
-        if (bus->d_inode) {
-            switch (S_IFMT & bus->d_inode->i_mode) {
-            case S_IFDIR:
-                update_bus(bus);
-                break;
-            case S_IFREG:
-                update_special(bus);
-                break;
-            default:
-                printk(KERN_WARNING "usbfs: Unknown node %s "
-                       "mode %x found on remount!\n",
-                       bus->d_name.name, bus->d_inode->i_mode);
-                break;
-            }
-        }
-    }
+	list_for_each_entry(bus, &root->d_subdirs, d_child) {
+		if (bus->d_inode) {
+			switch (S_IFMT & bus->d_inode->i_mode) {
+			case S_IFDIR:
+				update_bus(bus);
+				break;
+			case S_IFREG:
+				update_special(bus);
+				break;
+			default:
+				printk(KERN_WARNING "usbfs: Unknown node %s "
+				       "mode %x found on remount!\n",
+				       bus->d_name.name, bus->d_inode->i_mode);
+				break;
+			}
+		}
+	}
 
-    mutex_unlock(&root->d_inode->i_mutex);
+	mutex_unlock(&root->d_inode->i_mutex);
 }
 
-static int remount(struct super_block *sb, int *flags, char *data) {
-    /* If this is not a real mount,
-     * i.e. it's a simple_pin_fs from create_special_files,
-     * then ignore it.
-     */
-    if (*flags & MS_KERNMOUNT)
-        return 0;
+static int remount(struct super_block *sb, int *flags, char *data)
+{
+	/* If this is not a real mount,
+	 * i.e. it's a simple_pin_fs from create_special_files,
+	 * then ignore it.
+	 */
+	if (*flags & MS_KERNMOUNT)
+		return 0;
 
-    if (parse_options(sb, data)) {
-        printk(KERN_WARNING "usbfs: mount parameter error.\n");
-        return -EINVAL;
-    }
+	if (parse_options(sb, data)) {
+		printk(KERN_WARNING "usbfs: mount parameter error.\n");
+		return -EINVAL;
+	}
 
-    if (usbfs_mount)
-        update_sb(usbfs_mount->mnt_sb);
+	if (usbfs_mount)
+		update_sb(usbfs_mount->mnt_sb);
 
-    return 0;
+	return 0;
 }
 
-static struct inode *usbfs_get_inode (struct super_block *sb, umode_t mode, dev_t dev) {
-    struct inode *inode = new_inode(sb);
+static struct inode *usbfs_get_inode (struct super_block *sb, umode_t mode, dev_t dev)
+{
+	struct inode *inode = new_inode(sb);
 
-    if (inode) {
-        inode->i_ino = get_next_ino();
-        inode_init_owner(inode, NULL, mode);
-        inode->i_atime = inode->i_mtime = inode->i_ctime = CURRENT_TIME;
-        switch (mode & S_IFMT) {
-        default:
-            init_special_inode(inode, mode, dev);
-            break;
-        case S_IFREG:
-            inode->i_fop = &default_file_operations;
-            break;
-        case S_IFDIR:
-            inode->i_op = &simple_dir_inode_operations;
-            inode->i_fop = &simple_dir_operations;
+	if (inode) {
+		inode->i_ino = get_next_ino();
+		inode_init_owner(inode, NULL, mode);
+		inode->i_atime = inode->i_mtime = inode->i_ctime = CURRENT_TIME;
+		switch (mode & S_IFMT) {
+		default:
+			init_special_inode(inode, mode, dev);
+			break;
+		case S_IFREG:
+			inode->i_fop = &default_file_operations;
+			break;
+		case S_IFDIR:
+			inode->i_op = &simple_dir_inode_operations;
+			inode->i_fop = &simple_dir_operations;
 
-            /* directory inodes start off with i_nlink == 2 (for "." entry) */
-            inc_nlink(inode);
-            break;
-        }
-    }
-    return inode;
+			/* directory inodes start off with i_nlink == 2 (for "." entry) */
+			inc_nlink(inode);
+			break;
+		}
+	}
+	return inode; 
 }
 
 /* SMP-safe */
 static int usbfs_mknod (struct inode *dir, struct dentry *dentry, umode_t mode,
-                        dev_t dev) {
-    struct inode *inode = usbfs_get_inode(dir->i_sb, mode, dev);
-    int error = -EPERM;
+			dev_t dev)
+{
+	struct inode *inode = usbfs_get_inode(dir->i_sb, mode, dev);
+	int error = -EPERM;
 
-    if (dentry->d_inode)
-        return -EEXIST;
+	if (dentry->d_inode)
+		return -EEXIST;
 
-    if (inode) {
-        d_instantiate(dentry, inode);
-        dget(dentry);
-        error = 0;
-    }
-    return error;
+	if (inode) {
+		d_instantiate(dentry, inode);
+		dget(dentry);
+		error = 0;
+	}
+	return error;
 }
 
-static int usbfs_mkdir (struct inode *dir, struct dentry *dentry, umode_t mode) {
-    int res;
+static int usbfs_mkdir (struct inode *dir, struct dentry *dentry, umode_t mode)
+{
+	int res;
 
-    mode = (mode & (S_IRWXUGO | S_ISVTX)) | S_IFDIR;
-    res = usbfs_mknod (dir, dentry, mode, 0);
-    if (!res)
-        inc_nlink(dir);
-    return res;
+	mode = (mode & (S_IRWXUGO | S_ISVTX)) | S_IFDIR;
+	res = usbfs_mknod (dir, dentry, mode, 0);
+	if (!res)
+		inc_nlink(dir);
+	return res;
 }
 
-static int usbfs_create (struct inode *dir, struct dentry *dentry, umode_t mode) {
-    mode = (mode & S_IALLUGO) | S_IFREG;
-    return usbfs_mknod (dir, dentry, mode, 0);
+static int usbfs_create (struct inode *dir, struct dentry *dentry, umode_t mode)
+{
+	mode = (mode & S_IALLUGO) | S_IFREG;
+	return usbfs_mknod (dir, dentry, mode, 0);
 }
 
-static inline int usbfs_positive (struct dentry *dentry) {
-    return dentry->d_inode && !d_unhashed(dentry);
+static inline int usbfs_positive (struct dentry *dentry)
+{
+	return dentry->d_inode && !d_unhashed(dentry);
 }
 
-static int usbfs_empty (struct dentry *dentry) {
-    struct list_head *list;
+static int usbfs_empty (struct dentry *dentry)
+{
+	struct list_head *list;
 
-    spin_lock(&dentry->d_lock);
-    list_for_each(list, &dentry->d_subdirs) {
-        struct dentry *de = list_entry(list, struct dentry, d_u.d_child);
+	spin_lock(&dentry->d_lock);
+	list_for_each(list, &dentry->d_subdirs) {
+		struct dentry *de = list_entry(list, struct dentry, d_child);
 
-        spin_lock_nested(&de->d_lock, DENTRY_D_LOCK_NESTED);
-        if (usbfs_positive(de)) {
-            spin_unlock(&de->d_lock);
-            spin_unlock(&dentry->d_lock);
-            return 0;
-        }
-        spin_unlock(&de->d_lock);
-    }
-    spin_unlock(&dentry->d_lock);
-    return 1;
+		spin_lock_nested(&de->d_lock, DENTRY_D_LOCK_NESTED);
+		if (usbfs_positive(de)) {
+			spin_unlock(&de->d_lock);
+			spin_unlock(&dentry->d_lock);
+			return 0;
+		}
+		spin_unlock(&de->d_lock);
+	}
+	spin_unlock(&dentry->d_lock);
+	return 1;
 }
 
-static int usbfs_unlink (struct inode *dir, struct dentry *dentry) {
-    struct inode *inode = dentry->d_inode;
-    mutex_lock(&inode->i_mutex);
-    drop_nlink(dentry->d_inode);
-    dput(dentry);
-    mutex_unlock(&inode->i_mutex);
-    d_delete(dentry);
-    return 0;
+static int usbfs_unlink (struct inode *dir, struct dentry *dentry)
+{
+	struct inode *inode = dentry->d_inode;
+	mutex_lock(&inode->i_mutex);
+	drop_nlink(dentry->d_inode);
+	dput(dentry);
+	mutex_unlock(&inode->i_mutex);
+	d_delete(dentry);
+	return 0;
 }
 
-static int usbfs_rmdir(struct inode *dir, struct dentry *dentry) {
-    int error = -ENOTEMPTY;
-    struct inode * inode = dentry->d_inode;
+static int usbfs_rmdir(struct inode *dir, struct dentry *dentry)
+{
+	int error = -ENOTEMPTY;
+	struct inode * inode = dentry->d_inode;
 
-    mutex_lock(&inode->i_mutex);
-    dentry_unhash(dentry);
-    if (usbfs_empty(dentry)) {
-        dont_mount(dentry);
-        drop_nlink(dentry->d_inode);
-        drop_nlink(dentry->d_inode);
-        dput(dentry);
-        inode->i_flags |= S_DEAD;
-        drop_nlink(dir);
-        error = 0;
-    }
-    mutex_unlock(&inode->i_mutex);
-    if (!error)
-        d_delete(dentry);
-    return error;
+	mutex_lock(&inode->i_mutex);
+	dentry_unhash(dentry);
+	if (usbfs_empty(dentry)) {
+		dont_mount(dentry);
+		drop_nlink(dentry->d_inode);
+		drop_nlink(dentry->d_inode);
+		dput(dentry);
+		inode->i_flags |= S_DEAD;
+		drop_nlink(dir);
+		error = 0;
+	}
+	mutex_unlock(&inode->i_mutex);
+	if (!error)
+		d_delete(dentry);
+	return error;
 }
 
 

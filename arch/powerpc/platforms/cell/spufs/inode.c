@@ -149,27 +149,28 @@ spufs_evict_inode(struct inode *inode) {
         put_spu_gang(ei->i_gang);
 }
 
-static void spufs_prune_dir(struct dentry *dir) {
-    struct dentry *dentry, *tmp;
+static void spufs_prune_dir(struct dentry *dir)
+{
+	struct dentry *dentry, *tmp;
 
-    mutex_lock(&dir->d_inode->i_mutex);
-    list_for_each_entry_safe(dentry, tmp, &dir->d_subdirs, d_u.d_child) {
-        spin_lock(&dentry->d_lock);
-        if (!(d_unhashed(dentry)) && dentry->d_inode) {
-            dget_dlock(dentry);
-            __d_drop(dentry);
-            spin_unlock(&dentry->d_lock);
-            simple_unlink(dir->d_inode, dentry);
-            /* XXX: what was dcache_lock protecting here? Other
-             * filesystems (IB, configfs) release dcache_lock
-             * before unlink */
-            dput(dentry);
-        } else {
-            spin_unlock(&dentry->d_lock);
-        }
-    }
-    shrink_dcache_parent(dir);
-    mutex_unlock(&dir->d_inode->i_mutex);
+	mutex_lock(&dir->d_inode->i_mutex);
+	list_for_each_entry_safe(dentry, tmp, &dir->d_subdirs, d_child) {
+		spin_lock(&dentry->d_lock);
+		if (!(d_unhashed(dentry)) && dentry->d_inode) {
+			dget_dlock(dentry);
+			__d_drop(dentry);
+			spin_unlock(&dentry->d_lock);
+			simple_unlink(dir->d_inode, dentry);
+			/* XXX: what was dcache_lock protecting here? Other
+			 * filesystems (IB, configfs) release dcache_lock
+			 * before unlink */
+			dput(dentry);
+		} else {
+			spin_unlock(&dentry->d_lock);
+		}
+	}
+	shrink_dcache_parent(dir);
+	mutex_unlock(&dir->d_inode->i_mutex);
 }
 
 /* Caller must hold parent->i_mutex */
@@ -200,21 +201,21 @@ static int spufs_fill_dir(struct dentry *dir,
     }
     return 0;
 out:
-    /*
-     * remove all children from dir. dir->inode is not set so don't
-     * just simply use spufs_prune_dir() and panic afterwards :)
-     * dput() looks like it will do the right thing:
-     * - dec parent's ref counter
-     * - remove child from parent's child list
-     * - free child's inode if possible
-     * - free child
-     */
-    list_for_each_entry_safe(dentry, tmp, &dir->d_subdirs, d_u.d_child) {
-        dput(dentry);
-    }
+	/*
+	 * remove all children from dir. dir->inode is not set so don't
+	 * just simply use spufs_prune_dir() and panic afterwards :)
+	 * dput() looks like it will do the right thing:
+	 * - dec parent's ref counter
+	 * - remove child from parent's child list
+	 * - free child's inode if possible
+	 * - free child
+	 */
+	list_for_each_entry_safe(dentry, tmp, &dir->d_subdirs, d_child) {
+		dput(dentry);
+	}
 
-    shrink_dcache_parent(dir);
-    return ret;
+	shrink_dcache_parent(dir);
+	return ret;
 }
 
 static int spufs_dir_close(struct inode *inode, struct file *file) {
