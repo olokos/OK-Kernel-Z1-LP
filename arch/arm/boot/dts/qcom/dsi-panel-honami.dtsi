@@ -1,5 +1,5 @@
 /* Copyright (c) 2012, Code Aurora Forum. All rights reserved.
- * Copyright (C) 2013 Sony Mobile Communications AB.
+ * Copyright (C) 2013-2014 Sony Mobile Communications AB.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -12,8 +12,10 @@
  */
 
 &mdss_mdp {
-	
+	qcom,mdss-ib-factor = <2 1>;		/* 2 times  */
 	dsi_renesas_default: somc,renesas_default_panel {
+		compatible = "qcom,mdss-dsi-panel";
+
 		qcom,mdss-dsi-panel-name = "default renesas 1080p video";
 		qcom,mdss-dsi-panel-controller = <&mdss_dsi0>;
 		qcom,mdss-dsi-panel-type = "dsi_video_mode";
@@ -102,16 +104,12 @@
 		qcom,mdss-dsi-pan-enable-dynamic-fps;
 		qcom,mdss-dsi-pan-fps-update = "dfps_suspend_resume_mode";
 		qcom,mdss-dsi-reset-sequence = <1 20>, <0 200>, <1 20>;
-		qcom,mdss-brightness-max-level = <255>;
 
-		somc,disp-en-off-pre = <10>;
-		somc,disp-en-off-post = <10>;
-		somc,disp-en-on-pre = <25>;
-		somc,pw-on-rst-seq = <0 10>, <1 10>;
-		somc,pw-off-rst-seq = <0 10>;
 		somc,panel-id = [ff];
 		somc,panel-detect = <1>;
 		somc,driver-ic = <0>;
+		somc,panel-id-read-cmds;
+		somc,dsi-restart-hack;
 		somc,dric-gpio = <&msmgpio 26 0>;
 		somc,mdss-phy-size-mm = <62 110>;
 		somc,mdss-dsi-lane-config = [00 c2 45 00 00 00 00 01 75
@@ -121,9 +119,17 @@
 				00 02 45 00 00 00 00 01 97];
 		somc,mdss-dsi-disp-on-in-hs = <1>;
 		somc,mdss-dsi-wait-time-before-on-cmd = <120>;
+		qcom,mdss-brightness-max-level = <255>;
+		somc,disp-en-off-pre = <10>;
+		somc,disp-en-off-post = <10>;
+		somc,disp-en-on-pre = <25>;
+		somc,pw-on-rst-seq = <0 10>, <1 10>;
+		somc,pw-off-rst-seq = <0 10>;
 	};
 
 	dsi_renesas_sharp_1080_vid: somc,renesas_sharp_1080p_panel {
+		compatible = "qcom,mdss-dsi-panel";
+
 		qcom,mdss-dsi-panel-name = "sharp renesas 1080p video";
 		qcom,mdss-dsi-panel-controller = <&mdss_dsi0>;
 		qcom,mdss-dsi-panel-type = "dsi_video_mode";
@@ -137,8 +143,8 @@
 		qcom,mdss-dsi-h-back-porch = <64>;
 		qcom,mdss-dsi-h-pulse-width = <16>;
 		qcom,mdss-dsi-h-sync-skew = <0>;
-		qcom,mdss-dsi-v-back-porch = <4>;
-		qcom,mdss-dsi-v-front-porch = <1>;
+		qcom,mdss-dsi-v-back-porch = <3>;
+		qcom,mdss-dsi-v-front-porch = <2>;
 		qcom,mdss-dsi-v-pulse-width = <2>;
 		qcom,mdss-dsi-h-left-border = <0>;
 		qcom,mdss-dsi-h-right-border = <0>;
@@ -215,13 +221,7 @@
 		qcom,mdss-dsi-pan-enable-dynamic-fps;
 		qcom,mdss-dsi-pan-fps-update = "dfps_suspend_resume_mode";
 		qcom,mdss-dsi-reset-sequence = <1 20>, <0 200>, <1 20>;
-		qcom,mdss-brightness-max-level = <255>;
 
-		somc,disp-en-off-pre = <10>;
-		somc,disp-en-off-post = <10>;
-		somc,disp-en-on-pre = <25>;
-		somc,pw-on-rst-seq = <0 10>, <1 10>;
-		somc,pw-off-rst-seq = <0 10>;
 		somc,panel-id = [ff ff ff 63];
 		somc,driver-ic = <0>;
 		somc,dric-gpio = <&msmgpio 26 0>;
@@ -232,7 +232,13 @@
 				00 c2 45 00 00 00 00 01 75
 				00 02 45 00 00 00 00 01 97];
 		somc,mdss-dsi-disp-on-in-hs = <1>;
-		somc,mdss-dsi-wait-time-before-on-cmd = <200>;
+		somc,mdss-dsi-wait-time-before-on-cmd = <150>;
+		qcom,mdss-brightness-max-level = <255>;
+		somc,disp-en-off-pre = <10>;
+		somc,disp-en-off-post = <10>;
+		somc,disp-en-on-pre = <25>;
+		somc,pw-on-rst-seq = <0 10>, <1 10>;
+		somc,pw-off-rst-seq = <0 10>;
 
 		somc,mdss-dsi-pre-uv-command = [29 01 00 00 00 00 02 B0 04];
 		somc,mdss-dsi-uv-command = [04 01 00 00 00 00 01 EF];
@@ -315,6 +321,8 @@
 	};
 
 	dsi_renesas_jdc_1080_vid: somc,renesas_jdc_1080p_panel {
+		compatible = "qcom,mdss-dsi-panel";
+
 		qcom,mdss-dsi-panel-name = "jdc renesas 1080p video";
 		qcom,mdss-dsi-panel-controller = <&mdss_dsi0>;
 		qcom,mdss-dsi-panel-type = "dsi_video_mode";
@@ -403,7 +411,6 @@
 		qcom,mdss-dsi-pan-enable-dynamic-fps;
 		qcom,mdss-dsi-pan-fps-update = "dfps_suspend_resume_mode";
 		qcom,mdss-dsi-reset-sequence = <1 20>, <0 200>, <1 20>;
-		qcom,mdss-brightness-max-level = <255>;
 
 		somc,panel-id = [ff ff ff 62];
 		somc,driver-ic = <0>;
@@ -415,6 +422,7 @@
 				00 c2 45 00 00 00 00 01 75
 				00 02 45 00 00 00 00 01 97];
 		somc,mdss-dsi-disp-on-in-hs = <1>;
+		qcom,mdss-brightness-max-level = <255>;
 		somc,mdss-dsi-wait-time-before-on-cmd = <120>;
 
 		somc,mdss-dsi-pre-uv-command = [29 01 00 00 00 00 02 B0 04];
@@ -503,6 +511,8 @@
 	};
 
 	dsi_novatek_default: somc,novatek_default_panel {
+		compatible = "qcom,mdss-dsi-panel";
+
 		qcom,mdss-dsi-panel-name = "default novatek 1080p video";
 		qcom,mdss-dsi-panel-controller = <&mdss_dsi0>;
 		qcom,mdss-dsi-panel-type = "dsi_video_mode";
@@ -965,17 +975,11 @@
 		qcom,mdss-dsi-pan-enable-dynamic-fps;
 		qcom,mdss-dsi-pan-fps-update = "dfps_suspend_resume_mode";
 		qcom,mdss-dsi-reset-sequence = <1 20>, <0 200>, <1 20>;
-		qcom,mdss-brightness-max-level = <255>;
 
-		somc,disp-en-off-pre = <10>;
-		somc,disp-en-off-post = <10>;
-		somc,disp-en-on-pre = <200>;
-		somc,disp-en-on-post = <10>;
-		somc,pw-on-rst-seq = <1 10>, <0 10>, <1 25>;
-		somc,pw-off-rst-seq = <0 10>;
 		somc,panel-id = [ff];
 		somc,panel-detect = <1>;
 		somc,driver-ic = <1>;
+		somc,panel-id-read-cmds;
 		somc,dric-gpio = <&msmgpio 26 0>;
 		somc,mdss-phy-size-mm = <62 110>;
 		somc,mdss-dsi-lane-config = [00 c2 45 00 00 00 00 01 75
@@ -985,9 +989,19 @@
 				00 02 45 00 00 00 00 01 97];
 		somc,mdss-dsi-disp-on-in-hs = <1>;
 		somc,mdss-dsi-wait-time-before-on-cmd = <120>;
+		somc,mdss-dsi-init-from-begin = <1>;
+		qcom,mdss-brightness-max-level = <255>;
+		somc,disp-en-off-pre = <10>;
+		somc,disp-en-off-post = <10>;
+		somc,disp-en-on-pre = <200>;
+		somc,disp-en-on-post = <10>;
+		somc,pw-on-rst-seq = <1 10>, <0 10>, <1 25>;
+		somc,pw-off-rst-seq = <0 10>;
 	};
 
 	dsi_novatek_jdc_1080_vid: somc,novatek_jdc_1080p_panel {
+		compatible = "qcom,mdss-dsi-panel";
+
 		qcom,mdss-dsi-panel-name = "jdc novatek 1080p video";
 		qcom,mdss-dsi-panel-controller = <&mdss_dsi0>;
 		qcom,mdss-dsi-panel-type = "dsi_video_mode";
@@ -1450,14 +1464,7 @@
 		qcom,mdss-dsi-pan-enable-dynamic-fps;
 		qcom,mdss-dsi-pan-fps-update = "dfps_suspend_resume_mode";
 		qcom,mdss-dsi-reset-sequence = <1 20>, <0 200>, <1 20>;
-		qcom,mdss-brightness-max-level = <255>;
 
-		somc,disp-en-off-pre = <10>;
-		somc,disp-en-off-post = <10>;
-		somc,disp-en-on-pre = <200>;
-		somc,disp-en-on-post = <10>;
-		somc,pw-on-rst-seq = <1 10>, <0 10>, <1 25>;
-		somc,pw-off-rst-seq = <0 10>;
 		somc,panel-id = [12 72 08 62];
 		somc,driver-ic = <1>;
 		somc,dric-gpio = <&msmgpio 26 0>;
@@ -1468,7 +1475,15 @@
 				00 c2 45 00 00 00 00 01 75
 				00 02 45 00 00 00 00 01 97];
 		somc,mdss-dsi-disp-on-in-hs = <1>;
+		qcom,mdss-brightness-max-level = <255>;
+		somc,disp-en-off-pre = <10>;
+		somc,disp-en-off-post = <10>;
+		somc,disp-en-on-pre = <200>;
+		somc,disp-en-on-post = <10>;
+		somc,pw-on-rst-seq = <1 10>, <0 10>, <1 25>;
+		somc,pw-off-rst-seq = <0 10>;
 		somc,mdss-dsi-wait-time-before-on-cmd = <120>;
+		somc,mdss-dsi-init-from-begin = <1>;
 
 		somc,mdss-dsi-uv-command = [04 01 00 00 00 00 01 DA
 				04 01 00 00 00 00 01 DB];
