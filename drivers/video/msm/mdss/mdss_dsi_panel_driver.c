@@ -1744,10 +1744,10 @@ static int mdss_dsi_panel_picadj_setup(struct mdss_panel_data *pdata)
 	memset(&picadj, 0, sizeof(struct mdp_pa_cfg_data));
 
 	/* Check if values are in permitted range, otherwise read defaults */
-	if ( ((padata->sat_adj  < 224 || padata->sat_adj  > 383) && padata->sat_adj  != 128) ||
+	if ( ((padata->sat_adj  < 224 || padata->sat_adj  > 12000) && padata->sat_adj  != 128)
 	      (padata->hue_adj  < 0   || padata->hue_adj  > 1536) ||
-	     ((padata->val_adj  < 128 || padata->val_adj  > 383) && padata->val_adj  != 0) ||
-	     ((padata->cont_adj < 128 || padata->cont_adj > 383) && padata->cont_adj != 0) )
+	     ((padata->val_adj  < 0   || padata->val_adj  > 383) && padata->val_adj  != 0) ||
+	     ((padata->cont_adj < 0   || padata->cont_adj > 383) && padata->cont_adj != 0) )
 	{
 		picadj.block = MDP_LOGICAL_BLOCK_DISP_0;
 		picadj.pa_data.flags = MDP_PP_OPS_ENABLE | MDP_PP_OPS_READ;
