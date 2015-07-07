@@ -66,7 +66,10 @@
 		INFO_BUFFER(DEV, BUF, LEN, FMT, FLN);	\
 })
 
+#if 0
+// Tommy-Geenexus
 #define MXM_TOUCH_WAKEUP_FEATURE
+#endif
 
 #define MXM_CMD_LEN_PACKET_MAX      9
 #define MXM_CMD_LEN_MAX             (15 * MXM_CMD_LEN_PACKET_MAX)
