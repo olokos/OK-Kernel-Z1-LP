@@ -71,6 +71,13 @@ config DEVFREQ_GOV_MSM_ADRENO_TZ
 	  Sets the frequency using a "on-demand" algorithm.
 	  This governor is unlikely to be useful for other devices.
 
+config DEVFREQ_GOV_CONSERVATIVE
+	tristate "Conservative"
+	depends on MSM_KGSL
+	help
+	  Conservative governor for the Adreno GPU.
+	  Sets the frequency using a "conservative" algorithm.
+
 config DEVFREQ_GOV_MSM_CPUFREQ
 	bool "MSM CPUfreq"
 	depends on CPU_FREQ_MSM
