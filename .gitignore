@@ -86,6 +86,8 @@ GTAGS
 \#*#
 
 #OK Kernel gitignore
+/out/
 /out/*
 kernel-build-log.txt
+boot.img
 
