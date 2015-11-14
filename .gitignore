@@ -84,3 +84,8 @@ GTAGS
 *.orig
 *~
 \#*#
+
+#OK Kernel gitignore
+/out/*
+kernel-build-log.txt
+
