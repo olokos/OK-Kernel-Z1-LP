@@ -1382,9 +1382,6 @@ static void dbs_input_event(struct input_handle *handle, unsigned int type,
 		boost_flag = 1;
 	}
 	for_each_online_cpu(i) {
-#ifdef CONFIG_CPU_FREQ_WAKEUP_BOOST
-		per_cpu(dbs_refresh_work, i).max_speed = (code == KEY_POWER);
-#endif
 		queue_work_on(i, dbs_wq, &per_cpu(dbs_refresh_work, i).work);
 	}
 
