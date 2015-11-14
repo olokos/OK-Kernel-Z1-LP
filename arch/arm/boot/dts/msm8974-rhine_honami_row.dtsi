@@ -1119,7 +1119,7 @@
 				qcom,mode = "pwm";
 				qcom,pwm-channel = <6>;
 				qcom,pwm-us = <1000>;
-				qcom,pwm-max-value = <304>;
+				qcom,pwm-max-value = <511>;
 				qcom,max-current = <12>;
 				qcom,default-state = "off";
 				qcom,id = <3>;
@@ -1145,7 +1145,7 @@
 				qcom,mode = "pwm";
 				qcom,pwm-channel = <4>;
 				qcom,pwm-us = <1000>;
-				qcom,pwm-max-value = <368>;
+				qcom,pwm-max-value = <511>;
 				qcom,max-current = <12>;
 				qcom,default-state = "off";
 				qcom,id = <5>;
