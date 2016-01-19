@@ -62,6 +62,8 @@
 #define WLED_CTL_DLY_STEP		200
 #define WLED_CTL_DLY_MAX		1400
 #define WLED_MAX_CURR			25
+#define WLED_MIN_MAX_CURR		1
+#define WLED_DEF_MAX_CURR		20
 #define WLED_MSB_MASK			0x0F
 #define WLED_MAX_CURR_MASK		0x1F
 #define WLED_OP_FDBCK_MASK		0x07
@@ -69,6 +71,7 @@
 #define WLED_OP_FDBCK_DEFAULT		0x00
 
 #define WLED_MAX_LEVEL			4095
+#define WLED_MAP_MIN_LEVEL		288
 #define WLED_8_BIT_MASK			0xFF
 #define WLED_4_BIT_MASK			0x0F
 #define WLED_8_BIT_SHFT			0x08
@@ -525,6 +528,7 @@ static struct pwm_device *kpdbl_master;
 static u32 kpdbl_master_period_us;
 DECLARE_BITMAP(kpdbl_leds_in_use, NUM_KPDBL_LEDS);
 static bool is_kpdbl_master_turn_on;
+static int prev_max_current;
 
 static int
 qpnp_led_masked_write(struct qpnp_led_data *led, u16 addr, u8 mask, u8 val)
@@ -567,9 +571,31 @@ static void qpnp_dump_regs(struct qpnp_led_data *led, u8 regs[], u8 array_size)
 	pr_debug("===== %s LED register dump end =====\n", led->cdev.name);
 }
 
+static void
+qpnp_wled_current_scale(int bl_lvl, int *notif_curr_chg, int *max_curr)
+{
+	switch (bl_lvl) {
+	case WLED_MAX_LEVEL:
+		*max_curr = WLED_MAX_CURR;
+		*notif_curr_chg = 1;
+		break;
+	case WLED_MAP_MIN_LEVEL:
+		*max_curr = WLED_MIN_MAX_CURR;
+		*notif_curr_chg = 1;
+		break;
+	default:
+		break;
+	}
+
+	if (prev_max_current != WLED_DEF_MAX_CURR)
+		*notif_curr_chg = 1;
+
+	prev_max_current = *max_curr;
+}
+
 static int qpnp_wled_set(struct qpnp_led_data *led)
 {
-	int rc, duty, level;
+	int rc, duty, level, curr = WLED_DEF_MAX_CURR, curr_chg_req = 0;
 	u8 val, i, num_wled_strings;
 
 	level = led->cdev.brightness;
@@ -598,12 +624,24 @@ static int qpnp_wled_set(struct qpnp_led_data *led)
 		}
 	}
 
+	qpnp_wled_current_scale(level, &curr_chg_req, &curr);
+
 	duty = (WLED_MAX_DUTY_CYCLE * level) / WLED_MAX_LEVEL;
 
 	num_wled_strings = led->wled_cfg->num_strings;
 
 	/* program brightness control registers */
 	for (i = 0; i < num_wled_strings; i++) {
+		if (curr_chg_req) {
+			rc = qpnp_led_masked_write(led,
+			WLED_FULL_SCALE_REG(led->base, i), WLED_MAX_CURR_MASK,
+									curr);
+			if (rc) {
+				dev_err(&led->spmi_dev->dev,
+				"WLED max current reg write failed(%d)\n", rc);
+				return -EINVAL;
+			}
+		}
 		rc = qpnp_led_masked_write(led,
 			WLED_BRIGHTNESS_CNTL_MSB(led->base, i), WLED_MSB_MASK,
 			(duty >> WLED_8_BIT_SHFT) & WLED_4_BIT_MASK);
@@ -623,6 +661,9 @@ static int qpnp_wled_set(struct qpnp_led_data *led)
 		}
 	}
 
+	if (curr_chg_req)
+		led->max_current = curr;
+
 	/* sync */
 	val = WLED_SYNC_VAL;
 	rc = spmi_ext_register_writel(led->spmi_dev->ctrl, led->spmi_dev->sid,
@@ -632,6 +673,9 @@ static int qpnp_wled_set(struct qpnp_led_data *led)
 			"WLED set sync reg failed(%d)\n", rc);
 		return rc;
 	}
+
+	if (curr_chg_req)
+		usleep(WLED_SYNC_WAIT_FOR_DEVICE);
 
 	val = WLED_SYNC_RESET_VAL;
 	rc = spmi_ext_register_writel(led->spmi_dev->ctrl, led->spmi_dev->sid,
