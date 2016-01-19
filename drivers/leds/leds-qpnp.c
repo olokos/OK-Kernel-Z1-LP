@@ -291,6 +291,49 @@ enum led_mode {
 	LPG_SYNC_MODE,
 };
 
+enum br_point {
+	BR_POINT1 = 288,
+	BR_POINT2 = 440,
+	BR_POINT3 = 441,
+	BR_POINT4 = 744,
+	BR_POINT5 = 745,
+	BR_POINT6 = 1048,
+	BR_POINT7 = 1049,
+	BR_POINT8 = 1352,
+	BR_POINT9 = 1353,
+	BR_POINT10 = 1656,
+	BR_POINT11 = 1657,
+	BR_POINT12 = 1960,
+	BR_POINT13 = 1961,
+	BR_POINT14 = 2264,
+	BR_POINT15 = 2265,
+	BR_POINT16 = 2568,
+	BR_POINT17 = 2569,
+	BR_POINT18 = 2872,
+	BR_POINT19 = 2873,
+	BR_POINT20 = 3176,
+	BR_POINT21 = 3177,
+	BR_POINT22 = 3480,
+	BR_POINT23 = 3481,
+	BR_POINT24 = 3936,
+	BR_POINT25 = 3937
+};
+
+enum max_curr {
+	MAX_CURR1 = 1,
+	MAX_CURR2 = 3,
+	MAX_CURR3 = 5,
+	MAX_CURR4 = 7,
+	MAX_CURR5 = 9,
+	MAX_CURR6 = 11,
+	MAX_CURR7 = 13,
+	MAX_CURR8 = 15,
+	MAX_CURR9 = 17,
+	MAX_CURR10 = 19,
+	MAX_CURR11 = 21,
+	MAX_CURR12 = 23 
+};
+
 static u8 wled_debug_regs[] = {
 	/* common registers */
 	0x46, 0x47, 0x48, 0x49, 0x4a, 0x4b, 0x4c, 0x4d, 0x4d, 0x4e, 0x4f,
@@ -528,6 +571,7 @@ static struct pwm_device *kpdbl_master;
 static u32 kpdbl_master_period_us;
 DECLARE_BITMAP(kpdbl_leds_in_use, NUM_KPDBL_LEDS);
 static bool is_kpdbl_master_turn_on;
+static int prev_max_curr;
 static struct qpnp_led_data *led_rgb_r;
 static struct qpnp_led_data *led_rgb_g;
 static struct qpnp_led_data *led_rgb_b;
@@ -573,9 +617,61 @@ static void qpnp_dump_regs(struct qpnp_led_data *led, u8 regs[], u8 array_size)
 	pr_debug("===== %s LED register dump end =====\n", led->cdev.name);
 }
 
+static void qpnp_wled_map_current_to_bl(int bl_lvl,
+					bool *notif_curr_chg, int *max_curr)
+{
+	switch (bl_lvl) {
+	case BR_POINT1 ... BR_POINT2:
+		*max_curr = MAX_CURR1;
+		break;
+	case BR_POINT3 ... BR_POINT4:
+		*max_curr = MAX_CURR2;
+		break;
+	case BR_POINT5 ... BR_POINT6:
+		*max_curr = MAX_CURR3;
+		break;
+	case BR_POINT7 ... BR_POINT8:
+		*max_curr = MAX_CURR4;
+		break;
+	case BR_POINT9 ... BR_POINT10:
+		*max_curr = MAX_CURR5;
+		break;
+	case BR_POINT11 ... BR_POINT12:
+		*max_curr = MAX_CURR6;
+		break;
+	case BR_POINT13 ... BR_POINT14:
+		*max_curr = MAX_CURR7;
+		break;
+	case BR_POINT15 ... BR_POINT16:
+		*max_curr = MAX_CURR8;
+		break;
+	case BR_POINT17 ... BR_POINT18:
+		*max_curr = MAX_CURR9;
+		break;
+	case BR_POINT19 ... BR_POINT20:
+		*max_curr = MAX_CURR10;
+		break;
+	case BR_POINT21 ... BR_POINT22:
+		*max_curr = MAX_CURR11;
+		break;
+	case BR_POINT23 ... BR_POINT24:
+		*max_curr = MAX_CURR12;
+		break;
+	case BR_POINT25 ... WLED_MAX_LEVEL:
+		*max_curr =  WLED_MAX_CURR;
+		break;
+	}
+
+	if (prev_max_curr != *max_curr) {
+		*notif_curr_chg = true;
+		prev_max_curr = *max_curr;
+	}
+}
+
 static int qpnp_wled_set(struct qpnp_led_data *led)
 {
-	int rc, duty, level;
+	int rc, duty, level, curr;
+	bool curr_chg_req = false;
 	u8 val, i, num_wled_strings;
 
 	level = led->cdev.brightness;
@@ -604,11 +700,33 @@ static int qpnp_wled_set(struct qpnp_led_data *led)
 		}
 	}
 
+	/*
+	 * Dynamically scale backlight current to deal with suboptimal
+	 * userspace brightness mapping.
+	 */
+	qpnp_wled_map_current_to_bl(level, &curr_chg_req, &curr);
+
 	duty = (WLED_MAX_DUTY_CYCLE * level) / WLED_MAX_LEVEL;
 
 	num_wled_strings = led->wled_cfg->num_strings;
 
-	/* program brightness control registers */
+	/*
+	 * program brightness control registers.
+	 * Write max_curr first to reduce flicker.
+	 */
+	for (i = 0; i < num_wled_strings; i++) {
+		if (curr_chg_req) {
+			rc = qpnp_led_masked_write(led,
+			WLED_FULL_SCALE_REG(led->base, i), WLED_MAX_CURR_MASK,
+									curr);
+			if (rc) {
+				dev_err(&led->spmi_dev->dev,
+				"WLED max current reg write failed(%d)\n", rc);
+				return -EINVAL;
+			}
+		}
+	}
+
 	for (i = 0; i < num_wled_strings; i++) {
 		rc = qpnp_led_masked_write(led,
 			WLED_BRIGHTNESS_CNTL_MSB(led->base, i), WLED_MSB_MASK,
@@ -629,6 +747,9 @@ static int qpnp_wled_set(struct qpnp_led_data *led)
 		}
 	}
 
+	if (curr_chg_req)
+		led->max_current = curr;
+
 	/* sync */
 	val = WLED_SYNC_VAL;
 	rc = spmi_ext_register_writel(led->spmi_dev->ctrl, led->spmi_dev->sid,
@@ -638,6 +759,9 @@ static int qpnp_wled_set(struct qpnp_led_data *led)
 			"WLED set sync reg failed(%d)\n", rc);
 		return rc;
 	}
+
+	if (curr_chg_req)
+		usleep(WLED_SYNC_WAIT_FOR_DEVICE);
 
 	val = WLED_SYNC_RESET_VAL;
 	rc = spmi_ext_register_writel(led->spmi_dev->ctrl, led->spmi_dev->sid,
