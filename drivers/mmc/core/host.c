@@ -39,6 +39,7 @@ static void mmc_host_classdev_release(struct device *dev)
 	kfree(host);
 }
 
+#if 0
 static int mmc_host_runtime_suspend(struct device *dev)
 {
 	struct mmc_host *host = cls_dev_to_mmc_host(dev);
@@ -138,11 +139,14 @@ static const struct dev_pm_ops mmc_host_pm_ops = {
 	SET_RUNTIME_PM_OPS(mmc_host_runtime_suspend, mmc_host_runtime_resume,
 			   pm_generic_runtime_idle)
 };
+#endif
 
 static struct class mmc_host_class = {
 	.name		= "mmc_host",
 	.dev_release	= mmc_host_classdev_release,
+#if 0
 	.pm		= &mmc_host_pm_ops,
+#endif
 };
 
 int mmc_register_host_class(void)
