@@ -3798,3 +3798,10 @@ CONFIG_NLATTR=y
 # CONFIG_CORDIC is not set
 CONFIG_QMI_ENCDEC=y
 # CONFIG_QMI_ENCDEC_DEBUG is not set
+
+#
+# OK Kernel custom defconfig entries
+# Any new defconfig entries go below
+#
+CONFIG_INTELLI_PLUG=y
+
