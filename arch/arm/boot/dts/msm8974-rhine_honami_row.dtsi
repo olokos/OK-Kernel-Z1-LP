@@ -1181,9 +1181,6 @@
 	};
 };
 
-&sdhc_1 {
-	qcom,bus-speed-mode = "HS400_1p8v", "HS200_1p8v", "DDR_1p8v";
-};
 
 &sdhc_2 {
 	qcom,pad-drv-on = <0x4 0x2 0x2>; /* 10mA, 6mA, 6mA */
