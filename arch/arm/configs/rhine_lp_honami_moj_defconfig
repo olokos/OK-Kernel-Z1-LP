@@ -3804,4 +3804,6 @@ CONFIG_QMI_ENCDEC=y
 # Any new defconfig entries go below
 #
 CONFIG_INTELLI_PLUG=y
+CONFIG_WQ_POWER_EFFICIENT_DEFAULT=y
+
 
