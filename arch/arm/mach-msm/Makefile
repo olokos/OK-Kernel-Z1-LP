@@ -436,6 +436,8 @@ obj-$(CONFIG_WALL_CLK_SYSFS) += wallclk_sysfs.o
 obj-$(CONFIG_ARCH_RANDOM) += early_random.o
 obj-$(CONFIG_PERFMAP) += perfmap.o
 obj-$(CONFIG_RAMDUMP_TAGS) += board-rdtags.o
+obj-$(CONFIG_MSM_LIMITER) += msm_limiter.o
+
 CFLAGS_board-rdtags.o  := \
 	-D"INFO_PRODUCT=\"$(if $(TARGET_PRODUCT),$(TARGET_PRODUCT),unknown)\"" \
 	-D"INFO_VARIANT= \
