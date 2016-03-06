@@ -30,6 +30,7 @@
 #include <mach/clk.h>
 #include "clock-krait.h"
 #include "clock.h"
+#include "msm8974_cpuinfo.h"
 
 /* Clock inputs coming into Krait subsystem */
 DEFINE_FIXED_DIV_CLK(hfpll_src_clk, 1, NULL);
@@ -687,6 +688,10 @@ static int clock_krait_8974_driver_probe(struct platform_device *pdev)
 	get_krait_bin_format_b(pdev, &speed, &pvs, &pvs_ver);
 	snprintf(table_name, ARRAY_SIZE(table_name),
 			"qcom,speed%d-pvs%d-bin-v%d", speed, pvs, pvs_ver);
+
+	ret = cpuinfo_debugfs_init(speed, pvs, pvs_ver);
+	if (ret < 0)
+		return ret;
 
 	rows = parse_tbl(dev, table_name, 3,
 			(u32 **) &freq, (u32 **) &uv, (u32 **) &ua);

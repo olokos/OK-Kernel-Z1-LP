@@ -275,6 +275,9 @@ obj-$(CONFIG_ARCH_APQ8084) += board-8084.o board-8084-gpiomux.o
 obj-$(CONFIG_ARCH_APQ8084) += clock-8084.o
 obj-$(CONFIG_ARCH_MSM8974) += board-8974.o
 obj-$(CONFIG_ARCH_MSM8974) += clock-krait-8974.o
+ifeq ($(CONFIG_DEBUG_FS),y)
+obj-$(CONFIG_ARCH_MSM8974) += msm8974_cpuinfo.o
+endif
 obj-$(CONFIG_ARCH_MSM8974) += board-8974-console.o
 obj-$(CONFIG_ARCH_MSM8974) += clock-local2.o clock-pll.o clock-8974.o clock-rpm.o clock-voter.o clock-mdss-8974.o
 obj-$(CONFIG_ARCH_MSM8974) += gdsc.o
