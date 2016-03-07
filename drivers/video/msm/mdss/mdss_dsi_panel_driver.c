@@ -1044,7 +1044,7 @@ static int mdss_dsi_panel_on(struct mdss_panel_data *pdata)
 	}
 
 	if (spec_pdata->picadj_data.flags & MDP_PP_OPS_ENABLE)
-		mdss_dsi_panel_picadj_setup(pdata);
+ 		mdss_dsi_panel_picadj_setup(pdata);
 
 	if (spec_pdata->einit_cmds.cmd_cnt) {
 		pr_debug("%s: early init sequence\n", __func__);
@@ -1746,7 +1746,7 @@ static int mdss_dsi_panel_picadj_setup(struct mdss_panel_data *pdata)
  	/* Check if values are in permitted range, otherwise read defaults */
  	if ( ((padata->sat_adj  < 224 || padata->sat_adj  > 12000) && padata->sat_adj  != 128) ||
  	      (padata->hue_adj  < 0   || padata->hue_adj  > 1536) ||
- 	     ((padata->val_adj  < 128 || padata->val_adj  > 383) && padata->val_adj  != 0) ||
+ 	     ((padata->val_adj  < 0 || padata->val_adj  > 383) && padata->val_adj  != 0) ||
  	     ((padata->cont_adj < 0 || padata->cont_adj > 383) && padata->cont_adj != 0) )
  	{
  		picadj.block = MDP_LOGICAL_BLOCK_DISP_0;
@@ -1774,6 +1774,7 @@ static int mdss_dsi_panel_picadj_setup(struct mdss_panel_data *pdata)
  
  	return 0;
 }
+ 
 
 static void mdss_dsi_parse_lane_swap(struct device_node *np, char *dlane_swap)
 {
@@ -2647,21 +2648,20 @@ static int mdss_panel_parse_dt(struct device_node *np,
 		}
 
 		rc = of_property_read_u32(next, "somc,mdss-dsi-use-picadj", &tmp);
-		spec_pdata->picadj_data.flags = (!rc ? MDP_PP_OPS_ENABLE : 0);
+		spec_pdata->picadj_data.flags = !rc ? MDP_PP_OPS_ENABLE : 0;
 
-		if (rc) {
-			rc = of_property_read_u32(next, "somc,mdss-dsi-picadj-sat", &tmp);
-			spec_pdata->picadj_data.sat_adj = (!rc ? tmp : -1);
+		rc = of_property_read_u32(next, "somc,mdss-dsi-picadj-sat", &tmp);
+		spec_pdata->picadj_data.sat_adj = !rc ? tmp : -1;
 
-			rc = of_property_read_u32(next, "somc,mdss-dsi-picadj-hue", &tmp);
-			spec_pdata->picadj_data.hue_adj = (!rc ? tmp : -1);
+		rc = of_property_read_u32(next, "somc,mdss-dsi-picadj-hue", &tmp);
+		spec_pdata->picadj_data.hue_adj = !rc ? tmp : -1;
+		
+		rc = of_property_read_u32(next, "somc,mdss-dsi-picadj-val", &tmp);
+		spec_pdata->picadj_data.val_adj = !rc ? tmp : -1;
 
-			rc = of_property_read_u32(next, "somc,mdss-dsi-picadj-val", &tmp);
-			spec_pdata->picadj_data.val_adj = (!rc ? tmp : -1);
-
-			rc = of_property_read_u32(next, "somc,mdss-dsi-picadj-cont", &tmp);
-			spec_pdata->picadj_data.cont_adj = (!rc ? tmp : -1);
-		}
+		rc = of_property_read_u32(next, "somc,mdss-dsi-picadj-cont", &tmp);
+		spec_pdata->picadj_data.cont_adj = !rc ? tmp : -1;
+ 	
 
 		mdss_dsi_parse_dcs_cmds(next,
 			&spec_pdata->cabc_early_on_cmds,
