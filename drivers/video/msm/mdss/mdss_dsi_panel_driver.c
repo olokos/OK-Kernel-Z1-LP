@@ -1728,51 +1728,51 @@ exit:
 }
 
 static int mdss_dsi_panel_picadj_setup(struct mdss_panel_data *pdata)
-{
-	struct mdss_dsi_ctrl_pdata *ctrl_pdata = NULL;
-	struct mdp_pa_cfg *padata = NULL;
-	struct mdp_pa_cfg_data picadj;
-	u32 copyback = 0;
-
-	ctrl_pdata = container_of(pdata, struct mdss_dsi_ctrl_pdata,
-				panel_data);
-
-	padata = &ctrl_pdata->spec_pdata->picadj_data;
-	if (!padata)
-		return;
-
-	memset(&picadj, 0, sizeof(struct mdp_pa_cfg_data));
-
-	/* Check if values are in permitted range, otherwise read defaults */
-	if ( ((padata->sat_adj  < 224 || padata->sat_adj  > 12000) && padata->sat_adj  != 128)
-	      (padata->hue_adj  < 0   || padata->hue_adj  > 1536) ||
-	     ((padata->val_adj  < 0   || padata->val_adj  > 383) && padata->val_adj  != 0) ||
-	     ((padata->cont_adj < 0   || padata->cont_adj > 383) && padata->cont_adj != 0) )
-	{
-		picadj.block = MDP_LOGICAL_BLOCK_DISP_0;
-		picadj.pa_data.flags = MDP_PP_OPS_ENABLE | MDP_PP_OPS_READ;
-
-		mdss_mdp_pa_config(&picadj, &copyback);
+ {
+ 	struct mdss_dsi_ctrl_pdata *ctrl_pdata = NULL;
+ 	struct mdp_pa_cfg *padata = NULL;
+ 	struct mdp_pa_cfg_data picadj;
+ 	u32 copyback = 0;
+ 
+ 	ctrl_pdata = container_of(pdata, struct mdss_dsi_ctrl_pdata,
+ 				panel_data);
+ 
+ 	padata = &ctrl_pdata->spec_pdata->picadj_data;
+ 	if (!padata)
+ 		return;
+ 
+ 	memset(&picadj, 0, sizeof(struct mdp_pa_cfg_data));
+ 
+ 	/* Check if values are in permitted range, otherwise read defaults */
+ 	if ( ((padata->sat_adj  < 224 || padata->sat_adj  > 12000) && padata->sat_adj  != 128) ||
+ 	      (padata->hue_adj  < 0   || padata->hue_adj  > 1536) ||
+ 	     ((padata->val_adj  < 128 || padata->val_adj  > 383) && padata->val_adj  != 0) ||
+ 	     ((padata->cont_adj < 0 || padata->cont_adj > 383) && padata->cont_adj != 0) )
+ 	{
+ 		picadj.block = MDP_LOGICAL_BLOCK_DISP_0;
+ 		picadj.pa_data.flags = MDP_PP_OPS_ENABLE | MDP_PP_OPS_READ;
+ 
+ 		mdss_mdp_pa_config(&picadj, &copyback);
 		pr_err("%s: ERROR: Values not specified or invalid. Setting defaults.\n");
 		pr_err("%s (%d): defaults: sat=%d hue=%d val=%d cont=%d",
-			__func__, __LINE__, picadj.pa_data.sat_adj, picadj.pa_data.hue_adj,
-			picadj.pa_data.val_adj, picadj.pa_data.cont_adj);
-
-		padata = &picadj.pa_data;
-	}
-
-	picadj.block = MDP_LOGICAL_BLOCK_DISP_0;
-	padata->flags = MDP_PP_OPS_ENABLE | MDP_PP_OPS_WRITE;
-	picadj.pa_data = *padata;
-
-	mdss_mdp_pa_config(&picadj, &copyback);
-
-out:
-	pr_info("%s (%d):sat=%d hue=%d val=%d cont=%d",
-		__func__, __LINE__, padata->sat_adj,
-		padata->hue_adj, padata->val_adj, padata->cont_adj);
-
-	return 0;
+ 			__func__, __LINE__, picadj.pa_data.sat_adj, picadj.pa_data.hue_adj,
+ 			picadj.pa_data.val_adj, picadj.pa_data.cont_adj);
+ 
+ 		padata = &picadj.pa_data;
+ 	}
+ 
+ 	picadj.block = MDP_LOGICAL_BLOCK_DISP_0;
+ 	padata->flags = MDP_PP_OPS_ENABLE | MDP_PP_OPS_WRITE;
+ 	picadj.pa_data = *padata;
+ 
+ 	mdss_mdp_pa_config(&picadj, &copyback);
+ 
+ out:
+ 	pr_info("%s (%d):sat=%d hue=%d val=%d cont=%d",
+ 		__func__, __LINE__, padata->sat_adj,
+ 		padata->hue_adj, padata->val_adj, padata->cont_adj);
+ 
+ 	return 0;
 }
 
 static void mdss_dsi_parse_lane_swap(struct device_node *np, char *dlane_swap)
