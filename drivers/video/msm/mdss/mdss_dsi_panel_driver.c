@@ -1739,7 +1739,7 @@ static int mdss_dsi_panel_picadj_setup(struct mdss_panel_data *pdata)
  
  	padata = &ctrl_pdata->spec_pdata->picadj_data;
  	if (!padata)
- 		return;
+ 		return 0;
  
  	memset(&picadj, 0, sizeof(struct mdp_pa_cfg_data));
  
@@ -1753,7 +1753,7 @@ static int mdss_dsi_panel_picadj_setup(struct mdss_panel_data *pdata)
  		picadj.pa_data.flags = MDP_PP_OPS_ENABLE | MDP_PP_OPS_READ;
  
  		mdss_mdp_pa_config(&picadj, &copyback);
-		pr_err("%s: ERROR: Values not specified or invalid. Setting defaults.\n");
+		pr_err("%s: ERROR: Values not specified or invalid. Setting defaults.\n", __func__);
 		pr_err("%s (%d): defaults: sat=%d hue=%d val=%d cont=%d",
  			__func__, __LINE__, picadj.pa_data.sat_adj, picadj.pa_data.hue_adj,
  			picadj.pa_data.val_adj, picadj.pa_data.cont_adj);
