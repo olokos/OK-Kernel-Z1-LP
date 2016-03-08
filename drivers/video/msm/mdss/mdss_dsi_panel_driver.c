@@ -1767,7 +1767,6 @@ static int mdss_dsi_panel_picadj_setup(struct mdss_panel_data *pdata)
  
  	mdss_mdp_pa_config(&picadj, &copyback);
  
- out:
  	pr_info("%s (%d):sat=%d hue=%d val=%d cont=%d",
  		__func__, __LINE__, padata->sat_adj,
  		padata->hue_adj, padata->val_adj, padata->cont_adj);
