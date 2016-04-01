@@ -5,10 +5,10 @@ echo
 
 # Tuneables Here
 toolchain_path="/home/olokos/arm-cortex-linux-gnueabi-linaro_5.2-2015.11-2/bin/arm-eabi-"
-#name_of_your_kernel="OK-Kernel-v4"
+name_of_your_kernel="OK-Kernel-V5"
 defconfig="rhine_lp_honami_moj_defconfig"
-cpu_jobs="18"
-kerneltype="zImage-dtb"
+cpu_jobs="12"
+kerneltype="zImage"
 cmdline="androidboot.hardware=qcom user_debug=31 maxcpus=4 msm_rtb.filter=0x3F ehci-hcd.park=3 msm_rtb.enable=0 lpj=192598 dwc3.maximum_speed=high dwc3_msm.prop_chg_detect=Y androidboot.selinux=permissive"
 ps=2048
 base=0x00000000
@@ -16,9 +16,8 @@ ramdisk_offset=0x02000000
 tags_offset=0x01E00000
 
 export ARCH=arm
-export SUBARCH=arm
 export CROSS_COMPILE=$toolchain_path
-#export LOCALVERSION=-`echo $name_of_your_kernel`
+export LOCALVERSION=-`echo $name_of_your_kernel`
 
 # Go to kernel root
 cd /home/olokos/14.6.A.0.xxx/
@@ -28,7 +27,7 @@ do
 case "$cchoice" in
 	y|Y )
 		rm -rf out
-		make clean
+		make clean -j$cpu_jobs
 		rm -rf arch/arm/boot/"$kerneltype"
 		echo "Also make clean packed ramdisk"
 		cd ramdisk-custom/ramdisk-complete/sbin
@@ -56,7 +55,7 @@ while read -p "Do you want to make defconfig (y/n)? " cchoice
 do
 case "$cchoice" in
 	y|Y )
-		make $defconfig
+		make $defconfig -j$cpu_jobs
 		echo
 		echo "Done"
 		echo
@@ -126,15 +125,11 @@ done
 if [ -f out/"$kerneltype" ]; then
 	echo "Making boot.img..."
 	echo
-	./mkbootimg --kernel arch/arm/boot/"$kerneltype" --ramdisk out/ramdisk.cpio.gz --cmdline "$cmdline" --base $base --pagesize $ps --ramdisk_offset $ramdisk_offset --tags_offset $tags_offset --output boot.img
+	./mkqcdtbootimg --kernel arch/arm/boot/"$kerneltype" --ramdisk out/ramdisk.cpio.gz --cmdline "$cmdline" --base $base --pagesize $ps --ramdisk_offset $ramdisk_offset --tags_offset $tags_offset --dt_dir arch/arm/boot/ --output boot.img
 
 
 	echo "copying boot.img to /out"
 	cp boot.img out	
-	echo "boot.img made in your /out folder"
-	echo "Correcting /out folder permissions and ownership"
-	sudo chown -R olokos out
-	echo "Correcting permissions and ownership finished successfully!"
 	else
 	echo "No $kerneltype found..."
 fi
