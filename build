@@ -1,0 +1,124 @@
+#!/bin/bash
+
+echo "OK Kernel Buildscript"
+echo
+
+# Tuneables Here
+toolchain_path="/home/olokos/arm-cortex-linux-gnueabi-linaro_5.2-2015.11-2/bin/arm-eabi-"
+#name_of_your_kernel="OK-Kernel-v4"
+defconfig="rhine_lp_honami_moj_defconfig"
+cpu_jobs="18"
+kerneltype="zImage-dtb"
+cmdline="androidboot.hardware=qcom user_debug=31 maxcpus=4 msm_rtb.filter=0x3F ehci-hcd.park=3 msm_rtb.enable=0 lpj=192598 dwc3.maximum_speed=high dwc3_msm.prop_chg_detect=Y androidboot.selinux=permissive"
+ps=2048
+base=0x00000000
+ramdisk_offset=0x02000000
+tags_offset=0x01E00000
+
+export ARCH=arm
+export SUBARCH=arm
+export CROSS_COMPILE=$toolchain_path
+#export LOCALVERSION=-`echo $name_of_your_kernel`
+
+# Go to kernel root
+cd /home/olokos/14.6.A.0.xxx/
+
+while read -p "Do you want to make clean (y/n)? " cchoice
+do
+case "$cchoice" in
+	y|Y )
+		rm -rf out
+		make clean
+		rm -rf arch/arm/boot/"$kerneltype"
+		echo
+		echo "Done"
+		echo
+		break
+		;;
+	n|N )
+		break
+		;;
+	* )
+		echo
+		echo "Invalid try again!"
+		echo
+		;;
+esac
+done
+
+while read -p "Do you want to make defconfig (y/n)? " cchoice
+do
+case "$cchoice" in
+	y|Y )
+		make $defconfig
+		echo
+		echo "Done"
+		echo
+		break
+		;;
+	n|N )
+		break
+		;;
+	* )
+		echo
+		echo "Invalid try again!"
+		echo
+		;;
+esac
+done
+
+while read -p "Do you want to build (y/n)? " cchoice
+do
+echo
+case "$cchoice" in
+	y|Y )
+		make -j$cpu_jobs > kernel-build-log.txt
+		echo
+		echo "Done"
+		echo
+		mkdir out
+		cp arch/arm/boot/"$kerneltype" out
+		break
+		;;
+	n|N )
+		break
+		;;
+	* )
+		echo
+		echo "Invalid try again!"
+		echo
+		;;
+esac
+done
+
+if [ -f out/"$kerneltype" ]; then
+	echo "Making boot.img..."
+	echo
+	./mkbootimg --kernel arch/arm/boot/"$kerneltype" --ramdisk ramdiskwyciagniety/ramdisk.cpio.gz --cmdline "$cmdline" --base $base --pagesize $ps --ramdisk_offset $ramdisk_offset --tags_offset $tags_offset --output boot.img
+
+
+	echo "copying boot.img to /out"
+	cp boot.img out
+	echo "removed '--dt out/dt.img'"	
+	echo "boot.img made in your /out folder"
+	echo "Correcting /out folder permissions and ownership"
+	sudo chown -R olokos out
+	echo "Correcting permissions and ownership finished successfully!"
+	else
+	echo "No $kerneltype found..."
+fi
+
+		echo
+		adb reboot bootloader
+		echo		
+		sudo fastboot flash boot boot.img
+		echo "Kernel successfuly flashed!"
+		echo
+		sudo fastboot reboot
+		echo
+
+
+	exit 0;
+
+
+# (c) 2015, YoshiShaPow <YoshiPGA@gmail.com>
