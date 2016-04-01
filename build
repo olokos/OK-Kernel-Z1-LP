@@ -72,11 +72,21 @@ do
 echo
 case "$cchoice" in
 	y|Y )
+
+		mkdir out
+		echo "cd into ramdisk directory"
+		cd   ramdisk-custom
+		echo "Packing ramdisk..."		
+		find . | cpio -o -H newc | gzip > ramdisk.cpio.gz
+		echo "Move packed ramdisk to /out"
+		cp ramdisk.cpio.gz ../out
+		echo "Back out into kernel source directory"
+		cd ..
+		echo "Start building"
 		make -j$cpu_jobs > kernel-build-log.txt
 		echo
 		echo "Done"
 		echo
-		mkdir out
 		cp arch/arm/boot/"$kerneltype" out
 		break
 		;;
@@ -94,12 +104,11 @@ done
 if [ -f out/"$kerneltype" ]; then
 	echo "Making boot.img..."
 	echo
-	./mkbootimg --kernel arch/arm/boot/"$kerneltype" --ramdisk ramdiskwyciagniety/ramdisk.cpio.gz --cmdline "$cmdline" --base $base --pagesize $ps --ramdisk_offset $ramdisk_offset --tags_offset $tags_offset --output boot.img
+	./mkbootimg --kernel arch/arm/boot/"$kerneltype" --ramdisk out/ramdisk.cpio.gz --cmdline "$cmdline" --base $base --pagesize $ps --ramdisk_offset $ramdisk_offset --tags_offset $tags_offset --output boot.img
 
 
 	echo "copying boot.img to /out"
-	cp boot.img out
-	echo "removed '--dt out/dt.img'"	
+	cp boot.img out	
 	echo "boot.img made in your /out folder"
 	echo "Correcting /out folder permissions and ownership"
 	sudo chown -R olokos out
