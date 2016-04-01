@@ -30,7 +30,13 @@ case "$cchoice" in
 		rm -rf out
 		make clean
 		rm -rf arch/arm/boot/"$kerneltype"
-		echo
+		echo "Also make clean packed ramdisk"
+		cd ramdisk-custom/ramdisk-complete/sbin
+		rm ramdisk.cpio
+		rm ramdisk-recovery.cpio
+		cd ../..
+		rm ramdisk.cpio.gz
+		cd ..
 		echo "Done"
 		echo
 		break
@@ -74,15 +80,31 @@ case "$cchoice" in
 	y|Y )
 
 		mkdir out
-		echo "cd into ramdisk directory"
-		cd   ramdisk-custom
-		echo "Packing ramdisk..."		
-		find . | cpio -o -H newc | gzip > ramdisk.cpio.gz
-		echo "Move packed ramdisk to /out"
-		cp ramdisk.cpio.gz ../out
-		echo "Back out into kernel source directory"
+
+#ramdisk packing begins here
+		echo "Packing base device ramdisk..."
+		cd ramdisk-custom/ramdisk-device
+		find . | cpio -o -H newc > ../ramdisk-complete/sbin/ramdisk.cpio
+		echo "Packing recovery ramdisk..."
 		cd ..
-		echo "Start building"
+		cd ramdisk-recovery
+		find . | cpio -o -H newc > ../ramdisk-complete/sbin/ramdisk-recovery.cpio
+
+		echo "Both recovery and device ramdisk packed!"
+		echo " "
+
+		echo "Begin packing complete ramdisk"
+		cd   ../ramdisk-complete
+		echo "Packing complete ramdisk..."		
+		find . | cpio -o -H newc | gzip > ../ramdisk.cpio.gz
+		echo "Move packed ramdisk to /out"
+		cp ../ramdisk.cpio.gz ../../out
+		echo "Back out into kernel source directory"
+		cd ../..
+#ramdisk packing ends here
+		echo "Ramdisk packing finished!"
+		echo " "
+		echo "Start building OK Kernel..."
 		make -j$cpu_jobs > kernel-build-log.txt
 		echo
 		echo "Done"
