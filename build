@@ -141,11 +141,14 @@ fi
 
 		echo
 		adb reboot bootloader
-		echo		
-		sudo fastboot flash boot boot.img
+		echo
+#sudo not needed for fastboot if udev rules are set like so:
+#https://wiki.cyanogenmod.org/w/UDEV
+#but with mode 0666 		
+		fastboot flash boot boot.img
 		echo "Kernel successfuly flashed!"
 		echo
-		sudo fastboot reboot
+		fastboot reboot
 		echo
 
 
