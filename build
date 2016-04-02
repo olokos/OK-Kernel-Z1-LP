@@ -125,16 +125,15 @@ done
 if [ -f out/"$kerneltype" ]; then
 	echo "Making boot.img..."
 	echo
-	./mkqcdtbootimg --kernel arch/arm/boot/"$kerneltype" --ramdisk out/ramdisk.cpio.gz --cmdline "$cmdline" --base $base --pagesize $ps --ramdisk_offset $ramdisk_offset --tags_offset $tags_offset --dt_dir arch/arm/boot/ --output boot.img
+	./mkqcdtbootimg --kernel arch/arm/boot/"$kerneltype" --ramdisk out/ramdisk.cpio.gz --cmdline "$cmdline" --base $base --pagesize $ps --ramdisk_offset $ramdisk_offset --tags_offset $tags_offset --dt_dir arch/arm/boot/ --output out/boot.img
 
 
-	echo "copying boot.img to /out"
-	cp boot.img out	
 	else
 	echo "No $kerneltype found..."
 fi
 
-		echo
+		echo "cd'ing to /out and flashing kernel..."
+		cd out
 		adb reboot bootloader
 		echo
 #sudo not needed for fastboot if udev rules are set like so:
