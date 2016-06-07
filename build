@@ -5,7 +5,7 @@ echo
 
 # Tuneables Here
 toolchain_path="/home/olokos/arm-cortex-linux-gnueabi-linaro_5.2-2015.11-2/bin/arm-eabi-"
-name_of_your_kernel="OK-Kernel-V5"
+name_of_your_kernel="OK-Kernel-V6.1"
 defconfig="rhine_lp_honami_moj_defconfig"
 cpu_jobs="12"
 kerneltype="zImage"
