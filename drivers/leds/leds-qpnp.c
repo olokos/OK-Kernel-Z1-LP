@@ -320,11 +320,11 @@ enum br_point {
 };
 
 enum max_curr {
-	MAX_CURR1 = 1,
-	MAX_CURR2 = 3,
-	MAX_CURR3 = 5,
-	MAX_CURR4 = 7,
-	MAX_CURR5 = 9,
+	MAX_CURR1 = 10,
+	MAX_CURR2 = 10,
+	MAX_CURR3 = 10,
+	MAX_CURR4 = 10,
+	MAX_CURR5 = 10,
 	MAX_CURR6 = 11,
 	MAX_CURR7 = 13,
 	MAX_CURR8 = 15,
