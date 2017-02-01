@@ -4,8 +4,8 @@ echo "OK Kernel Buildscript"
 echo
 
 # Tuneables Here
-toolchain_path="/home/olokos/arm-cortex-linux-gnueabi-linaro_5.2-2015.11-2/bin/arm-eabi-"
-name_of_your_kernel="OK-Kernel-V6.1"
+toolchain_path="/home/olokos/gcc-linaro-6.2.1-2016.11-x86_64_arm-eabi/bin/arm-eabi-"
+name_of_your_kernel="OK-Kernel-V6"
 defconfig="rhine_lp_honami_moj_defconfig"
 cpu_jobs="12"
 kerneltype="zImage"
@@ -20,7 +20,7 @@ export CROSS_COMPILE=$toolchain_path
 export LOCALVERSION=-`echo $name_of_your_kernel`
 
 # Go to kernel root
-cd /home/olokos/14.6.A.0.xxx/
+cd /home/olokos/OK-Kernel-Z1-LP/
 
 while read -p "Do you want to make clean (y/n)? " cchoice
 do
