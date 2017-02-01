@@ -22,12 +22,6 @@ on early-init
     # This should occur before anything else (e.g. ueventd) is started.
     setcon u:r:init:s0
 
-    # RockZ1L: get all CPUs online
-    write /sys/devices/system/cpu/cpu0/online 1
-    write /sys/devices/system/cpu/cpu1/online 1
-    write /sys/devices/system/cpu/cpu2/online 1
-    write /sys/devices/system/cpu/cpu3/online 1
-
     # Set the security context of /adb_keys if present.
     restorecon /adb_keys
 
@@ -644,9 +638,4 @@ service mdnsd /system/bin/mdnsd
 service pre-recovery /system/bin/uncrypt
     class main
     disabled
-    oneshot
-
-# RockZ1L: init.d support
-service initd_support /system/bin/logwrapper /res/busybox run-parts /system/etc/init.d
-    class main
     oneshot
