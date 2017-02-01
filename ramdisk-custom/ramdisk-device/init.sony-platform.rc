@@ -192,9 +192,6 @@ on boot
     # Change reset behavior to warm reset
     
 
-    # Enable Sony RIC
-    mount securityfs securityfs /sys/kernel/security nosuid nodev noexec
-    write /sys/kernel/security/sony_ric/enable 1
 
     # Init selinux trap module (only for debugging)
     
@@ -334,12 +331,6 @@ service dhcpcd_eth0 /system/bin/dhcpcd -B -d -t 30
     disabled
     oneshot
 
-# Start RIC
-service ric /sbin/ric
-    user root
-    group root drmrpc trimarea system
-    class main
-    seclabel u:r:ric:s0
 
 # VMware MVP Hypervisor daemon
 service mvpd /system/bin/mvpd -F -a 14
