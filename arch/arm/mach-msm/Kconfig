@@ -3132,3 +3132,10 @@ config KERNEL_TEXT_MPU_PROT
           sections early in boot. Read access is permitted to
           all masters; Write access is only permited to the
           secure world.
+
+config FORCE_FAST_CHARGE
+ 	bool "Force AC charge mode at will"
+ 	default y
+ 	help
+ 	 A simple sysfs interface to force adapters that
+ 	 are detected as USB to charge as AC.
