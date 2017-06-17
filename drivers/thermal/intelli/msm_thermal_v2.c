@@ -1946,8 +1946,6 @@ int __devinit msm_thermal_init(struct msm_thermal_data *pdata)
 
 	/* emulate default behavior */
 	disable_msm_thermal();
-	hotplug_init();
-	freq_mitigation_init();
 	enabled = 0;
 
 	return ret;
